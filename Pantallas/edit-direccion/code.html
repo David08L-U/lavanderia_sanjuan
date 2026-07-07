@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editar Dirección</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-red": "#ba1a1a",
+                        "on-background": "#111c2d",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#595c5e",
+                        "secondary-fixed-dim": "#bbc8d5",
+                        "secondary": "#54606b",
+                        "secondary-container": "#d7e4f1",
+                        "primary-fixed": "#d8e2ff",
+                        "surface": "#f9f9ff",
+                        "on-primary-fixed-variant": "#004494",
+                        "on-surface-variant": "#424753",
+                        "surface-container-high": "#dee8ff",
+                        "surface-blue-tint": "#e7eeff",
+                        "on-primary-container": "#c3d4ff",
+                        "surface-container": "#e7eeff",
+                        "surface-dim": "#cfdaf2",
+                        "on-secondary-container": "#5a6671",
+                        "success-blue": "#0070eb",
+                        "tertiary": "#414546",
+                        "outline-variant": "#c2c6d5",
+                        "primary": "#00418f",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#095bbf",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#d7e4f1",
+                        "inverse-surface": "#263143",
+                        "on-surface": "#111c2d",
+                        "on-tertiary-container": "#d2d4d7",
+                        "surface-container-highest": "#d8e3fb",
+                        "primary-container": "#0058bc",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-variant": "#d8e3fb",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "on-secondary-fixed": "#111d26",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed": "#e1e3e5",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#ecf1ff",
+                        "outline": "#727784",
+                        "on-tertiary-fixed": "#191c1e",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#001a41",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#3c4853",
+                        "inverse-primary": "#adc6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-padding": "2rem",
+                        "hero-padding": "2.5rem",
+                        "container-margin": "1.25rem",
+                        "inline-gap": "0.75rem",
+                        "stack-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "button": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen flex justify-center">
+<div class="w-full max-w-[1280px] bg-surface flex flex-col relative overflow-hidden shadow-[0_0_24px_rgba(89,92,94,0.05)]">
+<!-- TopAppBar (Task-Focused, suppresses Bottom Nav) -->
+<header class="flex items-center justify-between px-container-margin h-14 w-full w-full top-0 sticky bg-surface shadow-sm z-50">
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150 p-2 -ml-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Editar Dirección</h1>
+<div class="w-10"></div> <!-- Spacer for center alignment -->
+</header>
+<!-- Map Area -->
+<div class="relative w-full h-[265px] min-h-[250px] bg-surface-container-high" data-alt="A crisp, clean, modern digital map interface centered on Madrid, Spain. The map uses a light-mode color palette with soft greys for roads, pristine white for city blocks, and subtle primary blue accents for water bodies or major routes. The style is efficient and corporate, resembling a premium navigation service, free of clutter or labels, emphasizing a trustworthy and rejuvenating aesthetic." data-location="Madrid" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCC2BzLU8gLppp6vE97SSIAqt37KQynAtkMZN0Tq3Jecf-5oa_UmwotxJin7o9mggZYpPKttJD4enEp02wWQkcuR_SSmbj1_Ds6SheuI-Xs5RhR0soHppiihzo9vsp6srmVezNyWuuEk4XM0q26MKdA2bf1QXb8fWjtKoXUwKmIVhm_YIKKLnnCmiPcrcCsp_bhRSAZ1_S7lbN6fIObMgIyWnPYPXASefIVsjwyC2MqjESDX9ifT6iI')">
+<!-- Center Pin -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center drop-shadow-md">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="w-3 h-1 bg-on-background/20 rounded-[100%] blur-[2px] mt-1"></div>
+</div>
+</div>
+<!-- Form Area -->
+<main class="flex-1 flex flex-col px-container-margin py-section-padding bg-surface-container-lowest rounded-t-[1.5rem] -mt-6 relative z-10 shadow-[0_-8px_24px_rgba(89,92,94,0.05)]">
+<form class="flex flex-col gap-stack-gap flex-1">
+<!-- Label Field -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant" for="address_label">Etiqueta</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline">bookmark</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface rounded-xl border border-outline-variant font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" id="address_label" type="text" value="Casa"/>
+</div>
+</div>
+<!-- Street Field -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface-variant" for="street">Calle y número</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline">signpost</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface rounded-xl border border-outline-variant font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" id="street" type="text" value="Calle de la Victoria 15, 3ºB"/>
+</div>
+</div>
+<div class="flex gap-inline-gap">
+<!-- City Field -->
+<div class="flex flex-col gap-1 flex-[2]">
+<label class="font-label-md text-label-md text-on-surface-variant" for="city">Ciudad</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline">location_city</span>
+<input class="w-full h-14 pl-12 pr-4 bg-surface rounded-xl border border-outline-variant font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" id="city" type="text" value="Madrid"/>
+</div>
+</div>
+<!-- Postal Code Field -->
+<div class="flex flex-col gap-1 flex-1">
+<label class="font-label-md text-label-md text-on-surface-variant" for="postal_code">Código Postal</label>
+<div class="relative flex items-center">
+<input class="w-full h-14 px-4 bg-surface rounded-xl border border-outline-variant font-body-lg text-body-lg text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" id="postal_code" type="text" value="28012"/>
+</div>
+</div>
+</div>
+<div class="flex-1"></div> <!-- Spacer to push button down if screen is tall -->
+<!-- Action Area -->
+<div class="mt-8 mb-4">
+<button class="w-full h-14 bg-primary text-on-primary rounded-full font-button text-button flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all shadow-md" type="button">
+<span class="material-symbols-outlined">save</span>
+                        Guardar Cambios
+                    </button>
+</div>
+</form>
+</main>
+</div>
+</body></html>
