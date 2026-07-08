@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../models/direccion.dart';
 import '../models/franja_horaria.dart';
 import '../models/servicio_lavanderia.dart';
+import '../models/tarjeta.dart';
+
+const _codigoPromoCorrecto = 'FRESH20';
+const _tasaDescuentoPromo = 0.20;
 
 class AgendarRecoleccionProvider extends ChangeNotifier {
-  AgendarRecoleccionProvider() : fechasDisponibles = _generarFechas() {
+  AgendarRecoleccionProvider({TipoServicio? servicioInicial})
+    : fechasDisponibles = _generarFechas(),
+      _servicio = servicioInicial ?? TipoServicio.lavadoYPlegado {
     _fechaSeleccionada = fechasDisponibles.first;
   }
 
@@ -16,7 +23,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
   final List<DateTime> fechasDisponibles;
   final instruccionesController = TextEditingController();
 
-  TipoServicio _servicio = TipoServicio.lavadoYPlegado;
+  TipoServicio _servicio;
   TipoServicio get servicio => _servicio;
 
   late DateTime _fechaSeleccionada;
@@ -25,6 +32,40 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
   FranjaHoraria _franja = FranjaHoraria.tarde;
   FranjaHoraria get franja => _franja;
 
+  Direccion? _direccionSeleccionada;
+  Direccion? get direccionSeleccionada => _direccionSeleccionada;
+
+  void seleccionarDireccion(Direccion direccion) {
+    _direccionSeleccionada = direccion;
+    notifyListeners();
+  }
+
+  TarjetaGuardada? _tarjetaSeleccionada;
+  TarjetaGuardada? get tarjetaSeleccionada => _tarjetaSeleccionada;
+
+  void seleccionarTarjeta(TarjetaGuardada tarjeta) {
+    _tarjetaSeleccionada = tarjeta;
+    notifyListeners();
+  }
+
+  final codigoPromoController = TextEditingController();
+  bool _codigoPromoValido = false;
+  String? _mensajePromo;
+  String? get mensajePromo => _mensajePromo;
+
+  /// Fracción de descuento a aplicar sobre el total (0 si no hay código válido).
+  double get tasaDescuento => _codigoPromoValido ? _tasaDescuentoPromo : 0;
+
+  void aplicarCodigoPromocional() {
+    final codigo = codigoPromoController.text.trim().toUpperCase();
+    if (codigo.isEmpty) return;
+    _codigoPromoValido = codigo == _codigoPromoCorrecto;
+    _mensajePromo = _codigoPromoValido
+        ? '¡Código aplicado! ${(_tasaDescuentoPromo * 100).round()}% de descuento.'
+        : 'Código promocional no válido.';
+    notifyListeners();
+  }
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -32,6 +73,11 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
       serviciosDisponibles.firstWhere((s) => s.tipo == _servicio);
 
   double get totalEstimado => servicioInfo.totalEstimado;
+
+  double get descuento => totalEstimado * tasaDescuento;
+
+  double get totalConDescuento =>
+      (totalEstimado - descuento).clamp(0, double.infinity);
 
   void seleccionarServicio(TipoServicio tipo) {
     _servicio = tipo;
@@ -63,6 +109,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
   @override
   void dispose() {
     instruccionesController.dispose();
+    codigoPromoController.dispose();
     super.dispose();
   }
 }

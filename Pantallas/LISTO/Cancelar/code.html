@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cancelar Pedido - FreshClean</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#595c5e",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface": "#f9f9ff",
+                        "surface-bright": "#f9f9ff",
+                        "secondary": "#54606b",
+                        "on-tertiary-container": "#fbfdff",
+                        "primary": "#0058bc",
+                        "on-background": "#111c2d",
+                        "surface-container-high": "#dee8ff",
+                        "tertiary-container": "#727577",
+                        "outline-variant": "#c1c6d7",
+                        "surface-variant": "#d8e3fb",
+                        "surface-container": "#e7eeff",
+                        "inverse-primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "on-primary-fixed-variant": "#004493",
+                        "on-secondary-container": "#5a6671",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#717786",
+                        "on-surface-variant": "#414755",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary-container": "#fefcff",
+                        "on-secondary-fixed": "#111d26",
+                        "on-surface": "#111c2d",
+                        "secondary-container": "#d8e4f2",
+                        "surface-tint": "#005bc1",
+                        "surface-dim": "#cfdaf2",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-primary-fixed": "#001a41",
+                        "secondary-fixed-dim": "#bcc8d5",
+                        "surface-container-highest": "#d8e3fb",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-container-low": "#f0f3ff",
+                        "primary-container": "#0070eb",
+                        "tertiary-fixed": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#ecf1ff",
+                        "inverse-surface": "#263143",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary-fixed": "#d8e4f2",
+                        "on-secondary-fixed-variant": "#3d4853"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "inline-gap": "0.75rem",
+                        "container-margin": "1.25rem",
+                        "stack-gap": "1rem",
+                        "section-padding": "2rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "button": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        /* Custom radio button styles for the "reason" list */
+        .reason-radio:checked + div {
+            background-color: theme('colors.surface-container-high');
+            border-color: theme('colors.primary');
+        }
+        .reason-radio:checked + div .radio-inner {
+            background-color: theme('colors.primary');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col font-body-lg antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm">
+<div class="flex items-center px-section-padding h-16 w-full max-w-7xl mx-auto">
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors duration-200 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">arrow_back</span>
+</button>
+<h1 class="ml-4 font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Cancelar Pedido</h1>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-container-margin max-w-2xl mx-auto w-full">
+<!-- Warning Banner -->
+<div class="bg-error-container rounded-2xl p-4 mb-8 flex items-start gap-4">
+<span class="material-symbols-outlined text-on-error-container mt-0.5" style="font-variation-settings: 'FILL' 1;">warning</span>
+<div>
+<h2 class="font-title-md text-title-md text-on-error-container mb-1">Cancellations may incur a fee</h2>
+<p class="font-body-md text-body-md text-on-error-container opacity-90">If the driver is already en route to your location, a small cancellation fee may be applied to cover their travel time.</p>
+</div>
+</div>
+<form id="cancel-form">
+<!-- Reasons List -->
+<fieldset class="mb-8">
+<legend class="font-title-md text-title-md text-on-surface mb-4">¿Por qué deseas cancelar?</legend>
+<div class="flex flex-col gap-3">
+<label class="relative cursor-pointer group block">
+<input class="reason-radio sr-only" name="cancel_reason" type="radio" value="mistake"/>
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant bg-surface-container-lowest transition-all hover:bg-surface-container-low">
+<span class="font-body-lg text-body-lg text-on-surface">Ordered by mistake</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant group-hover:border-primary flex items-center justify-center transition-colors">
+<div class="radio-inner w-2.5 h-2.5 rounded-full bg-transparent transition-colors"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer group block">
+<input class="reason-radio sr-only" name="cancel_reason" type="radio" value="expensive"/>
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant bg-surface-container-lowest transition-all hover:bg-surface-container-low">
+<span class="font-body-lg text-body-lg text-on-surface">Too expensive</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant group-hover:border-primary flex items-center justify-center transition-colors">
+<div class="radio-inner w-2.5 h-2.5 rounded-full bg-transparent transition-colors"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer group block">
+<input class="reason-radio sr-only" name="cancel_reason" type="radio" value="better_price"/>
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant bg-surface-container-lowest transition-all hover:bg-surface-container-low">
+<span class="font-body-lg text-body-lg text-on-surface">Found a better price</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant group-hover:border-primary flex items-center justify-center transition-colors">
+<div class="radio-inner w-2.5 h-2.5 rounded-full bg-transparent transition-colors"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer group block">
+<input class="reason-radio sr-only" name="cancel_reason" type="radio" value="driver_delayed"/>
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant bg-surface-container-lowest transition-all hover:bg-surface-container-low">
+<span class="font-body-lg text-body-lg text-on-surface">Driver taking too long</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant group-hover:border-primary flex items-center justify-center transition-colors">
+<div class="radio-inner w-2.5 h-2.5 rounded-full bg-transparent transition-colors"></div>
+</div>
+</div>
+</label>
+<label class="relative cursor-pointer group block">
+<input checked="" class="reason-radio sr-only" name="cancel_reason" type="radio" value="other"/>
+<div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant bg-surface-container-lowest transition-all hover:bg-surface-container-low">
+<span class="font-body-lg text-body-lg text-on-surface">Other</span>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant group-hover:border-primary flex items-center justify-center transition-colors">
+<div class="radio-inner w-2.5 h-2.5 rounded-full bg-transparent transition-colors"></div>
+</div>
+</div>
+</label>
+</div>
+</fieldset>
+<!-- Additional Comments -->
+<div class="mb-8">
+<label class="block font-title-md text-title-md text-on-surface mb-2" for="comments">Additional comments (optional)</label>
+<textarea class="w-full rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all resize-none p-4 font-body-md text-body-md text-on-surface placeholder-on-surface-variant" id="comments" name="comments" placeholder="Tell us more about why you're cancelling..." rows="3"></textarea>
+</div>
+</form>
+</main>
+<!-- Bottom Actions -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-md pb-safe pt-4 px-container-margin z-40">
+<div class="max-w-2xl mx-auto flex flex-col gap-3 pb-8">
+<button class="w-full h-14 rounded-2xl bg-error text-on-error font-button text-button flex justify-center items-center active:scale-[0.98] transition-transform" type="button">
+                Confirmar Cancelación
+            </button>
+<button class="w-full h-14 rounded-2xl bg-surface-container-high text-primary font-button text-button flex justify-center items-center active:scale-[0.98] transition-transform" type="button">
+                Keep Order
+            </button>
+</div>
+</div>
+<!-- Padding for safe area on mobile devices -->
+<style>
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+</body></html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agendar Recolección - FreshClean</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#595c5e",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#5a6671",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#e7eeff",
+                    "surface-tint": "#005bc1",
+                    "surface-container-low": "#f0f3ff",
+                    "outline": "#717786",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#dee8ff",
+                    "surface-container-highest": "#d8e3fb",
+                    "inverse-surface": "#263143",
+                    "on-secondary-fixed-variant": "#3d4853",
+                    "inverse-primary": "#adc6ff",
+                    "inverse-on-surface": "#ecf1ff",
+                    "surface-dim": "#cfdaf2",
+                    "surface": "#f9f9ff",
+                    "tertiary-fixed": "#e0e3e5",
+                    "secondary-container": "#d8e4f2",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "on-primary-fixed": "#001a41",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f9f9ff",
+                    "secondary": "#54606b",
+                    "on-secondary-fixed": "#111d26",
+                    "primary-fixed-dim": "#adc6ff",
+                    "secondary-fixed": "#d8e4f2",
+                    "on-surface": "#111c2d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#fbfdff",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "tertiary-container": "#727577",
+                    "on-primary-container": "#fefcff",
+                    "surface-variant": "#d8e3fb",
+                    "on-background": "#111c2d",
+                    "on-surface-variant": "#414755",
+                    "outline-variant": "#c1c6d7",
+                    "background": "#f9f9ff",
+                    "primary": "#0058bc",
+                    "primary-container": "#0070eb",
+                    "secondary-fixed-dim": "#bcc8d5",
+                    "on-primary-fixed-variant": "#004493",
+                    "primary-fixed": "#d8e2ff",
+                    "on-tertiary-fixed": "#191c1e",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "1.25rem",
+                    "section-padding": "2rem",
+                    "inline-gap": "0.75rem",
+                    "stack-gap": "1rem"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "title-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "button": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "button": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .icon-thin {
+            font-variation-settings: 'wght' 300;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen pb-48">
+<header class="fixed top-0 w-full h-16 flex items-center px-container-margin bg-surface/90 backdrop-blur-md z-50">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-primary active:scale-95" onclick="window.location.href='{{DATA:SCREEN:SCREEN_28}}'">
+<span class="material-symbols-outlined icon-thin" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="ml-2 font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Agendar Recolección</h1>
+</header>
+<main class="pt-24 px-container-margin flex flex-col gap-[2rem]">
+<section class="flex flex-col gap-stack-gap">
+<h2 class="font-title-md text-title-md text-on-surface">Dirección</h2>
+<div class="bg-surface-container-lowest rounded-xl border border-secondary-container p-4 flex items-center justify-between shadow-[0_8px_24px_rgba(0,0,0,0.03)] active:scale-[0.98] transition-transform cursor-pointer" onclick="window.location.href='{{DATA:SCREEN:SCREEN_38}}'">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined icon-thin" data-icon="home">home</span>
+</div>
+<div>
+<p class="font-button text-button text-on-surface">Casa Principal</p>
+<p class="font-body-md text-body-md text-secondary mt-0.5">Av. Siempreviva 742, Depto 3</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline icon-thin" data-icon="chevron_right">chevron_right</span>
+</div>
+</section>
+<section class="flex flex-col gap-stack-gap">
+<h2 class="font-title-md text-title-md text-on-surface">Fecha</h2>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2 -mx-container-margin px-container-margin">
+<div class="flex-shrink-0 w-[72px] h-[88px] rounded-xl bg-surface-container-low border border-transparent flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors">
+<span class="font-label-md text-label-md text-secondary uppercase">Hoy</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">12</span>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[88px] rounded-xl bg-primary text-on-primary border border-primary flex flex-col items-center justify-center gap-1 cursor-pointer shadow-[0_8px_16px_rgba(0,88,188,0.2)]">
+<span class="font-label-md text-label-md text-primary-fixed-dim uppercase">Mañ</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary">13</span>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[88px] rounded-xl bg-surface-container-low border border-transparent flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors">
+<span class="font-label-md text-label-md text-secondary uppercase">Jue</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">14</span>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[88px] rounded-xl bg-surface-container-low border border-transparent flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors">
+<span class="font-label-md text-label-md text-secondary uppercase">Vie</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">15</span>
+</div>
+<div class="flex-shrink-0 w-[72px] h-[88px] rounded-xl bg-surface-container-low border border-transparent flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors">
+<span class="font-label-md text-label-md text-secondary uppercase">Sab</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">16</span>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-stack-gap">
+<h2 class="font-title-md text-title-md text-on-surface">Horario</h2>
+<div class="flex flex-col gap-3">
+<label class="relative flex items-center justify-between w-full p-4 rounded-xl border border-transparent bg-surface-container-low cursor-pointer transition-all active:scale-[0.99]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary icon-thin" data-icon="light_mode">light_mode</span>
+<div>
+<p class="font-button text-button text-on-surface">Mañana</p>
+<p class="font-label-md text-label-md text-secondary">08:00 - 12:00</p>
+</div>
+</div>
+<input class="w-5 h-5 text-primary border-outline-variant focus:ring-primary focus:ring-offset-surface bg-surface-container-lowest" name="time_slot" type="radio"/>
+</label>
+<label class="relative flex items-center justify-between w-full p-4 rounded-xl border-2 border-primary bg-surface-container-lowest cursor-pointer transition-all shadow-[0_4px_16px_rgba(0,88,188,0.08)]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary icon-thin" data-icon="wb_sunny">wb_sunny</span>
+<div>
+<p class="font-button text-button text-primary">Tarde</p>
+<p class="font-label-md text-label-md text-primary/80">13:00 - 17:00</p>
+</div>
+</div>
+<input checked="" class="w-5 h-5 text-primary border-primary focus:ring-primary focus:ring-offset-surface bg-surface-container-lowest" name="time_slot" type="radio"/>
+</label>
+<label class="relative flex items-center justify-between w-full p-4 rounded-xl border border-transparent bg-surface-container-low cursor-pointer transition-all active:scale-[0.99]">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary icon-thin" data-icon="dark_mode">dark_mode</span>
+<div>
+<p class="font-button text-button text-on-surface">Noche</p>
+<p class="font-label-md text-label-md text-secondary">18:00 - 21:00</p>
+</div>
+</div>
+<input class="w-5 h-5 text-primary border-outline-variant focus:ring-primary focus:ring-offset-surface bg-surface-container-lowest" name="time_slot" type="radio"/>
+</label>
+</div>
+</section>
+<section class="flex flex-col gap-stack-gap">
+<h2 class="font-title-md text-title-md text-on-surface">Método de Pago</h2>
+<div class="bg-surface-container-lowest rounded-xl border border-secondary-container p-4 flex items-center justify-between shadow-[0_8px_24px_rgba(0,0,0,0.03)] active:scale-[0.98] transition-transform cursor-pointer" onclick="window.location.href='{{DATA:SCREEN:SCREEN_39}}'">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined icon-thin" data-icon="credit_card">credit_card</span>
+</div>
+<div>
+<p class="font-button text-button text-on-surface">Visa **** 4242</p>
+<p class="font-body-md text-body-md text-secondary mt-0.5">Vence 12/26</p>
+</div>
+</div>
+<button class="text-primary font-button text-button hover:underline">Cambiar</button>
+</div>
+</section><section class="flex flex-col gap-stack-gap">
+<h2 class="font-title-md text-title-md text-on-surface">Instrucciones especiales</h2>
+<textarea class="w-full h-28 p-4 rounded-xl bg-surface-container-low border-2 border-transparent text-body-md font-body-md text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-primary focus:ring-0 resize-none transition-colors" placeholder="Ej: Dejar en portería, cuidado con el perro, etc."></textarea>
+</section>
+</main>
+<div class="fixed bottom-[72px] left-0 w-full p-container-margin bg-surface border-t border-outline-variant z-40">
+<div class="flex gap-3 mb-4">
+<div class="relative flex-grow">
+<input class="w-full h-12 px-4 rounded-xl bg-surface-container-low border-2 border-transparent text-body-md font-body-md text-on-surface placeholder:text-outline-variant focus:bg-surface-container-lowest focus:border-primary focus:ring-0 transition-colors" placeholder="Código promocional" type="text"/>
+</div>
+<button class="h-12 px-6 bg-secondary-container text-primary rounded-xl font-button text-button active:scale-95 transition-transform">Aplicar</button>
+</div><button class="w-full h-[56px] bg-primary text-on-primary rounded-xl font-button text-button flex items-center justify-center shadow-[0_8px_24px_rgba(0,88,188,0.25)] active:scale-[0.98] transition-transform" onclick="alert('¡Pedido #FC-9000 confirmado con éxito!'); window.location.href='{{DATA:SCREEN:SCREEN_21}}'">
+            Confirmar Pedido
+        </button>
+</div>
+<nav class="md:hidden bg-surface shadow-[0_-4px_16px_0_rgba(0,0,0,0.04)] fixed bottom-0 left-0 w-full flex justify-around items-center px-container-margin py-3 rounded-t-xl z-50"><button class="flex flex-col items-center justify-center text-secondary px-5 py-2 hover:bg-surface-container-low transition-all active:scale-95 duration-200"><span class="material-symbols-outlined mb-1">home</span><span class="font-label-md text-label-md">Inicio</span></button><button class="flex flex-col items-center justify-center text-secondary px-5 py-2 hover:bg-surface-container-low transition-all active:scale-95 duration-200"><span class="material-symbols-outlined mb-1">local_laundry_service</span><span class="font-label-md text-label-md">Servicios</span></button><button class="flex flex-col items-center justify-center bg-secondary-container text-primary rounded-2xl px-5 py-2 hover:bg-surface-container-low transition-all active:scale-95 duration-200"><span class="material-symbols-outlined icon-fill mb-1">receipt_long</span><span class="font-label-md text-label-md">Pedidos</span></button><button class="flex flex-col items-center justify-center text-secondary px-5 py-2 hover:bg-surface-container-low transition-all active:scale-95 duration-200"><span class="material-symbols-outlined mb-1">person</span><span class="font-label-md text-label-md">Perfil</span></button></nav>
+</body></html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Seguimiento en Vivo - FreshClean</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "inverse-primary": "#adc6ff",
+                      "on-secondary-fixed": "#111d26",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f0f3ff",
+                      "on-primary-container": "#fefcff",
+                      "primary": "#0058bc",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#ecf1ff",
+                      "tertiary-container": "#727577",
+                      "surface-tint": "#005bc1",
+                      "surface-bright": "#f9f9ff",
+                      "secondary-fixed": "#d8e4f2",
+                      "on-surface": "#111c2d",
+                      "on-error-container": "#93000a",
+                      "surface-container-high": "#dee8ff",
+                      "secondary-fixed-dim": "#bcc8d5",
+                      "outline-variant": "#c1c6d7",
+                      "on-tertiary-fixed": "#191c1e",
+                      "tertiary-fixed": "#e0e3e5",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#001a41",
+                      "primary-fixed": "#d8e2ff",
+                      "on-background": "#111c2d",
+                      "surface-container-highest": "#d8e3fb",
+                      "tertiary": "#595c5e",
+                      "surface-dim": "#cfdaf2",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "on-secondary-fixed-variant": "#3d4853",
+                      "surface-variant": "#d8e3fb",
+                      "primary-container": "#0070eb",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "background": "#f9f9ff",
+                      "on-secondary-container": "#5a6671",
+                      "outline": "#717786",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface": "#f9f9ff",
+                      "on-tertiary-container": "#fbfdff",
+                      "on-secondary": "#ffffff",
+                      "on-surface-variant": "#414755",
+                      "surface-container": "#e7eeff",
+                      "secondary-container": "#d8e4f2",
+                      "secondary": "#54606b",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#004493",
+                      "inverse-surface": "#263143"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "inline-gap": "0.75rem",
+                      "stack-gap": "1rem",
+                      "section-padding": "2rem",
+                      "container-margin": "1.25rem"
+              },
+              "fontFamily": {
+                      "title-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "button": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "button": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .map-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+        .route-dash {
+            stroke-dasharray: 10;
+            animation: dash 20s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -1000; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background h-full font-sans antialiased overflow-hidden flex flex-col relative pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface fixed top-0 w-full z-50 shadow-sm">
+<div class="flex justify-between items-center px-container-margin h-16 w-full">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant dark:hover:bg-on-surface-variant transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed">Seguimiento en Vivo</h1>
+<span class="font-label-md text-label-md text-on-surface-variant">#FC-12345</span>
+</div>
+<div class="w-10 h-10"></div> <!-- Placeholder for balance -->
+</div>
+</header>
+<!-- Main Content (Map Area) -->
+<main class="flex-1 relative w-full h-full pt-16">
+<!-- Simulated Map Background -->
+<div class="absolute inset-0 bg-surface-variant w-full h-full z-0 overflow-hidden" data-alt="A clean, minimalist vector map of an urban area in light blue and white tones, reflecting a highly polished app interface. The streets are subtly defined with very light gray lines on a white background, with pale blue accents for water bodies. The aesthetic is extremely clean, corporate, and modern, perfectly matching a fresh laundry service app theme. High quality, UI design element, bright lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCul6F7pB7NA4YkV9jKQxqliiz8IUaqRvSEZp1BWJ_XVY_IIypYYvQRexGEaiflaFT7wXZNFx7PlxaCdHuNaGEQNt-NalQVtAPd8aujnWqCgoR40NnR18mbXt4hailyn4dCqNnB5JkWyIUd_POU8snnujUfbAbN87jCRbAP_wJcPoOKDAAp9_AJ6nGzdT91VgiFkuTe_v8FOhowJR_Jl8REqdaslBfBXL9IprrQJJI1iabV6A1U3f3zik_P4e2fWFf5uhQrF1i6fA')">
+<!-- SVG Route -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="route-dash" d="M 20 80 Q 40 40 80 20" fill="none" stroke="#0070eb" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+<!-- Plant Location Marker -->
+<div class="absolute top-[20%] left-[80%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="w-8 h-8 bg-surface rounded-full shadow-sm flex items-center justify-center border-2 border-primary z-10">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">local_laundry_service</span>
+</div>
+</div>
+<!-- Home Location Marker with Pulse -->
+<div class="absolute top-[80%] left-[20%] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+<div class="absolute w-12 h-12 bg-primary rounded-full map-pulse"></div>
+<div class="w-6 h-6 bg-primary rounded-full border-4 border-surface shadow-sm z-10 relative"></div>
+</div>
+<!-- Delivery Van Marker (Animating along route roughly) -->
+<div class="absolute top-[45%] left-[55%] -translate-x-1/2 -translate-y-1/2 z-20 shadow-[0_4px_16px_rgba(0,0,0,0.1)] rounded-full bg-surface p-2 border border-outline-variant transition-transform duration-1000 ease-linear">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+</div>
+</div>
+<!-- Overlay Card (Bottom) -->
+<div class="absolute bottom-0 left-0 w-full px-container-margin pb-stack-gap z-30">
+<div class="bg-surface rounded-xl shadow-[0_-4px_24px_rgba(0,0,0,0.06)] border border-outline-variant overflow-hidden flex flex-col">
+<!-- Status Header -->
+<div class="bg-primary-fixed px-inline-gap py-stack-gap flex items-center justify-between">
+<div>
+<p class="font-title-md text-title-md text-on-primary-fixed">Llega en 12 min</p>
+<p class="font-body-md text-body-md text-on-primary-fixed-variant mt-1">En camino a tu domicilio</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">timer</span>
+</div>
+</div>
+<!-- Driver Info -->
+<div class="p-inline-gap flex items-center gap-inline-gap border-b border-outline-variant">
+<img alt="Driver" class="w-14 h-14 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a friendly delivery driver in a clean blue uniform. He has a warm smile and approachable demeanor. The background is a plain, light studio backdrop to keep the focus on his face. The lighting is bright and even, conveying trust and reliability for a premium service app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfGl4pdD8RshH7VZh6JASP-LFyNfvvMM6xO0L4ZBMweQEA1ylHenxh2SFVBq0MpNPlsgAvHhCZT2CE2tTgFcfKu_gKUhJP8gTGecCA7JulAeJZsQ5kxqW-guQgXgWM-uASXnqcNZAUcf5EECqxmvm3uKkj4IyQUA7BlO6xvGJllHaPPbhWvjaiUssy_x7hYLE2T8Oz2JT5LnbC5o0xz3YqCH5WCeCb2fpLFFTml0ZfufkSOtTDF9zOkpTSDMGwmliRbrlN7gtlctU"/>
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface">Carlos Mendoza</h3>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-secondary">4.9 • FreshVan #042</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="p-inline-gap flex gap-inline-gap bg-surface-bright">
+<button class="flex-1 h-14 bg-primary text-on-primary rounded-xl font-button text-button flex items-center justify-center gap-2 hover:bg-surface-tint transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">call</span>
+                        Llamar al repartidor
+                    </button>
+<button class="w-14 h-14 bg-secondary-container text-on-secondary-container rounded-xl flex items-center justify-center hover:bg-surface-variant transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">support_agent</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface dark:bg-surface border-t border-outline-variant dark:border-outline shadow-[0_-4px_16px_rgba(0,0,0,0.04)] fixed bottom-0 left-0 w-full flex justify-around items-center py-3 pb-safe px-inline-gap z-50 rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-container hover:opacity-80 transition-opacity active:scale-90 duration-150 w-16">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-container hover:opacity-80 transition-opacity active:scale-90 duration-150 w-16">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">local_laundry_service</span>
+<span class="font-label-md text-label-md">Services</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary-container text-primary dark:text-on-secondary-fixed-variant rounded-full px-4 py-1 hover:opacity-80 transition-opacity active:scale-90 duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="font-label-md text-label-md font-bold">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-container hover:opacity-80 transition-opacity active:scale-90 duration-150 w-16">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</button>
+</nav>
+</body></html>

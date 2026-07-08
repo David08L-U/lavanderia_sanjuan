@@ -1,0 +1,229 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Detalle del Servicio - FreshClean</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-high": "#dee8ff",
+                        "surface-container": "#e7eeff",
+                        "secondary": "#54606b",
+                        "on-surface-variant": "#414755",
+                        "on-tertiary-container": "#fbfdff",
+                        "tertiary": "#595c5e",
+                        "inverse-primary": "#adc6ff",
+                        "secondary-fixed-dim": "#bcc8d5",
+                        "primary-container": "#0070eb",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "secondary-fixed": "#d8e4f2",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container-low": "#f0f3ff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "outline": "#717786",
+                        "on-error": "#ffffff",
+                        "on-background": "#111c2d",
+                        "surface-tint": "#005bc1",
+                        "on-secondary-container": "#5a6671",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#3d4853",
+                        "error": "#ba1a1a",
+                        "surface": "#f9f9ff",
+                        "primary": "#0058bc",
+                        "on-primary-fixed": "#001a41",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#263143",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d8e3fb",
+                        "on-secondary-fixed": "#111d26",
+                        "outline-variant": "#c1c6d7",
+                        "tertiary-fixed": "#e0e3e5",
+                        "tertiary-container": "#727577",
+                        "on-surface": "#111c2d",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-primary-fixed-variant": "#004493",
+                        "secondary-container": "#d8e4f2",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-dim": "#cfdaf2",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "1rem",
+                        "inline-gap": "0.75rem",
+                        "section-padding": "2rem",
+                        "container-margin": "1.25rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "button": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased md:hidden pb-32">
+<!-- Top Navigation (Task-focused, overrides global app bar) -->
+<header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md shadow-[0_16px_24px_rgba(17,28,45,0.04)] px-container-margin py-4 flex items-center gap-4 transition-all duration-300" id="top-nav">
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-container transition-colors active:scale-95 duration-100 text-primary">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary truncate flex-1">Detalle del Servicio</h1>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[72px] min-h-screen">
+<!-- Hero Image -->
+<div class="w-full h-64 md:h-80 relative bg-surface-container-low overflow-hidden">
+<img alt="Lavado x Kilo Hero" class="w-full h-full object-cover" data-alt="A pristine, brightly lit modern laundromat setting focusing on a beautifully folded stack of fresh white and soft blue towels. The lighting is high-key, soft, and natural, evoking a sense of profound cleanliness and hygiene. The aesthetic is modern corporate, minimalist, and deeply calming, aligning with a premium laundry service brand identity. The palette is dominated by pure whites and soft sky blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP6O2KJMwc3kjwWQo3zY6Z3EnlVNdSJM5L_PlFRB9ohltswT2UMuHuQA_QtIwhwa4FIToRDyi2UBa7vZxa6_b7Uk8RzJT_OROETbN7PVvRE3Jqd1LBt1zpe9DjP1jliHv1ZB1XNr_6VsF2NoNoY9ZgOpotXPKBSr20P57n9Sp2HSbdhw4B7bbZaAJ7gkOP71J-pbYSwWlpw5nhQnCrFgmZu6jsTvBHEMOIcwmoB60p_9KoW-BcodqQfegI4fOL7wZYFLXnp1l8UuE">
+<!-- Subtle gradient overlay for seamless blending -->
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
+</div>
+<!-- Service Core Info -->
+<section class="px-container-margin -mt-8 relative z-10">
+<div class="bg-surface rounded-xl p-6 shadow-[0_8px_24px_rgba(17,28,45,0.04)] border border-surface-container-high/50 flex flex-col gap-4">
+<div class="flex justify-between items-start gap-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">Lavado x Kilo</h2>
+<span class="inline-flex items-center justify-center bg-surface-container text-primary font-label-md text-label-md px-3 py-1 rounded-full whitespace-nowrap">
+                        $25 / kg
+                    </span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-[18px] text-primary">schedule</span>
+<span>Tiempo estimado: <strong>24 horas</strong></span>
+</div>
+</div>
+</section>
+<!-- Details & Description -->
+<section class="px-container-margin mt-section-padding flex flex-col gap-stack-gap">
+<h3 class="font-title-md text-title-md text-primary">¿Qué incluye?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                Nuestro servicio premium de lavado por kilo está diseñado para el cuidado diario de tu ropa. Incluye clasificación profesional por colores y tejidos, lavado profundo con detergentes de alta calidad y suavizantes, secado a temperatura controlada para evitar encogimiento, y un doblado meticuloso para que tus prendas lleguen listas para guardar.
+            </p>
+</section>
+<!-- Benefits Bento Grid -->
+<section class="px-container-margin mt-section-padding flex flex-col gap-stack-gap">
+<h3 class="font-title-md text-title-md text-primary">Beneficios</h3>
+<div class="grid grid-cols-1 gap-4">
+<!-- Benefit Card 1 -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_16px_rgba(17,28,45,0.03)] border border-surface-container-high/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<div>
+<h4 class="font-title-md text-[16px] leading-[24px] font-semibold text-on-surface">Eco-friendly</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Detergentes biodegradables de bajo impacto.</p>
+</div>
+</div>
+<!-- Benefit Card 2 -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_16px_rgba(17,28,45,0.03)] border border-surface-container-high/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">sanitizer</span>
+</div>
+<div>
+<h4 class="font-title-md text-[16px] leading-[24px] font-semibold text-on-surface">Sanitizado</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Elimina el 99.9% de bacterias y ácaros.</p>
+</div>
+</div>
+<!-- Benefit Card 3 -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_4px_16px_rgba(17,28,45,0.03)] border border-surface-container-high/30 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">checkroom</span>
+</div>
+<div>
+<h4 class="font-title-md text-[16px] leading-[24px] font-semibold text-on-surface">Protección de Tejidos</h4>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Ciclos suaves que prolongan la vida útil.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-[72px] left-0 w-full px-container-margin py-4 bg-gradient-to-t from-background via-background/95 to-transparent z-40 pb-safe">
+<button class="w-full h-[56px] bg-primary text-on-primary font-button text-button rounded-xl shadow-lg active:scale-95 duration-150 transition-transform flex items-center justify-center gap-2">
+<span>Contratar</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar (Shell) -->
+<!-- Note: While the prompt asks for a detail screen, it also explicitly requests the Global bottom navigation bar. 
+         Usually, deep details hide the nav, but following explicit user instruction to include it. Active state set to Services based on context. -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface dark:bg-surface-dim shadow-[0_-4px_16px_rgba(17,28,45,0.04)] flex justify-around items-center px-2 py-3">
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-outline px-4 py-1.5 hover:opacity-80 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-2xl px-4 py-1.5 transition-all hover:opacity-80 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined fill">local_laundry_service</span>
+<span class="font-label-md text-label-md mt-1 font-semibold">Services</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-outline px-4 py-1.5 hover:opacity-80 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-outline px-4 py-1.5 hover:opacity-80 transition-opacity active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple scroll effect for header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('top-nav');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-md', 'bg-surface/95');
+                header.classList.remove('bg-surface/90', 'shadow-[0_16px_24px_rgba(17,28,45,0.04)]');
+            } else {
+                header.classList.remove('shadow-md', 'bg-surface/95');
+                header.classList.add('bg-surface/90', 'shadow-[0_16px_24px_rgba(17,28,45,0.04)]');
+            }
+        });
+    </script>
+</body></html>

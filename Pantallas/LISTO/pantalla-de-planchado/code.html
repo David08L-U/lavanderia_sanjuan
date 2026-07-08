@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshClean - Planchado</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-blue-tint": "#e7eeff",
+                        "primary-container": "#0058bc",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-secondary-fixed": "#111d26",
+                        "on-primary-fixed": "#001a41",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-container": "#e7eeff",
+                        "on-error": "#ffffff",
+                        "error-red": "#ba1a1a",
+                        "on-surface-variant": "#424753",
+                        "outline": "#727784",
+                        "on-primary-fixed-variant": "#004494",
+                        "surface-dim": "#cfdaf2",
+                        "on-background": "#111c2d",
+                        "surface-container-high": "#dee8ff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d8e3fb",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#095bbf",
+                        "surface-container-highest": "#d8e3fb",
+                        "background": "#f9f9ff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "inverse-surface": "#263143",
+                        "secondary-fixed": "#d7e4f1",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#d7e4f1",
+                        "secondary": "#54606b",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary-container": "#c3d4ff",
+                        "outline-variant": "#c2c6d5",
+                        "tertiary-container": "#595c5e",
+                        "on-secondary-fixed-variant": "#3c4853",
+                        "tertiary": "#414546",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#e1e3e5",
+                        "on-tertiary-fixed": "#191c1e",
+                        "surface-container-lowest": "#ffffff",
+                        "success-blue": "#0070eb",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-container": "#d2d4d7",
+                        "on-surface": "#111c2d",
+                        "on-secondary-container": "#5a6671",
+                        "secondary-fixed-dim": "#bbc8d5",
+                        "surface-bright": "#f9f9ff",
+                        "primary": "#00418f",
+                        "on-error-container": "#93000a",
+                        "surface": "#f9f9ff",
+                        "inverse-primary": "#adc6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "inline-gap": "0.75rem",
+                        "stack-gap": "1rem",
+                        "hero-padding": "2.5rem",
+                        "section-padding": "2rem",
+                        "container-margin": "1.25rem"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(249, 249, 255, 0) 0%, rgba(249, 249, 255, 1) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-lg antialiased selection:bg-primary-fixed selection:text-on-primary-fixed pb-24 md:pb-0">
+<!-- Top Navigation (Desktop) / Header (Mobile) -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim shadow-sm hidden md:flex">
+<div class="flex justify-between items-center px-container-margin py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<button aria-label="Menu" class="p-2 rounded-full hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim">FreshClean</span>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-on-secondary-container dark:text-outline hover:text-primary font-button text-button transition-colors" href="#">Home</a>
+<a class="text-primary dark:text-primary-fixed-dim font-button text-button transition-colors" href="#">Services</a>
+<a class="text-on-secondary-container dark:text-outline hover:text-primary font-button text-button transition-colors" href="#">Orders</a>
+<a class="text-on-secondary-container dark:text-outline hover:text-primary font-button text-button transition-colors" href="#">Profile</a>
+</nav>
+<button aria-label="Notifications" class="p-2 rounded-full hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors text-on-secondary-container dark:text-outline">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Mobile Header (Back Button) -->
+<header class="fixed top-0 w-full z-40 bg-surface/80 backdrop-blur-md md:hidden shadow-[0_4px_16px_rgba(17,28,45,0.02)]">
+<div class="flex justify-between items-center px-container-margin py-4 w-full">
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-container active:scale-95 duration-100 transition-all text-on-surface" onclick="history.back()">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Planchado</span>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<main class="pt-16 md:pt-24 max-w-4xl mx-auto md:px-container-margin">
+<!-- Hero Section -->
+<section class="relative w-full h-[353px] md:h-[442px] min-h-[300px] md:rounded-2xl overflow-hidden shadow-sm">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="Close up shot of professional steam ironing on a crisp white dress shirt. The iron is gliding smoothly, emitting a soft puff of steam. The setting is bright, clean, and organized, lit by natural daylight. Colors are pristine whites and soft blues, conveying a sense of fresh, impeccable cleanliness and premium garment care." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3IpREFAn9EAgJ1nhjN16ymwbeOvVYc6r9eH_KyHhKeZ_JraJsasoE9lC7PgHAjbOoKaJDoNlXFYpX3XQCIV3LMiHwtPAeY_3m-Okbpc3EUTqtfFm-xnrpN4nSPQZ6HeTU_uYZG0NDZipn5LzpRwygSGl4zu2iHdYLZqaQDYfvT1K8925kpjtUajLZNd2fP6cVM62rf9f9xiiaSxQCcxULiG4aABFxDGpMLJsfVkeSGYnKfWyqEXZX"/>
+<div class="absolute inset-0 hero-gradient"></div>
+<div class="absolute bottom-0 left-0 w-full p-container-margin flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="inline-flex items-center gap-2 bg-primary-container text-on-primary-container px-3 py-1 rounded-full mb-3 shadow-sm backdrop-blur-sm bg-opacity-90">
+<span class="material-symbols-outlined text-[18px]">iron</span>
+<span class="font-label-md text-label-md font-semibold tracking-wide uppercase">Servicio Especializado</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Planchado Perfecto</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">Acabado impecable y cuidado profesional para que tus prendas luzcan como nuevas. Utilizamos vaporización avanzada para proteger las fibras.</p>
+</div>
+</div>
+</section>
+<!-- Service Details Cards -->
+<section class="mt-section-padding px-container-margin md:px-0 grid grid-cols-1 md:grid-cols-3 gap-stack-gap">
+<!-- Pricing Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 shadow-[0_8px_24px_rgba(89,92,94,0.04)] flex flex-col items-center text-center hover:border-primary-fixed transition-colors">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined filled-icon text-[24px]">payments</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Precio</h3>
+<p class="font-display-lg text-display-lg text-primary">$15 <span class="font-body-md text-body-md text-on-surface-variant font-normal">/ pza</span></p>
+</div>
+<!-- Time Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 shadow-[0_8px_24px_rgba(89,92,94,0.04)] flex flex-col items-center text-center hover:border-primary-fixed transition-colors">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed mb-4">
+<span class="material-symbols-outlined filled-icon text-[24px]">schedule</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Tiempo Estimado</h3>
+<p class="font-headline-lg text-headline-lg text-on-surface mt-1">12-24 <span class="font-body-md text-body-md text-on-surface-variant font-normal">horas</span></p>
+</div>
+<!-- Delivery Card -->
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 shadow-[0_8px_24px_rgba(89,92,94,0.04)] flex flex-col items-center text-center hover:border-primary-fixed transition-colors">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined filled-icon text-[24px]">local_shipping</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Entrega</h3>
+<p class="font-body-lg text-body-lg text-on-surface mt-1">En gancho o doblado</p>
+</div>
+</section>
+<!-- Benefits Section (Bento Grid Style) -->
+<section class="mt-section-padding px-container-margin md:px-0 mb-32 md:mb-12">
+<h2 class="font-title-md text-title-md text-on-surface mb-stack-gap">Beneficios del Servicio</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low rounded-xl p-6 flex items-start gap-4 hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined">eco</span>
+</div>
+<div>
+<h4 class="font-button text-button text-on-surface mb-1">Cuidado de Telas</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Ajustamos la temperatura y nivel de vapor según la composición específica de cada prenda, evitando brillos indeseados o daños en fibras delicadas.</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-6 flex items-start gap-4 hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-primary-fixed-dim flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined">checkroom</span>
+</div>
+<div>
+<h4 class="font-button text-button text-on-surface mb-1">Entrega en Gancho</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Tus prendas se entregan listas para colgar en tu clóset. Utilizamos ganchos protectores para mantener la forma perfecta de hombros y cuellos.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button Area / Bottom CTA -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-md border-t border-surface-variant p-4 md:p-6 z-40 md:relative md:bg-transparent md:border-none md:max-w-4xl md:mx-auto md:px-container-margin flex justify-center">
+<a class="w-full md:w-auto md:min-w-[300px] flex items-center justify-center gap-2 bg-primary text-on-primary font-button text-button h-14 rounded-full shadow-[0_4px_12px_rgba(0,65,143,0.2)] hover:bg-on-primary-fixed-variant active:scale-[0.98] transition-all" href="{{DATA:SCREEN:SCREEN_46}}">
+<span>Contratar Servicio</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</a>
+</div>
+</body></html>
