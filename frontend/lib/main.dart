@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
+import 'providers/direcciones_provider.dart';
 import 'providers/login_provider.dart';
-import 'screens/login/login_screen.dart';
+import 'providers/metodos_pago_provider.dart';
+import 'screens/auth/login/login_screen.dart';
 import 'utils/app_colors.dart';
 import 'utils/app_scroll_behavior.dart';
 
@@ -21,6 +23,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => DireccionesProvider()),
+        ChangeNotifierProvider(create: (_) => MetodosPagoProvider()),
       ],
       child: MaterialApp(
         title: 'Lavanderia San Juan',

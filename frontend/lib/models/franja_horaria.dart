@@ -21,18 +21,18 @@ const franjasDisponibles = [
     valor: FranjaHoraria.manana,
     etiqueta: 'Mañana',
     horario: '08:00 - 12:00',
-    icon: Icons.wb_sunny_outlined,
+    icon: Icons.light_mode_rounded,
   ),
   FranjaHorariaInfo(
     valor: FranjaHoraria.tarde,
     etiqueta: 'Tarde',
-    horario: '12:00 - 16:00',
+    horario: '13:00 - 17:00',
     icon: Icons.wb_sunny_rounded,
   ),
   FranjaHorariaInfo(
     valor: FranjaHoraria.noche,
     etiqueta: 'Noche',
-    horario: '16:00 - 20:00',
-    icon: Icons.nightlight_round,
+    horario: '18:00 - 21:00',
+    icon: Icons.dark_mode_rounded,
   ),
 ];

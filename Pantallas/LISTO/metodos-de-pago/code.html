@@ -1,0 +1,209 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>FreshClean - Métodos de Pago</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#bcc8d5",
+                        "surface-bright": "#f9f9ff",
+                        "outline": "#717786",
+                        "inverse-primary": "#adc6ff",
+                        "secondary-fixed": "#d8e4f2",
+                        "on-tertiary-container": "#fbfdff",
+                        "inverse-surface": "#263143",
+                        "surface-container-high": "#dee8ff",
+                        "surface-container": "#e7eeff",
+                        "on-surface": "#111c2d",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-container-low": "#f0f3ff",
+                        "tertiary": "#595c5e",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#001a41",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#fefcff",
+                        "background": "#f9f9ff",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface": "#f9f9ff",
+                        "secondary": "#54606b",
+                        "on-surface-variant": "#414755",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary-fixed-variant": "#004493",
+                        "primary": "#0058bc",
+                        "on-secondary-container": "#5a6671",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "secondary-container": "#d8e4f2",
+                        "on-secondary-fixed-variant": "#3d4853",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#cfdaf2",
+                        "outline-variant": "#c1c6d7",
+                        "on-tertiary-fixed": "#191c1e",
+                        "on-secondary-fixed": "#111d26",
+                        "primary-container": "#0070eb",
+                        "surface-tint": "#005bc1",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#111c2d",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d8e3fb",
+                        "tertiary-container": "#727577"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-padding": "2rem",
+                        "inline-gap": "0.75rem",
+                        "container-margin": "1.25rem",
+                        "stack-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "button": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ambient-shadow {
+            box-shadow: 0 8px 24px rgba(17, 28, 45, 0.04);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar (From JSON) -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim shadow-sm dark:shadow-none z-50">
+<div class="flex items-center justify-between px-container-margin h-14 w-full">
+<button aria-label="Back to Profile" class="flex items-center justify-center p-2 -ml-2 text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-150 rounded-full">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim flex-1 text-center pr-8 truncate">Métodos de Pago</h1>
+<div class="w-8"></div> <!-- Spacer for center alignment -->
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-container-margin py-section-padding space-y-8 max-w-2xl mx-auto w-full pb-safe">
+<!-- Saved Cards Section -->
+<section class="space-y-4">
+<h2 class="font-title-md text-title-md text-on-surface">Tarjetas Guardadas</h2>
+<div class="grid grid-cols-1 gap-4">
+<!-- Primary Card (Mastercard) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 ambient-shadow flex flex-col justify-between relative overflow-hidden group hover:border-primary/30 transition-colors cursor-pointer">
+<!-- Subtle background decoration -->
+<div class="absolute -right-12 -top-12 w-40 h-40 bg-surface-container-high rounded-full opacity-50 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-6 z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-8 bg-surface-container flex items-center justify-center rounded-md border border-outline-variant/20">
+<!-- Minimalist Mastercard Logo -->
+<div class="flex">
+<div class="w-4 h-4 rounded-full bg-[#EB001B] opacity-80 mix-blend-multiply"></div>
+<div class="w-4 h-4 rounded-full bg-[#F79E1B] opacity-80 mix-blend-multiply -ml-2"></div>
+</div>
+</div>
+<span class="font-label-md text-label-md bg-primary-container text-on-primary-container px-2.5 py-1 rounded-full uppercase tracking-wide">Principal</span>
+</div>
+<button aria-label="Opciones de tarjeta" class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="z-10 space-y-1">
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-mono tracking-widest">•••• •••• •••• 4242</p>
+<div class="flex justify-between items-end">
+<p class="font-body-md text-body-md text-on-surface-variant">Expira 12/25</p>
+</div>
+</div>
+</div>
+<!-- Secondary Card (Visa) -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-5 ambient-shadow flex flex-col justify-between relative overflow-hidden group hover:border-primary/30 transition-colors cursor-pointer opacity-80 hover:opacity-100">
+<div class="flex justify-between items-start mb-6 z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-8 bg-surface-container flex items-center justify-center rounded-md border border-outline-variant/20">
+<span class="font-bold text-primary italic text-xs">VISA</span>
+</div>
+</div>
+<button aria-label="Opciones de tarjeta" class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="z-10 space-y-1">
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-mono tracking-widest text-opacity-80">•••• •••• •••• 8819</p>
+<div class="flex justify-between items-end">
+<p class="font-body-md text-body-md text-on-surface-variant">Expira 08/24</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Add New Payment Method -->
+<section class="pt-4 border-t border-surface-container-high">
+<button class="w-full bg-surface-container-lowest border border-dashed border-outline hover:border-primary rounded-xl p-5 flex flex-col items-center justify-center gap-3 group transition-colors ambient-shadow active:scale-[0.98] duration-200">
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary-container">add</span>
+</div>
+<span class="font-button text-button text-primary">Añadir Nueva Tarjeta</span>
+</button>
+</section>
+<!-- Other Methods -->
+<section class="space-y-4 pt-4">
+<h3 class="font-title-md text-title-md text-on-surface">Otros Métodos</h3>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 overflow-hidden ambient-shadow">
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors border-b border-outline-variant/20">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+<span class="font-body-lg text-body-lg text-on-surface">Transferencia Bancaria</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">payments</span>
+<span class="font-body-lg text-body-lg text-on-surface">Efectivo al Repartidor</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Suppressed BottomNavBar based on Source of Truth Rules -->
+<!-- Rule applied: Automatic Suppression -> Linear/Transactional or Task-Focused (Sub-page featuring a 'Back' action implies a temporary departure from main nav flow). -->
+</body></html>

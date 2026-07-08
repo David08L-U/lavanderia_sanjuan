@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>FreshClean - Tintorería Profesional</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#263143",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#717786",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-variant": "#d8e3fb",
+                    "primary": "#0058bc",
+                    "on-secondary-fixed-variant": "#3d4853",
+                    "on-tertiary-container": "#fbfdff",
+                    "secondary-fixed-dim": "#bcc8d5",
+                    "on-surface-variant": "#414755",
+                    "inverse-primary": "#adc6ff",
+                    "surface-bright": "#f9f9ff",
+                    "secondary-container": "#d8e4f2",
+                    "secondary": "#54606b",
+                    "surface-container-highest": "#d8e3fb",
+                    "surface-dim": "#cfdaf2",
+                    "on-secondary-container": "#5a6671",
+                    "surface-container-low": "#f0f3ff",
+                    "on-primary": "#ffffff",
+                    "tertiary": "#595c5e",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "tertiary-container": "#727577",
+                    "primary-container": "#0070eb",
+                    "inverse-on-surface": "#ecf1ff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#111d26",
+                    "surface-tint": "#005bc1",
+                    "outline-variant": "#c1c6d7",
+                    "on-primary-fixed": "#001a41",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#004493",
+                    "on-background": "#111c2d",
+                    "surface": "#f9f9ff",
+                    "primary-fixed": "#d8e2ff",
+                    "on-primary-container": "#fefcff",
+                    "surface-container-high": "#dee8ff",
+                    "on-surface": "#111c2d",
+                    "tertiary-fixed": "#e0e3e5",
+                    "background": "#f9f9ff",
+                    "secondary-fixed": "#d8e4f2",
+                    "surface-container": "#e7eeff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "1.25rem",
+                    "inline-gap": "0.75rem",
+                    "section-padding": "2rem",
+                    "stack-gap": "1rem"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "button": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "button": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-fixed-dim">
+<!-- Top Navigation Anchor -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md shadow-sm h-16 flex justify-between items-center px-container-margin">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors active:scale-95">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">FreshClean</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-quality professional headshot of a smiling young urban professional woman with a clean, minimalist background. The lighting is soft and natural, emphasizing a premium and reliable service feel. Her expression conveys trust and efficiency, perfectly aligned with a high-end concierge laundry brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4u88A9nxTNDQRpHoRnrGdDoqUxhFX7kWTE8C6qIo9CvVf5RPW3pnOP6XcQ-R_PhiEm0nGOgSdd-oM7SDzf05Rcj0w_8q_q22Zii6n0RIhPoXn2kwWWV8UnAg24_n6rQFqquGF72ypKyDu8RzYvfYCedO5pca5bE6WVil4PfB1A-saUyV5twLmUkVm31LWh-uqDt1JlY2h6Koc93nsOT2XK3Gn71P2MzLNmvx7246nH1hyK_66G5s-PqDoMcovVdlEEB_mADEwoDc"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-16 pb-32">
+<!-- Hero Section -->
+<section class="relative w-full h-[353px] overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A stunning, close-up photograph of high-end garments like tailored wool suits and delicate silk dresses hanging on elegant wooden hangers in a pristine, minimalist dry cleaning studio. The lighting is bright and ethereal, casting soft shadows. The color palette consists of crisp whites, soft sky blues, and neutral tones, creating an atmosphere of professional hygiene and expert care." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAHaAHunvnZ5pxfS8QT72OtqU6NqjT_Nf6fTsI7CfEMq1j-MNjonewVkBMZnRHl8bJsRSFb4MCUnsQEbBUDKEslzz29AmHwvLoJMBZNWCLIQAe6TXssSwvLlLIqfc_jN9s2PuQmBF8w3UC1QEoHbb1RVyR0zVDuZhk4f_JNjPswu_DG1D6jx39UrGklzuTetMTV5AXekfl2LfUXKc_5DW6NBpf6l-nIAeHmAsrXL_kSV55iORjwL_RZbX39MPdrGhhphXMZTpWlD-0')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+</section>
+<!-- Header Information -->
+<section class="px-container-margin -mt-12 relative z-10">
+<div class="bg-surface p-6 rounded-xl shadow-lg border border-outline-variant/30">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">Tintorería Profesional</h1>
+<p class="font-body-md text-on-surface-variant leading-relaxed">
+                    Cuidado experto para tus prendas más delicadas. Utilizamos procesos de limpieza en seco ecológicos que eliminan manchas difíciles sin dañar las fibras.
+                </p>
+<div class="mt-4 flex flex-wrap gap-2">
+<span class="bg-secondary-container text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Ecológico</span>
+<span class="bg-secondary-container text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Premium</span>
+<span class="bg-secondary-container text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Garantizado</span>
+</div>
+</div>
+</section>
+<!-- Process Section -->
+<section class="mt-section-padding px-container-margin">
+<h2 class="font-title-md text-title-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                ¿Cómo funciona?
+            </h2>
+<div class="grid grid-cols-1 gap-4">
+<div class="flex gap-4 p-4 bg-surface-container-low rounded-xl border border-outline-variant/20 items-start">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="text-on-primary font-bold">1</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Revisión</h3>
+<p class="font-body-md text-on-surface-variant">Inspección minuciosa de cada prenda para identificar manchas y áreas de cuidado especial.</p>
+</div>
+</div>
+<div class="flex gap-4 p-4 bg-surface-container-low rounded-xl border border-outline-variant/20 items-start">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="text-on-primary font-bold">2</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Tratamiento</h3>
+<p class="font-body-md text-on-surface-variant">Aplicación de solventes biodegradables y técnicas de desmanchado artesanal.</p>
+</div>
+</div>
+<div class="flex gap-4 p-4 bg-surface-container-low rounded-xl border border-outline-variant/20 items-start">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="text-on-primary font-bold">3</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Acabado Final</h3>
+<p class="font-body-md text-on-surface-variant">Planchado profesional al vapor y empaque en fundas protectoras transpirables.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Suggested Items Section -->
+<section class="mt-section-padding px-container-margin">
+<h2 class="font-title-md text-title-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">checkroom</span>
+                Prendas sugeridas
+            </h2>
+<div class="grid grid-cols-2 gap-3">
+<div class="p-4 bg-white rounded-xl border border-secondary-container shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-2">dry_cleaning</span>
+<span class="font-title-md text-on-surface">Trajes</span>
+</div>
+<div class="p-4 bg-white rounded-xl border border-secondary-container shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-2">personal_video</span>
+<span class="font-title-md text-on-surface">Abrigos</span>
+</div>
+<div class="p-4 bg-white rounded-xl border border-secondary-container shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-2">styler</span>
+<span class="font-title-md text-on-surface">Vestidos Seda</span>
+</div>
+<div class="p-4 bg-white rounded-xl border border-secondary-container shadow-sm flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-2">diamond</span>
+<span class="font-title-md text-on-surface">Diseñador</span>
+</div>
+</div>
+</section>
+<!-- Special Instructions -->
+<section class="mt-section-padding px-container-margin">
+<div class="bg-error-container p-4 rounded-xl flex gap-4">
+<span class="material-symbols-outlined text-error">info</span>
+<div>
+<h3 class="font-title-md text-on-error-container mb-1">Instrucciones Especiales</h3>
+<p class="font-body-md text-on-error-container opacity-90">Por favor, asegúrate de vaciar los bolsillos e informar sobre manchas específicas o daños previos al recolectar tu pedido.</p>
+</div>
+</div>
+</section>
+<!-- Pricing Tiers -->
+<section class="mt-section-padding px-container-margin">
+<h2 class="font-title-md text-title-md mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">sell</span>
+                Tarifas
+            </h2>
+<div class="flex overflow-x-auto gap-4 hide-scrollbar pb-4 -mx-container-margin px-container-margin">
+<div class="min-w-[260px] bg-white border border-outline-variant/30 p-6 rounded-2xl shadow-sm">
+<span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Básica</span>
+<div class="flex items-baseline gap-1 mt-2 mb-4">
+<span class="text-display-lg font-display-lg text-primary">$12</span>
+<span class="text-body-md text-on-surface-variant">/ prenda</span>
+</div>
+<ul class="space-y-3">
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined text-primary scale-75">check_circle</span> Limpieza estándar
+                        </li>
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined text-primary scale-75">check_circle</span> Planchado básico
+                        </li>
+</ul>
+</div>
+<div class="min-w-[260px] bg-primary-container p-6 rounded-2xl shadow-md ring-4 ring-primary-fixed-dim/30">
+<span class="text-label-md text-white/80 font-bold uppercase tracking-widest">Premium</span>
+<div class="flex items-baseline gap-1 mt-2 mb-4 text-white">
+<span class="text-display-lg font-display-lg">$25</span>
+<span class="text-body-md opacity-80">/ prenda</span>
+</div>
+<ul class="space-y-3 text-white">
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined scale-75">check_circle</span> Desmanchado profundo
+                        </li>
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined scale-75">check_circle</span> Vaporizado manual
+                        </li>
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined scale-75">check_circle</span> Seguro de prenda
+                        </li>
+</ul>
+</div>
+<div class="min-w-[260px] bg-white border border-outline-variant/30 p-6 rounded-2xl shadow-sm">
+<span class="text-label-md text-on-surface-variant font-bold uppercase tracking-widest">Luxury</span>
+<div class="flex items-baseline gap-1 mt-2 mb-4">
+<span class="text-display-lg font-display-lg text-primary">$45</span>
+<span class="text-body-md text-on-surface-variant">/ prenda</span>
+</div>
+<ul class="space-y-3">
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined text-primary scale-75">check_circle</span> Cuidado de pedrería
+                        </li>
+<li class="flex items-center gap-2 text-body-md">
+<span class="material-symbols-outlined text-primary scale-75">check_circle</span> Entrega en percha premium
+                        </li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Action Anchor -->
+<div class="fixed bottom-0 left-0 w-full bg-surface px-container-margin py-6 flex flex-col gap-4 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] z-50 rounded-t-3xl">
+<button class="w-full h-14 bg-primary text-on-primary font-button text-button rounded-xl shadow-lg active:scale-95 transition-transform duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">shopping_basket</span>
+            Contratar Ahora
+        </button>
+<!-- Tab Bar Mimicry for Shell Integrity -->
+<div class="flex justify-around items-center pt-2">
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px]">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_laundry_service</span>
+<span class="text-[10px] font-bold">Services</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="text-[10px]">Orders</span>
+</div>
+<div class="flex flex-col items-center gap-1 opacity-50">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Profile</span>
+</div>
+</div>
+</div>
+<script>
+        // Simple micro-interaction for pricing cards
+        const priceCards = document.querySelectorAll('.min-w-\\[260px\\]');
+        priceCards.forEach(card => {
+            card.addEventListener('click', () => {
+                priceCards.forEach(c => {
+                    c.classList.remove('ring-4', 'ring-primary-fixed-dim/30');
+                    if(c.classList.contains('bg-primary-container')) {
+                        // Keep primary container styled differently
+                    }
+                });
+                if(!card.classList.contains('bg-primary-container')) {
+                    card.classList.add('ring-4', 'ring-primary-fixed-dim/30');
+                }
+            });
+        });
+    </script>
+</body></html>

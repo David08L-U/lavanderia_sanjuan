@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Seleccionar Dirección - FreshClean</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .selected-card {
+            border-color: #0058bc !important;
+            background-color: #f0f3ff !important;
+        }
+        .radio-active {
+            background-color: #0058bc;
+            box-shadow: inset 0 0 0 2px white;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d8e3fb;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#d8e3fb",
+                      "primary-fixed-dim": "#adc6ff",
+                      "on-primary-container": "#fefcff",
+                      "surface-container-high": "#dee8ff",
+                      "primary-container": "#0070eb",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-primary-fixed-variant": "#004493",
+                      "on-error-container": "#93000a",
+                      "inverse-surface": "#263143",
+                      "on-surface": "#111c2d",
+                      "primary-fixed": "#d8e2ff",
+                      "on-secondary-fixed": "#111d26",
+                      "on-background": "#111c2d",
+                      "outline-variant": "#c1c6d7",
+                      "error": "#ba1a1a",
+                      "secondary-container": "#d8e4f2",
+                      "surface-tint": "#005bc1",
+                      "surface": "#f9f9ff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-container": "#727577",
+                      "on-secondary-fixed-variant": "#3d4853",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "secondary": "#54606b",
+                      "on-primary-fixed": "#001a41",
+                      "error-container": "#ffdad6",
+                      "background": "#f9f9ff",
+                      "surface-container-highest": "#d8e3fb",
+                      "on-secondary-container": "#5a6671",
+                      "primary": "#0058bc",
+                      "outline": "#717786",
+                      "tertiary-fixed": "#e0e3e5",
+                      "inverse-on-surface": "#ecf1ff",
+                      "on-tertiary-container": "#fbfdff",
+                      "surface-bright": "#f9f9ff",
+                      "secondary-fixed": "#d8e4f2",
+                      "surface-container": "#e7eeff",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#cfdaf2",
+                      "on-surface-variant": "#414755",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "inverse-primary": "#adc6ff",
+                      "tertiary": "#595c5e",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#bcc8d5",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "inline-gap": "0.75rem",
+                      "stack-gap": "1rem",
+                      "container-margin": "1.25rem",
+                      "section-padding": "2rem"
+              },
+              "fontFamily": {
+                      "title-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "button": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "button": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col items-center">
+<!-- Top Navigation Shell -->
+<header class="w-full top-0 sticky z-30 bg-surface shadow-sm flex items-center justify-between px-container-margin h-14">
+<div class="flex items-center gap-4">
+<button aria-label="Volver" class="active:scale-95 transition-transform duration-150 text-primary">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">Seleccionar Dirección</h1>
+</div>
+<button aria-label="Agregar Dirección" class="active:scale-95 transition-transform duration-150 text-primary">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+</header>
+<main class="w-full max-w-md flex-1 flex flex-col pb-32">
+<!-- Map Preview Section -->
+<section class="mt-4 px-container-margin">
+<div class="relative w-full h-44 rounded-xl overflow-hidden shadow-sm group">
+<div class="absolute inset-0 bg-surface-variant animate-pulse" id="map-loading-state"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A clean, minimalist vector-style city map of Mexico City with soft blue and white tones. The map features elegant, thin-line street grids and subtle water features in a fresh sky blue. A single circular pin in a deep professional blue marks a central point, illuminated by a soft glow that creates a modern, high-end digital aesthetic." data-location="Mexico City" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0Abw-UPdR805hXyGnDKq2f0kr6GcN0h1Glm9q0yCBCFgUx9184g_XaL761bDo_nanzRoNgkE7TsetX2HxWvrovpQvZu-wuliD3WhRU0-lkiVCkv8bvFssyyUJ-6dTK2v3PAqYrSI-9cDCO6JlsdGLDT8mn0W-2hmXjKwmeHwG0Ryrf2S3S7wmP83tqXEAadpBtEiudP9wpnEKaxj04RBKoca5PYiijJhPCMPgtRGrBDSzoKLpIkMd')">
+</div>
+<div class="absolute bottom-3 left-3 bg-surface/90 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2 border border-surface-variant">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-label-md font-label-md text-on-surface">Ubicación Actual</span>
+</div>
+</div>
+</section>
+<!-- Address List Title -->
+<section class="mt-8 px-container-margin">
+<h2 class="text-title-md font-title-md text-on-surface mb-4">Mis Lugares</h2>
+<div class="flex flex-col gap-stack-gap" id="address-container">
+<!-- Address Card: Casa (Selected) -->
+<div class="selected-card cursor-pointer flex items-center justify-between p-4 bg-surface-container-lowest border border-surface-variant rounded-xl transition-all duration-200 hover:shadow-md" onclick="selectAddress(this)">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<div>
+<p class="text-body-lg font-title-md text-on-surface">Casa</p>
+<p class="text-body-md text-on-surface-variant mt-0.5">Av. Paseo de la Reforma 123, Juárez, CDMX, 06600</p>
+</div>
+</div>
+<div class="ml-4 shrink-0">
+<div class="radio-circle w-6 h-6 rounded-full border-2 border-primary radio-active flex items-center justify-center transition-colors"></div>
+</div>
+</div>
+<!-- Address Card: Oficina -->
+<div class="cursor-pointer flex items-center justify-between p-4 bg-surface-container-lowest border border-surface-variant rounded-xl transition-all duration-200 hover:shadow-md group" onclick="selectAddress(this)">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center shrink-0 group-hover:bg-primary-container/5 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">work</span>
+</div>
+<div>
+<p class="text-body-lg font-title-md text-on-surface">Oficina</p>
+<p class="text-body-md text-on-surface-variant mt-0.5">Calle Hamburgo 45, Piso 10, Juárez, CDMX, 06600</p>
+</div>
+</div>
+<div class="ml-4 shrink-0">
+<div class="radio-circle w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center transition-colors"></div>
+</div>
+</div>
+<!-- Address Card: Gimnasio -->
+<div class="cursor-pointer flex items-center justify-between p-4 bg-surface-container-lowest border border-surface-variant rounded-xl transition-all duration-200 hover:shadow-md group" onclick="selectAddress(this)">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center shrink-0 group-hover:bg-primary-container/5 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">fitness_center</span>
+</div>
+<div>
+<p class="text-body-lg font-title-md text-on-surface">Gimnasio</p>
+<p class="text-body-md text-on-surface-variant mt-0.5">Av. Insurgentes Sur 800, Col del Valle, CDMX, 03100</p>
+</div>
+</div>
+<div class="ml-4 shrink-0">
+<div class="radio-circle w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center transition-colors"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- New Address Quick Action -->
+<section class="mt-6 px-container-margin">
+<button class="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-outline-variant rounded-xl text-primary font-button hover:bg-primary/5 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">add_location_alt</span>
+                Agregar otra ubicación
+            </button>
+</section>
+</main>
+<!-- Fixed Bottom Action Button -->
+<div class="fixed bottom-0 left-0 w-full p-container-margin bg-gradient-to-t from-background via-background/95 to-transparent pt-8 pb-10 z-40 max-w-md left-1/2 -translate-x-1/2">
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-button text-button shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-all hover:opacity-90" id="confirm-button">
+            Confirmar Dirección
+            <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        function selectAddress(element) {
+            // Remove active styles from all cards
+            const allCards = document.querySelectorAll('#address-container > div');
+            allCards.forEach(card => {
+                card.classList.remove('selected-card');
+                const radio = card.querySelector('.radio-circle');
+                radio.classList.remove('radio-active', 'border-primary');
+                radio.classList.add('border-outline-variant');
+                
+                // Icon styling reset
+                const iconContainer = card.querySelector('.shrink-0 div');
+                iconContainer.classList.remove('bg-primary-container/10');
+                iconContainer.classList.add('bg-surface-variant/50');
+                const icon = iconContainer.querySelector('span');
+                icon.classList.remove('text-primary');
+                icon.style.fontVariationSettings = "'FILL' 0";
+            });
+
+            // Add active styles to clicked card
+            element.classList.add('selected-card');
+            const activeRadio = element.querySelector('.radio-circle');
+            activeRadio.classList.add('radio-active', 'border-primary');
+            activeRadio.classList.remove('border-outline-variant');
+
+            // Icon styling active
+            const activeIconContainer = element.querySelector('.shrink-0 div');
+            activeIconContainer.classList.add('bg-primary-container/10');
+            activeIconContainer.classList.remove('bg-surface-variant/50');
+            const activeIcon = activeIconContainer.querySelector('span');
+            activeIcon.classList.add('text-primary');
+            activeIcon.style.fontVariationSettings = "'FILL' 1";
+
+            // Visual feedback on button
+            const confirmBtn = document.getElementById('confirm-button');
+            confirmBtn.classList.add('scale-105');
+            setTimeout(() => confirmBtn.classList.remove('scale-105'), 200);
+        }
+
+        // Initialize first card state if not already handled by static HTML correctly
+        document.addEventListener('DOMContentLoaded', () => {
+            const mapLoading = document.getElementById('map-loading-state');
+            setTimeout(() => {
+                mapLoading.classList.add('opacity-0');
+                setTimeout(() => mapLoading.style.display = 'none', 500);
+            }, 1000);
+        });
+    </script>
+</body></html>
