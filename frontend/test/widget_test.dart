@@ -1,30 +1,21 @@
-// This is a basic Flutter widget test.
+// Prueba básica de humo para la app de Flutter.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Para interactuar con un widget en tus pruebas, usa el WidgetTester
+// del paquete flutter_test. Por ejemplo, puedes simular toques y scroll.
+// También puedes usar WidgetTester para buscar widgets hijos en el árbol
+// de widgets, leer texto y verificar que las propiedades sean correctas.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fronted/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('La app arranca en la pantalla de acceso', (WidgetTester tester) async {
+    // Construimos la app y disparamos un frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verificamos que la pantalla de Login se muestre primero.
+    expect(find.text('Iniciar Sesión'), findsOneWidget);
+    expect(find.text('FreshClean'), findsOneWidget);
   });
 }

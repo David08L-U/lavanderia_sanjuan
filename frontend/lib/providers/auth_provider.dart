@@ -35,6 +35,61 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> registrar({
+    required String nombre,
+    required String apellido,
+    required String correo,
+    required String telefono,
+    required String password,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _currentUser = await _authService.registrar(
+        nombre: nombre,
+        apellido: apellido,
+        correo: correo,
+        telefono: telefono,
+        password: password,
+      );
+      return true;
+    } on AuthException catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> actualizarPerfil({
+    required String nombre,
+    required String correo,
+    String? telefono,
+  }) async {
+    final actual = _currentUser;
+    if (actual == null) return false;
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _currentUser = await _authService.actualizarPerfil(
+        Usuario(id: actual.id, nombre: nombre, correo: correo, telefono: telefono, rol: actual.rol),
+      );
+      return true;
+    } on AuthException catch (e) {
+      _errorMessage = e.message;
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   void logout() {
     _currentUser = null;
     notifyListeners();

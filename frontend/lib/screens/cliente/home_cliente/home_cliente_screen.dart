@@ -2,16 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/auth_provider.dart';
-import '../../utils/app_colors.dart';
+import '../../../models/servicio_lavanderia.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../utils/app_colors.dart';
+import '../../../widgets/app_bottom_nav_bar.dart';
+import '../mi_perfil/mi_perfil_screen.dart';
+import '../mis_pedidos/mis_pedidos_screen.dart';
+import '../notificaciones/notificaciones_screen.dart';
+import '../nueva_orden/nueva_orden_screen.dart';
+import '../pedido/pedido_screen.dart';
+import '../servicios/edredones_screen.dart';
+import '../servicios/lavado_kilo_screen.dart';
+import '../servicios/planchado_screen.dart';
+import '../servicios/servicios_screen.dart';
+import '../servicios/tintoreria_screen.dart';
+import 'detalle_oferta_screen.dart';
 
 class HomeClienteScreen extends StatelessWidget {
   const HomeClienteScreen({super.key});
 
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
-    );
+  void _onServicioTap(BuildContext context, ServicioLavanderiaInfo servicio) {
+    switch (servicio.tipo) {
+      case TipoServicio.tintoreria:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const TintoreriaScreen()),
+        );
+      case TipoServicio.planchado:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const PlanchadoScreen()),
+        );
+      case TipoServicio.edredones:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const EdredonesScreen()),
+        );
+      case TipoServicio.lavadoYPlegado:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const LavadoKiloScreen()),
+        );
+    }
+  }
+
+  void _onTabSelected(BuildContext context, AppBottomTab tab) {
+    switch (tab) {
+      case AppBottomTab.home:
+        break;
+      case AppBottomTab.services:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ServiciosScreen()),
+        );
+      case AppBottomTab.profile:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MiPerfilScreen()),
+        );
+      case AppBottomTab.orders:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const MisPedidosScreen()),
+        );
+    }
   }
 
   @override
@@ -47,7 +94,9 @@ class HomeClienteScreen extends StatelessWidget {
               children: [
                 IconButton(
                   icon: const Icon(Icons.notifications_outlined, color: AppColors.secondary),
-                  onPressed: () => _showComingSoon(context),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const NotificacionesScreen()),
+                  ),
                 ),
                 Positioned(
                   right: 10,
@@ -76,18 +125,35 @@ class HomeClienteScreen extends StatelessWidget {
             children: [
               _Greeting(nombre: nombre),
               const SizedBox(height: 24),
-              _HeroBanner(onOrderNow: () => _showComingSoon(context)),
+              _HeroBanner(
+                onOrderNow: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const NuevaOrdenScreen()),
+                ),
+              ),
               const SizedBox(height: 32),
-              _ActiveOrderSection(onTap: () => _showComingSoon(context)),
+              _ActiveOrderSection(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const PedidoScreen()),
+                ),
+              ),
               const SizedBox(height: 32),
-              _ServicesSection(onTap: () => _showComingSoon(context)),
+              _ServicesSection(
+                onServicioTap: (servicio) => _onServicioTap(context, servicio),
+              ),
               const SizedBox(height: 24),
-              _WeeklyOfferBanner(onTap: () => _showComingSoon(context)),
+              _WeeklyOfferBanner(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const DetalleOfertaScreen()),
+                ),
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: _HomeBottomNavBar(onOtherTap: () => _showComingSoon(context)),
+      bottomNavigationBar: AppBottomNavBar(
+        currentTab: AppBottomTab.home,
+        onTabSelected: (tab) => _onTabSelected(context, tab),
+      ),
     );
   }
 }
@@ -374,16 +440,9 @@ class _ActiveOrderSection extends StatelessWidget {
 }
 
 class _ServicesSection extends StatelessWidget {
-  const _ServicesSection({required this.onTap});
+  const _ServicesSection({required this.onServicioTap});
 
-  final VoidCallback onTap;
-
-  static const _services = [
-    (icon: Icons.scale_outlined, title: 'Lavado x Kilo', subtitle: 'Desde \$25/kg'),
-    (icon: Icons.dry_cleaning_outlined, title: 'Tintorería', subtitle: 'Prendas delicadas'),
-    (icon: Icons.iron_outlined, title: 'Planchado', subtitle: 'Impecable'),
-    (icon: Icons.bed_outlined, title: 'Edredones', subtitle: 'Gran volumen'),
-  ];
+  final ValueChanged<ServicioLavanderiaInfo> onServicioTap;
 
   @override
   Widget build(BuildContext context) {
@@ -402,7 +461,7 @@ class _ServicesSection extends StatelessWidget {
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: _services.length,
+          itemCount: serviciosDisponibles.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 16,
@@ -410,12 +469,12 @@ class _ServicesSection extends StatelessWidget {
             childAspectRatio: 1.05,
           ),
           itemBuilder: (context, index) {
-            final service = _services[index];
+            final servicio = serviciosDisponibles[index];
             return _ServiceCard(
-              icon: service.icon,
-              title: service.title,
-              subtitle: service.subtitle,
-              onTap: onTap,
+              icon: servicio.icon,
+              title: servicio.nombre,
+              subtitle: servicio.precioTexto,
+              onTap: () => onServicioTap(servicio),
             );
           },
         ),
@@ -559,99 +618,3 @@ class _WeeklyOfferBanner extends StatelessWidget {
   }
 }
 
-class _HomeBottomNavBar extends StatelessWidget {
-  const _HomeBottomNavBar({required this.onOtherTap});
-
-  final VoidCallback onOtherTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(icon: Icons.home_rounded, label: 'Home', active: true, onTap: () {}),
-              _NavItem(
-                icon: Icons.local_laundry_service_outlined,
-                label: 'Services',
-                active: false,
-                onTap: onOtherTap,
-              ),
-              _NavItem(
-                icon: Icons.receipt_long_outlined,
-                label: 'Orders',
-                active: false,
-                onTap: onOtherTap,
-              ),
-              _NavItem(
-                icon: Icons.person_outline_rounded,
-                label: 'Profile',
-                active: false,
-                onTap: onOtherTap,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.active,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool active;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-        decoration: BoxDecoration(
-          color: active ? AppColors.secondaryContainer : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 22, color: active ? AppColors.primary : AppColors.secondary),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 11,
-                fontWeight: FontWeight.w500,
-                color: active ? AppColors.primary : AppColors.secondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

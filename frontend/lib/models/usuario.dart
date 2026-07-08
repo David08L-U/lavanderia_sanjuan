@@ -17,6 +17,7 @@ class Usuario {
     required this.nombre,
     required this.correo,
     required this.rol,
+    this.telefono,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
@@ -24,6 +25,7 @@ class Usuario {
       id: json['id'].toString(),
       nombre: json['nombre'] as String? ?? '',
       correo: json['correo'] as String? ?? json['email'] as String? ?? '',
+      telefono: json['telefono'] as String? ?? json['phone'] as String?,
       rol: userRoleFromString(json['rol'] as String? ?? json['role'] as String?),
     );
   }
@@ -31,5 +33,6 @@ class Usuario {
   final String id;
   final String nombre;
   final String correo;
+  final String? telefono;
   final UserRole rol;
 }
