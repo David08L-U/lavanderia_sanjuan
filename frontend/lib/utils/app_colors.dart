@@ -27,6 +27,7 @@ class AppColors {
   static const error = Color(0xFFBA1A1A);
   static const onError = Color(0xFFFFFFFF);
   static const errorContainer = Color(0xFFFFDAD6);
+  static const onErrorContainer = Color(0xFF93000A);
 
   static const surface = Color(0xFFF9F9FF);
   static const surfaceDim = Color(0xFFCFDAF2);
