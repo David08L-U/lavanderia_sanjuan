@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/usuario.dart';
-import '../../providers/auth_provider.dart';
-import '../../providers/login_provider.dart';
-import '../../utils/app_colors.dart';
-import '../../widgets/labeled_text_field.dart';
-import '../home_administrador/home_administrador_screen.dart';
-import '../home_cliente/home_cliente_screen.dart';
+import '../../../models/usuario.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../providers/login_provider.dart';
+import '../../../utils/app_colors.dart';
+import '../../../widgets/labeled_text_field.dart';
+import '../../admin/home_administrador/home_administrador_screen.dart';
+import '../../cliente/home_cliente/home_cliente_screen.dart';
+import '../crear_cuenta/crear_cuenta_screen.dart';
+import '../recuperar_contrasena/recuperar_contrasena_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -133,7 +135,11 @@ class LoginScreen extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () => _showComingSoon(context),
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const RecuperarContrasenaScreen(),
+                                  ),
+                                ),
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.zero,
                                   minimumSize: const Size(0, 32),
@@ -246,7 +252,11 @@ class LoginScreen extends StatelessWidget {
                                   color: AppColors.primary,
                                 ),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => _showComingSoon(context),
+                                  ..onTap = () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => const CrearCuentaScreen(),
+                                    ),
+                                  ),
                               ),
                             ],
                           ),

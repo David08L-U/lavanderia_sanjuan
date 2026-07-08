@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/app_colors.dart';
+import '../../../utils/app_colors.dart';
 
 // TODO: pendiente el diseño real de esta pantalla (aún no llega en Pantallas/).
 class HomeAdministradorScreen extends StatelessWidget {
