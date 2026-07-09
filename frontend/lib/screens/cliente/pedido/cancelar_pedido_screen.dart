@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../services/pedido_ops_service.dart';
 import '../../../utils/app_colors.dart';
 import '../mis_pedidos/mis_pedidos_screen.dart';
 
@@ -20,6 +21,7 @@ class CancelarPedidoScreen extends StatefulWidget {
 }
 
 class _CancelarPedidoScreenState extends State<CancelarPedidoScreen> {
+  final _pedidoOpsService = PedidoOpsService();
   String _razonSeleccionada = _razones.last;
   final _comentariosController = TextEditingController();
   bool _isLoading = false;
@@ -32,17 +34,31 @@ class _CancelarPedidoScreenState extends State<CancelarPedidoScreen> {
 
   Future<void> _confirmarCancelacion() async {
     setState(() => _isLoading = true);
-    // TODO: enviar la cancelación (razón + comentarios) al backend.
-    await Future.delayed(const Duration(milliseconds: 600));
-    if (!mounted) return;
+    try {
+      await _pedidoOpsService.cancelarPedido(
+        '1',
+        razon: _razonSeleccionada,
+        comentarios: _comentariosController.text.trim(),
+      );
+      if (!mounted) return;
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const MisPedidosScreen()),
-      (route) => route.isFirst,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Pedido cancelado correctamente')),
-    );
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const MisPedidosScreen()),
+        (route) => route.isFirst,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pedido cancelado correctamente')),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo cancelar el pedido')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../services/pedido_ops_service.dart';
 import '../../../utils/app_colors.dart';
 
 class _Criterio {
@@ -26,6 +27,7 @@ class CalificarServicioScreen extends StatefulWidget {
 }
 
 class _CalificarServicioScreenState extends State<CalificarServicioScreen> {
+  final _pedidoOpsService = PedidoOpsService();
   int _calificacionGeneral = 0;
   final _calificacionesDetalle = List<int>.filled(_criterios.length, 0);
   final _resenaController = TextEditingController();
@@ -39,14 +41,28 @@ class _CalificarServicioScreenState extends State<CalificarServicioScreen> {
 
   Future<void> _enviarCalificacion() async {
     setState(() => _isLoading = true);
-    // TODO: enviar la calificación (general + detalle + reseña) al backend.
-    await Future.delayed(const Duration(milliseconds: 600));
-    if (!mounted) return;
+    try {
+      await _pedidoOpsService.calificarPedido(
+        '1',
+        calificacionGeneral: _calificacionGeneral,
+        resena: _resenaController.text.trim(),
+      );
+      if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('¡Gracias por tu calificación!')),
-    );
-    Navigator.of(context).maybePop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('¡Gracias por tu calificación!')),
+      );
+      Navigator.of(context).maybePop();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo enviar la calificación')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override

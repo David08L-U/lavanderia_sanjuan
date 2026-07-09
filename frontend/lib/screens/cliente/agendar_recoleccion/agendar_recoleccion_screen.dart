@@ -7,6 +7,7 @@ import '../../../models/franja_horaria.dart';
 import '../../../models/servicio_lavanderia.dart';
 import '../../../models/tarjeta.dart';
 import '../../../providers/agendar_recoleccion_provider.dart';
+import '../../../providers/auth_provider.dart';
 import '../../../providers/direcciones_provider.dart';
 import '../../../providers/metodos_pago_provider.dart';
 import '../../../utils/app_colors.dart';
@@ -80,7 +81,11 @@ class AgendarRecoleccionScreen extends StatelessWidget {
     AgendarRecoleccionProvider provider,
     Direccion direccionActual,
   ) async {
-    await provider.agendarRecoleccion();
+    final auth = context.read<AuthProvider>();
+    await provider.agendarRecoleccion(
+      clienteId: auth.currentUser?.id ?? '2',
+      clienteNombre: auth.currentUser?.nombre ?? 'Cliente Demo',
+    );
     if (!context.mounted) return;
     final fecha = provider.fechaSeleccionada;
     final franjaInfo = franjasDisponibles.firstWhere(

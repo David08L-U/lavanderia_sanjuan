@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
 import '../models/usuario.dart';
 
 class AuthException implements Exception {
@@ -10,9 +16,15 @@ class AuthException implements Exception {
 }
 
 class AuthService {
-  // TODO: reemplazar por la URL real del servidor cuando esté desplegado.
-  // ignore: unused_field
-  static const _baseUrl = 'http://localhost:3000/api';
+  String get _baseUrl {
+    if (kIsWeb) {
+      return 'http://localhost:5162/api';
+    }
+    if (Platform.isAndroid) {
+      return 'http://10.0.2.2:5162/api';
+    }
+    return 'http://localhost:5162/api';
+  }
 
   /// Llama al endpoint de login del backend.
   ///
@@ -28,29 +40,20 @@ class AuthService {
     required String correo,
     required String password,
   }) async {
-    // TODO: sustituir este stub por la llamada real, por ejemplo:
-    //
-    // final response = await http.post(
-    //   Uri.parse('$_baseUrl/auth/login'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({'correo': correo, 'password': password}),
-    // );
-    //
-    // if (response.statusCode == 401) {
-    //   throw AuthException('Correo o contraseña incorrectos');
-    // }
-    // if (response.statusCode != 200) {
-    //   throw AuthException('No se pudo iniciar sesión, intenta de nuevo');
-    // }
-    // return Usuario.fromJson(jsonDecode(response.body));
-
-    await Future.delayed(const Duration(milliseconds: 600));
-    return Usuario(
-      id: '0',
-      nombre: 'Usuario',
-      correo: correo,
-      rol: UserRole.cliente,
+    final response = await http.post(
+      Uri.parse('$_baseUrl/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'correo': correo, 'password': password}),
     );
+
+    if (response.statusCode == 401 || response.statusCode == 404) {
+      throw AuthException('Correo o contraseña incorrectos');
+    }
+    if (response.statusCode != 200) {
+      throw AuthException('No se pudo iniciar sesión, intenta de nuevo');
+    }
+
+    return Usuario.fromJson(jsonDecode(response.body));
   }
 
   /// Llama al endpoint de registro del backend.
@@ -68,36 +71,26 @@ class AuthService {
     required String telefono,
     required String password,
   }) async {
-    // TODO: sustituir este stub por la llamada real, por ejemplo:
-    //
-    // final response = await http.post(
-    //   Uri.parse('$_baseUrl/auth/registro'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({
-    //     'nombre': nombre,
-    //     'apellido': apellido,
-    //     'correo': correo,
-    //     'telefono': telefono,
-    //     'password': password,
-    //   }),
-    // );
-    //
-    // if (response.statusCode == 409) {
-    //   throw AuthException('Ese correo ya está registrado');
-    // }
-    // if (response.statusCode != 200 && response.statusCode != 201) {
-    //   throw AuthException('No se pudo crear la cuenta, intenta de nuevo');
-    // }
-    // return Usuario.fromJson(jsonDecode(response.body));
-
-    await Future.delayed(const Duration(milliseconds: 600));
-    return Usuario(
-      id: '0',
-      nombre: '$nombre $apellido',
-      correo: correo,
-      telefono: telefono,
-      rol: UserRole.cliente,
+    final response = await http.post(
+      Uri.parse('$_baseUrl/auth/registro'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nombre': nombre,
+        'apellido': apellido,
+        'correo': correo,
+        'telefono': telefono,
+        'password': password,
+      }),
     );
+
+    if (response.statusCode == 409) {
+      throw AuthException('Ese correo ya está registrado');
+    }
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw AuthException('No se pudo crear la cuenta, intenta de nuevo');
+    }
+
+    return Usuario.fromJson(jsonDecode(response.body));
   }
 
   /// Llama al endpoint que actualiza los datos del perfil del usuario.
@@ -106,25 +99,21 @@ class AuthService {
   /// actualiza los datos. Este servicio solo debe mandar los campos y
   /// devolver el [Usuario] actualizado que responda el backend.
   Future<Usuario> actualizarPerfil(Usuario usuario) async {
-    // TODO: sustituir este stub por la llamada real, por ejemplo:
-    //
-    // final response = await http.put(
-    //   Uri.parse('$_baseUrl/usuarios/${usuario.id}'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({
-    //     'nombre': usuario.nombre,
-    //     'correo': usuario.correo,
-    //     'telefono': usuario.telefono,
-    //   }),
-    // );
-    //
-    // if (response.statusCode != 200) {
-    //   throw AuthException('No se pudo actualizar el perfil, intenta de nuevo');
-    // }
-    // return Usuario.fromJson(jsonDecode(response.body));
+    final response = await http.put(
+      Uri.parse('$_baseUrl/usuarios/${usuario.id}'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'nombre': usuario.nombre,
+        'correo': usuario.correo,
+        'telefono': usuario.telefono,
+      }),
+    );
 
-    await Future.delayed(const Duration(milliseconds: 600));
-    return usuario;
+    if (response.statusCode != 200) {
+      throw AuthException('No se pudo actualizar el perfil, intenta de nuevo');
+    }
+
+    return Usuario.fromJson(jsonDecode(response.body));
   }
 
   /// Llama al endpoint que cambia la contraseña del usuario autenticado.
@@ -138,25 +127,21 @@ class AuthService {
     required String passwordActual,
     required String passwordNueva,
   }) async {
-    // TODO: sustituir este stub por la llamada real, por ejemplo:
-    //
-    // final response = await http.post(
-    //   Uri.parse('$_baseUrl/usuarios/cambiar-password'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({
-    //     'passwordActual': passwordActual,
-    //     'passwordNueva': passwordNueva,
-    //   }),
-    // );
-    //
-    // if (response.statusCode == 401) {
-    //   throw AuthException('La contraseña actual es incorrecta');
-    // }
-    // if (response.statusCode != 200) {
-    //   throw AuthException('No se pudo actualizar la contraseña, intenta de nuevo');
-    // }
+    final response = await http.post(
+      Uri.parse('$_baseUrl/usuarios/cambiar-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'passwordActual': passwordActual,
+        'passwordNueva': passwordNueva,
+      }),
+    );
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    if (response.statusCode == 401) {
+      throw AuthException('La contraseña actual es incorrecta');
+    }
+    if (response.statusCode != 200) {
+      throw AuthException('No se pudo actualizar la contraseña, intenta de nuevo');
+    }
   }
 
   /// Llama al endpoint que envía el correo de recuperación de contraseña.
@@ -165,18 +150,14 @@ class AuthService {
   /// revelar qué correos están registrados). Este servicio solo debe
   /// lanzar [AuthException] si la petición falla por completo.
   Future<void> solicitarRecuperacion({required String correo}) async {
-    // TODO: sustituir este stub por la llamada real, por ejemplo:
-    //
-    // final response = await http.post(
-    //   Uri.parse('$_baseUrl/auth/recuperar-password'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({'correo': correo}),
-    // );
-    //
-    // if (response.statusCode != 200) {
-    //   throw AuthException('No se pudo enviar el correo, intenta de nuevo');
-    // }
+    final response = await http.post(
+      Uri.parse('$_baseUrl/auth/recuperar-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'correo': correo}),
+    );
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    if (response.statusCode != 200) {
+      throw AuthException('No se pudo enviar el correo, intenta de nuevo');
+    }
   }
 }

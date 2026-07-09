@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../services/pedido_ops_service.dart';
 import '../../../utils/app_colors.dart';
 import 'pedido_screen.dart';
 
@@ -27,6 +28,7 @@ class ReportarProblemaScreen extends StatefulWidget {
 }
 
 class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
+  final _pedidoOpsService = PedidoOpsService();
   String? _tipoSeleccionado;
   final _detallesController = TextEditingController();
   bool _isLoading = false;
@@ -45,14 +47,28 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
 
   Future<void> _enviarReporte() async {
     setState(() => _isLoading = true);
-    // TODO: enviar el reporte (tipo + detalles + evidencia) al backend.
-    await Future.delayed(const Duration(milliseconds: 600));
-    if (!mounted) return;
+    try {
+      await _pedidoOpsService.reportarProblema(
+        '1',
+        tipo: _tipoSeleccionado ?? 'Otro problema',
+        detalles: _detallesController.text.trim(),
+      );
+      if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Reporte enviado. Nuestro equipo te contactará pronto.')),
-    );
-    Navigator.of(context).maybePop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Reporte enviado. Nuestro equipo te contactará pronto.')),
+      );
+      Navigator.of(context).maybePop();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo enviar el reporte')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override
