@@ -10,14 +10,14 @@ import 'formulario_direccion_screen.dart';
 class SeleccionarDireccionScreen extends StatefulWidget {
   const SeleccionarDireccionScreen({super.key, required this.seleccionActual});
 
-  final Direccion seleccionActual;
+  final Direccion? seleccionActual;
 
   @override
   State<SeleccionarDireccionScreen> createState() => _SeleccionarDireccionScreenState();
 }
 
 class _SeleccionarDireccionScreenState extends State<SeleccionarDireccionScreen> {
-  late Direccion _seleccionada = widget.seleccionActual;
+  late Direccion? _seleccionada = widget.seleccionActual;
 
   Future<void> _agregarDireccion() async {
     final nueva = await Navigator.of(context).push<Direccion>(
@@ -128,7 +128,7 @@ class _SeleccionarDireccionScreenState extends State<SeleccionarDireccionScreen>
             width: double.infinity,
             height: 56,
             child: ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(_seleccionada),
+              onPressed: _seleccionada == null ? null : () => Navigator.of(context).pop(_seleccionada),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,

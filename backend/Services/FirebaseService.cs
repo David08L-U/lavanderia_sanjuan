@@ -16,7 +16,7 @@ public class FirebaseService
 
     public bool Enabled => bool.TryParse(_configuration["Firebase:Enabled"], out var enabled) ? enabled : false;
 
-    public string? ProjectId => _configuration["Firebase:ProjectId"];
+    public string? ProjectId => Enabled ? _configuration["Firebase:ProjectId"] : null;
 
     public string? CredentialsPath => _configuration["Firebase:CredentialsPath"];
 

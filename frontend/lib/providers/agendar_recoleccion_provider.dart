@@ -95,7 +95,11 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> agendarRecoleccion({String? clienteId, String? clienteNombre}) async {
+  Future<void> agendarRecoleccion({
+    String? clienteId,
+    String? clienteNombre,
+    required String direccion,
+  }) async {
     _isLoading = true;
     notifyListeners();
 
@@ -111,7 +115,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
         'servicio': servicioInfo.nombre,
         'fecha': _fechaSeleccionada.toIso8601String(),
         'franjaHoraria': franjaEtiqueta,
-        'direccion': direccionSeleccionada?.titulo ?? 'Dirección no definida',
+        'direccion': direccion,
         'instrucciones': instruccionesController.text.trim(),
         'total': totalConDescuento,
       });

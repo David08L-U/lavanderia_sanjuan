@@ -79,12 +79,19 @@ class AgendarRecoleccionScreen extends StatelessWidget {
   Future<void> _submit(
     BuildContext context,
     AgendarRecoleccionProvider provider,
-    Direccion direccionActual,
+    Direccion? direccionActual,
   ) async {
+    if (direccionActual == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Debes seleccionar una dirección de entrega')),
+      );
+      return;
+    }
     final auth = context.read<AuthProvider>();
     await provider.agendarRecoleccion(
       clienteId: auth.currentUser?.id ?? '2',
       clienteNombre: auth.currentUser?.nombre ?? 'Cliente Demo',
+      direccion: '${direccionActual.titulo}: ${direccionActual.lineas.join(", ")}',
     );
     if (!context.mounted) return;
     final fecha = provider.fechaSeleccionada;
@@ -110,7 +117,7 @@ class AgendarRecoleccionScreen extends StatelessWidget {
   Future<void> _seleccionarDireccion(
     BuildContext context,
     AgendarRecoleccionProvider provider,
-    Direccion direccionActual,
+    Direccion? direccionActual,
   ) async {
     final resultado = await Navigator.of(context).push<Direccion>(
       MaterialPageRoute(
@@ -261,11 +268,12 @@ class _SectionTitle extends StatelessWidget {
 class _AddressCard extends StatelessWidget {
   const _AddressCard({required this.direccion, required this.onTap});
 
-  final Direccion direccion;
+  final Direccion? direccion;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final dir = direccion;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -291,31 +299,40 @@ class _AddressCard extends StatelessWidget {
                 color: AppColors.secondaryContainer,
                 shape: BoxShape.circle,
               ),
-              child: Icon(direccion.icon, color: AppColors.primary),
+              child: Icon(dir?.icon ?? Icons.location_on_outlined, color: AppColors.primary),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    direccion.titulo,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.onSurface,
+              child: dir == null
+                  ? Text(
+                      'Agregar dirección de entrega',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.onSurface,
+                      ),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          dir.titulo,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          dir.lineas.join(', '),
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: AppColors.secondary,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    direccion.lineas.join(', '),
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                ],
-              ),
             ),
             const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
           ],

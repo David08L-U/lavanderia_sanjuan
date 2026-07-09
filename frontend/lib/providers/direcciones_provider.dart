@@ -16,10 +16,13 @@ class DireccionesProvider extends ChangeNotifier {
 
   List<Direccion> get direcciones => List.unmodifiable(_direcciones);
 
-  Direccion get predeterminada => _direcciones.firstWhere(
-    (direccion) => direccion.predeterminada,
-    orElse: () => _direcciones.first,
-  );
+  Direccion? get predeterminada {
+    if (_direcciones.isEmpty) return null;
+    return _direcciones.firstWhere(
+      (direccion) => direccion.predeterminada,
+      orElse: () => _direcciones.first,
+    );
+  }
 
   Future<void> cargar() async {
     try {

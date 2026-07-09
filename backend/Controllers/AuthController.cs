@@ -6,11 +6,8 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = new()
-    {
-        new() { Id = "1", Nombre = "Admin San Juan", Correo = "admin@sanjuan.com", Telefono = "3001234567", Password = "admin123", Rol = "administrador" },
-        new() { Id = "2", Nombre = "Cliente Demo", Correo = "cliente@sanjuan.com", Telefono = "3007654321", Password = "cliente123", Rol = "cliente" }
-    };
+    private static readonly List<UsuarioDto> Usuarios = UsuarioRepository.Usuarios;
+
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
@@ -20,13 +17,13 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "Correo y contraseña son requeridos" });
         }
 
-        var usuario = Usuarios.FirstOrDefault(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+        var usuario = Usuarios.FirstOrDefault(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
         if (usuario == null)
         {
             return NotFound(new { message = "Usuario no encontrado" });
         }
 
-        if (!usuario.Password.Equals(request.Password))
+        if (!string.Equals(usuario.Password, request.Password, StringComparison.Ordinal))
         {
             return Unauthorized(new { message = "Correo o contraseña incorrectos" });
         }
@@ -49,7 +46,7 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "Faltan datos obligatorios" });
         }
 
-        var existe = Usuarios.Any(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+        var existe = Usuarios.Any(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
         if (existe)
         {
             return Conflict(new { message = "Ese correo ya está registrado" });
@@ -67,7 +64,7 @@ public class AuthController : ControllerBase
 
         Usuarios.Add(nuevo);
 
-        return CreatedAtAction(nameof(Login), new { id = nuevo.Id }, nuevo);
+        return StatusCode(201, nuevo);
     }
 
     [HttpPost("recuperar-password")]

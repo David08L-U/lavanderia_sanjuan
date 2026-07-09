@@ -6,11 +6,8 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = new()
-    {
-        new() { Id = "1", Nombre = "Admin San Juan", Correo = "admin@sanjuan.com", Telefono = "3001234567", Password = "admin123", Rol = "administrador" },
-        new() { Id = "2", Nombre = "Cliente Demo", Correo = "cliente@sanjuan.com", Telefono = "3007654321", Password = "cliente123", Rol = "cliente" }
-    };
+    private static readonly List<UsuarioDto> Usuarios = UsuarioRepository.Usuarios;
+
 
     [HttpPut("{id}")]
     public IActionResult ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
@@ -23,7 +20,7 @@ public class UsuariosController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(request.Correo))
         {
-            var existe = Usuarios.Any(u => u.Id != id && u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+            var existe = Usuarios.Any(u => u.Id != id && string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
             if (existe)
             {
                 return Conflict(new { message = "Ese correo ya está registrado" });
@@ -46,8 +43,8 @@ public class UsuariosController : ControllerBase
         }
 
         var usuario = string.IsNullOrWhiteSpace(request.Correo)
-            ? Usuarios.FirstOrDefault(u => u.Password == request.PasswordActual)
-            : Usuarios.FirstOrDefault(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+            ? Usuarios.FirstOrDefault(u => string.Equals(u.Password, request.PasswordActual, StringComparison.Ordinal))
+            : Usuarios.FirstOrDefault(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
 
         if (usuario == null)
         {
