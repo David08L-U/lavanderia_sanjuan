@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/servicio_lavanderia.dart';
+import '../../../providers/auth_provider.dart';
+import '../../../services/pedido_service.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../home_cliente/home_cliente_screen.dart';
@@ -38,40 +41,60 @@ class _Pedido {
   final double progreso;
 }
 
-const _pedidos = [
-  _Pedido(
-    numero: '#FC-8921',
-    servicio: 'Lavado y Doblado',
-    fecha: '12 Oct, 2023',
-    monto: '\$320.00 MXN',
-    montoNumerico: 320.00,
-    estado: _EstadoPedido.enProceso,
-    tipoServicio: TipoServicio.lavadoYPlegado,
-    pesoEstimado: '16kg total',
-    progreso: 0.45,
-  ),
-  _Pedido(
-    numero: '#FC-8854',
-    servicio: 'Planchado Express',
-    fecha: '05 Oct, 2023',
-    monto: '\$180.00 MXN',
-    montoNumerico: 180.00,
-    estado: _EstadoPedido.entregado,
-    tipoServicio: TipoServicio.planchado,
-  ),
-  _Pedido(
-    numero: '#FC-8799',
-    servicio: 'Limpieza en Seco',
-    fecha: '28 Sep, 2023',
-    monto: '\$450.00 MXN',
-    montoNumerico: 450.00,
-    estado: _EstadoPedido.entregado,
-    tipoServicio: TipoServicio.tintoreria,
-  ),
-];
-
-class MisPedidosScreen extends StatelessWidget {
+class MisPedidosScreen extends StatefulWidget {
   const MisPedidosScreen({super.key});
+
+  @override
+  State<MisPedidosScreen> createState() => _MisPedidosScreenState();
+}
+
+class _MisPedidosScreenState extends State<MisPedidosScreen> {
+  final _pedidoService = PedidoService();
+  bool _isLoading = true;
+  String? _error;
+  final List<_Pedido> _pedidos = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarPedidos();
+  }
+
+  Future<void> _cargarPedidos() async {
+    final auth = context.read<AuthProvider>();
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final data = await _pedidoService.listarPedidos(clienteId: auth.currentUser?.id);
+      setState(() {
+        _pedidos.clear();
+        _pedidos.addAll(
+          data.map((item) => _Pedido(
+            numero: '#FC-${item['id']}',
+            servicio: item['servicio']?.toString() ?? 'Servicio',
+            fecha: item['fecha']?.toString() ?? 'Sin fecha',
+            monto: '\$${item['total']?.toString() ?? '0'} MXN',
+            montoNumerico: double.tryParse(item['total']?.toString() ?? '0') ?? 0,
+            estado: item['estado']?.toString() == 'Entregado'
+                ? _EstadoPedido.entregado
+                : _EstadoPedido.enProceso,
+            tipoServicio: TipoServicio.lavadoYPlegado,
+            pesoEstimado: item['instrucciones']?.toString(),
+            progreso: item['estado']?.toString() == 'Entregado' ? 1.0 : 0.45,
+          )),
+        );
+      });
+    } catch (_) {
+      setState(() => _error = 'No se pudieron cargar los pedidos');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
 
   void _onTabSelected(BuildContext context, AppBottomTab tab) {
     switch (tab) {
@@ -152,22 +175,48 @@ class MisPedidosScreen extends StatelessWidget {
       ),
       body: SafeArea(
         top: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          child: Column(
-            children: [
-              for (var i = 0; i < _pedidos.length; i++) ...[
-                _PedidoCard(
-                  pedido: _pedidos[i],
-                  onVerDetalles: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PedidoScreen()),
-                  ),
-                  onRepetirPedido: () => _repetirPedido(context, _pedidos[i]),
-                  onFactura: () => _verFactura(context, _pedidos[i]),
-                ),
-                if (i != _pedidos.length - 1) const SizedBox(height: 16),
+        child: RefreshIndicator(
+          onRefresh: _cargarPedidos,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            child: Column(
+              children: [
+                if (_isLoading)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (_error != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      _error!,
+                      style: GoogleFonts.inter(color: AppColors.error),
+                    ),
+                  )
+                else if (_pedidos.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      'Aún no tienes pedidos registrados.',
+                      style: GoogleFonts.inter(color: AppColors.secondary),
+                    ),
+                  )
+                else
+                  for (var i = 0; i < _pedidos.length; i++) ...[
+                    _PedidoCard(
+                      pedido: _pedidos[i],
+                      onVerDetalles: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const PedidoScreen()),
+                      ),
+                      onRepetirPedido: () => _repetirPedido(context, _pedidos[i]),
+                      onFactura: () => _verFactura(context, _pedidos[i]),
+                    ),
+                    if (i != _pedidos.length - 1) const SizedBox(height: 16),
+                  ],
               ],
-            ],
+            ),
           ),
         ),
       ),

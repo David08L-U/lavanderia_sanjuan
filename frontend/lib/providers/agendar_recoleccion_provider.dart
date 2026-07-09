@@ -4,6 +4,7 @@ import '../models/direccion.dart';
 import '../models/franja_horaria.dart';
 import '../models/servicio_lavanderia.dart';
 import '../models/tarjeta.dart';
+import '../services/pedido_service.dart';
 
 const _codigoPromoCorrecto = 'FRESH20';
 const _tasaDescuentoPromo = 0.20;
@@ -94,16 +95,30 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: conectar con el backend para crear el ticket de lavandería,
-  // enviando servicio, fecha, franja horaria, dirección e instrucciones.
-  Future<void> agendarRecoleccion() async {
+  Future<void> agendarRecoleccion({String? clienteId, String? clienteNombre}) async {
     _isLoading = true;
     notifyListeners();
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    try {
+      final pedidoService = PedidoService();
+      final franjaEtiqueta = franjasDisponibles
+          .firstWhere((f) => f.valor == _franja)
+          .etiqueta;
 
-    _isLoading = false;
-    notifyListeners();
+      await pedidoService.crearPedido({
+        'clienteId': clienteId ?? '2',
+        'clienteNombre': clienteNombre ?? 'Cliente Demo',
+        'servicio': servicioInfo.nombre,
+        'fecha': _fechaSeleccionada.toIso8601String(),
+        'franjaHoraria': franjaEtiqueta,
+        'direccion': direccionSeleccionada?.titulo ?? 'Dirección no definida',
+        'instrucciones': instruccionesController.text.trim(),
+        'total': totalConDescuento,
+      });
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   @override
