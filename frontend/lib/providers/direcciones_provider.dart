@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../models/direccion.dart';
+import '../services/direccion_service.dart';
 
 /// Fuente única de las direcciones guardadas del cliente, compartida entre
 /// Mis Direcciones, Seleccionar Dirección y el flujo de Agendar Recolección.
 class DireccionesProvider extends ChangeNotifier {
-  final List<Direccion> _direcciones = [
-    const Direccion(
-      icon: Icons.home_rounded,
-      titulo: 'Casa Principal',
-      lineas: ['Av. Siempre Viva 742', 'Springfield, CP 12345'],
-      telefono: '+34 555 123 456',
-      predeterminada: true,
-    ),
-    const Direccion(
-      icon: Icons.business_rounded,
-      titulo: 'Oficina',
-      lineas: ['Torre Empresarial, Piso 5', 'Centro, CP 54321'],
-      telefono: '+34 555 987 654',
-      nota: 'Entregar en recepción',
-    ),
-  ];
+  DireccionesProvider({DireccionService? direccionService})
+    : _direccionService = direccionService ?? DireccionService() {
+    Future.microtask(cargar);
+  }
+
+  final DireccionService _direccionService;
+  final List<Direccion> _direcciones = [];
 
   List<Direccion> get direcciones => List.unmodifiable(_direcciones);
 
@@ -29,20 +21,47 @@ class DireccionesProvider extends ChangeNotifier {
     orElse: () => _direcciones.first,
   );
 
-  // TODO: sincronizar con el backend cuando exista el endpoint de direcciones.
-  void agregar(Direccion direccion) {
-    final esLaPrimera = _direcciones.isEmpty;
-    _direcciones.add(esLaPrimera ? direccion.copyWith(predeterminada: true) : direccion);
-    notifyListeners();
+  Future<void> cargar() async {
+    try {
+      final datos = await _direccionService.listarDirecciones();
+      _direcciones
+        ..clear()
+        ..addAll(datos);
+      notifyListeners();
+    } catch (_) {
+      // Se conserva la lista local vacía si la API no responde.
+    }
   }
 
-  void actualizar(int index, Direccion direccion) {
-    _direcciones[index] = direccion;
-    notifyListeners();
+  Future<void> agregar(Direccion direccion) async {
+    try {
+      final guardada = await _direccionService.crearDireccion(direccion);
+      _direcciones.add(guardada);
+      notifyListeners();
+    } catch (_) {
+      final esLaPrimera = _direcciones.isEmpty;
+      _direcciones.add(esLaPrimera ? direccion.copyWith(predeterminada: true) : direccion);
+      notifyListeners();
+    }
   }
 
-  void eliminar(int index) {
+  Future<void> actualizar(int index, Direccion direccion) async {
+    try {
+      final actualizada = await _direccionService.actualizarDireccion(index.toString(), direccion);
+      _direcciones[index] = actualizada;
+      notifyListeners();
+    } catch (_) {
+      _direcciones[index] = direccion;
+      notifyListeners();
+    }
+  }
+
+  Future<void> eliminar(int index) async {
     final eraPredeterminada = _direcciones[index].predeterminada;
+    try {
+      await _direccionService.eliminarDireccion((index + 1).toString());
+    } catch (_) {}
+
     _direcciones.removeAt(index);
     if (eraPredeterminada && _direcciones.isNotEmpty) {
       _direcciones[0] = _direcciones[0].copyWith(predeterminada: true);
