@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/servicio_lavanderia.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../services/pedido_service.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../mi_perfil/mi_perfil_screen.dart';
@@ -18,8 +19,58 @@ import '../servicios/servicios_screen.dart';
 import '../servicios/tintoreria_screen.dart';
 import 'detalle_oferta_screen.dart';
 
-class HomeClienteScreen extends StatelessWidget {
+class HomeClienteScreen extends StatefulWidget {
   const HomeClienteScreen({super.key});
+
+  @override
+  State<HomeClienteScreen> createState() => _HomeClienteScreenState();
+}
+
+class _HomeClienteScreenState extends State<HomeClienteScreen> {
+  final _pedidoService = PedidoService();
+  bool _isLoading = true;
+  Map<String, dynamic>? _pedidoActivo;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarPedidoActivo();
+  }
+
+  Future<void> _cargarPedidoActivo() async {
+    final auth = context.read<AuthProvider>();
+    if (auth.currentUser == null) return;
+
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
+    try {
+      final pedidos = await _pedidoService.listarPedidos(clienteId: auth.currentUser!.id);
+      if (!mounted) return;
+
+      // Buscar el primer pedido activo (no entregado, ni rechazado, ni cancelado)
+      final estadosFinales = ['entregado', 'rechazado', 'cancelado'];
+      final activo = pedidos.firstWhere(
+        (p) => !estadosFinales.contains(p['estado']?.toString().toLowerCase()),
+        orElse: () => {},
+      );
+
+      setState(() {
+        _pedidoActivo = activo.isEmpty ? null : activo;
+        _isLoading = false;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _pedidoActivo = null;
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   void _onServicioTap(BuildContext context, ServicioLavanderiaInfo servicio) {
     switch (servicio.tipo) {
@@ -80,7 +131,7 @@ class HomeClienteScreen extends StatelessWidget {
               'FreshClean',
               style: GoogleFonts.inter(
                 fontSize: 20,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppColors.primary,
               ),
             ),
@@ -118,35 +169,50 @@ class HomeClienteScreen extends StatelessWidget {
       ),
       body: SafeArea(
         top: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Greeting(nombre: nombre),
-              const SizedBox(height: 24),
-              _HeroBanner(
-                onOrderNow: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const NuevaOrdenScreen()),
+        child: RefreshIndicator(
+          onRefresh: _cargarPedidoActivo,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _Greeting(nombre: nombre),
+                const SizedBox(height: 24),
+                _HeroBanner(
+                  onOrderNow: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const NuevaOrdenScreen()),
+                  ).then((_) => _cargarPedidoActivo()),
                 ),
-              ),
-              const SizedBox(height: 32),
-              _ActiveOrderSection(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PedidoScreen()),
+                
+                // MÓDULO PEDIDO ACTIVO DINÁMICO
+                if (_isLoading) ...[
+                  const SizedBox(height: 32),
+                  const Center(child: CircularProgressIndicator()),
+                ] else if (_pedidoActivo != null) ...[
+                  const SizedBox(height: 32),
+                  _ActiveOrderSection(
+                    pedido: _pedidoActivo!,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PedidoScreen(pedido: _pedidoActivo),
+                      ),
+                    ).then((_) => _cargarPedidoActivo()),
+                  ),
+                ],
+                
+                const SizedBox(height: 32),
+                _ServicesSection(
+                  onServicioTap: (servicio) => _onServicioTap(context, servicio),
                 ),
-              ),
-              const SizedBox(height: 32),
-              _ServicesSection(
-                onServicioTap: (servicio) => _onServicioTap(context, servicio),
-              ),
-              const SizedBox(height: 24),
-              _WeeklyOfferBanner(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const DetalleOfertaScreen()),
+                const SizedBox(height: 24),
+                _WeeklyOfferBanner(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const DetalleOfertaScreen()),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -170,14 +236,14 @@ class _Greeting extends StatelessWidget {
       children: [
         Text(
           '¡Hola, $nombre!',
-          style: GoogleFonts.inter(fontSize: 16, color: AppColors.secondary),
+          style: GoogleFonts.inter(fontSize: 16, color: AppColors.secondary, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 4),
         Text(
           'Bienvenido de nuevo',
           style: GoogleFonts.inter(
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
             letterSpacing: -0.5,
             color: AppColors.onSurface,
           ),
@@ -226,7 +292,7 @@ class _HeroBanner extends StatelessWidget {
                 'Ropa fresca,\nsin esfuerzo.',
                 style: GoogleFonts.inter(
                   fontSize: 24,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w800,
                   height: 1.3,
                   letterSpacing: -0.24,
                   color: AppColors.onPrimaryFixed,
@@ -240,6 +306,7 @@ class _HeroBanner extends StatelessWidget {
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     color: AppColors.onPrimaryFixedVariant,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -256,8 +323,8 @@ class _HeroBanner extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Order Now',
-                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
+                      'Ordenar Ahora',
+                      style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(width: 8),
                     const Icon(Icons.arrow_forward_rounded, size: 18),
@@ -273,12 +340,78 @@ class _HeroBanner extends StatelessWidget {
 }
 
 class _ActiveOrderSection extends StatelessWidget {
-  const _ActiveOrderSection({required this.onTap});
+  const _ActiveOrderSection({required this.pedido, required this.onTap});
 
+  final Map<String, dynamic> pedido;
   final VoidCallback onTap;
+
+  double _obtenerProgreso(String estado) {
+    switch (estado.toLowerCase()) {
+      case 'pendiente':
+        return 0.15;
+      case 'aceptado':
+        return 0.30;
+      case 'en proceso':
+      case 'en planta':
+        return 0.50;
+      case 'secado y doblado':
+        return 0.75;
+      case 'en camino':
+        return 0.90;
+      case 'entregado':
+        return 1.0;
+      default:
+        return 0.0;
+    }
+  }
+
+  String _obtenerProgresoTexto(String estado) {
+    switch (estado.toLowerCase()) {
+      case 'pendiente':
+        return '15%';
+      case 'aceptado':
+        return '30%';
+      case 'en proceso':
+      case 'en planta':
+        return '50%';
+      case 'secado y doblado':
+        return '75%';
+      case 'en camino':
+        return '90%';
+      default:
+        return '0%';
+    }
+  }
+
+  String _obtenerEstadoVisual(String estado) {
+    switch (estado.toLowerCase()) {
+      case 'pendiente':
+        return 'Por aprobar';
+      case 'aceptado':
+        return 'Recolección aceptada';
+      case 'en proceso':
+      case 'en planta':
+        return 'Lavando';
+      case 'secado y doblado':
+        return 'Doblado y empaquetado';
+      case 'en camino':
+        return 'En reparto';
+      default:
+        return estado;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final id = pedido['id']?.toString() ?? '';
+    final estado = pedido['estado']?.toString() ?? 'Pendiente';
+    final fecha = pedido['fecha']?.toString() ?? '';
+    final franja = pedido['franjaHoraria']?.toString() ?? '';
+    
+    final progreso = _obtenerProgreso(estado);
+    final progresoTexto = _obtenerProgresoTexto(estado);
+    final estadoVisual = _obtenerEstadoVisual(estado);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -289,7 +422,7 @@ class _ActiveOrderSection extends StatelessWidget {
               'Pedido Activo',
               style: GoogleFonts.inter(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppColors.onSurface,
               ),
             ),
@@ -304,7 +437,7 @@ class _ActiveOrderSection extends StatelessWidget {
                 'Ver detalles',
                 style: GoogleFonts.inter(
                   fontSize: 12,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   color: AppColors.primary,
                 ),
               ),
@@ -320,7 +453,7 @@ class _ActiveOrderSection extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.surfaceContainerLowest,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.surfaceVariant),
+              border: Border.all(color: AppColors.secondaryContainer.withAlpha(127)),
             ),
             child: Column(
               children: [
@@ -328,56 +461,63 @@ class _ActiveOrderSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: AppColors.secondaryContainer,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.local_laundry_service_rounded,
-                            color: AppColors.primary,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Orden #FC-8923',
-                              style: GoogleFonts.inter(
-                                fontSize: 12,
-                                color: AppColors.secondary,
-                              ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              color: AppColors.secondaryContainer,
+                              shape: BoxShape.circle,
                             ),
-                            Text(
-                              'Lavando',
-                              style: GoogleFonts.inter(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.onSurface,
-                              ),
+                            child: const Icon(
+                              Icons.local_laundry_service_rounded,
+                              color: AppColors.primary,
+                              size: 20,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Orden #FC-$id',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: AppColors.secondary,
+                                  ),
+                                ),
+                                Text(
+                                  estadoVisual,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.onSurface,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Entrega est.',
+                          'Entrega',
                           style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary),
                         ),
                         Text(
-                          'Hoy, 18:00',
+                          '$fecha ($franja)',
                           style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
                             color: AppColors.onSurface,
                           ),
                         ),
@@ -394,10 +534,10 @@ class _ActiveOrderSection extends StatelessWidget {
                       style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary),
                     ),
                     Text(
-                      '60%',
+                      progresoTexto,
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                         color: AppColors.primary,
                       ),
                     ),
@@ -407,7 +547,7 @@ class _ActiveOrderSection extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
-                    value: 0.6,
+                    value: progreso,
                     minHeight: 8,
                     backgroundColor: AppColors.surfaceVariant,
                     valueColor: const AlwaysStoppedAnimation(AppColors.primary),
@@ -425,7 +565,7 @@ class _ActiveOrderSection extends StatelessWidget {
                       foregroundColor: AppColors.primary,
                       side: BorderSide.none,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                      textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w700),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                   ),
@@ -450,10 +590,10 @@ class _ServicesSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Servicios',
+          'Servicios Disponibles',
           style: GoogleFonts.inter(
             fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
             color: AppColors.onSurface,
           ),
         ),
@@ -506,7 +646,7 @@ class _ServiceCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surfaceContainerLowest,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.surfaceVariant),
+          border: Border.all(color: AppColors.secondaryContainer.withAlpha(127)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -525,14 +665,14 @@ class _ServiceCard extends StatelessWidget {
               title,
               style: GoogleFonts.inter(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: AppColors.onSurface,
               ),
             ),
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary),
+              style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -568,7 +708,7 @@ class _WeeklyOfferBanner extends StatelessWidget {
                     'OFERTA SEMANAL',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0.6,
                       color: AppColors.onSecondaryContainer,
                     ),
@@ -578,7 +718,7 @@ class _WeeklyOfferBanner extends StatelessWidget {
                     '20% OFF en Tintorería',
                     style: GoogleFonts.inter(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.onSurface,
                     ),
                   ),
@@ -586,12 +726,12 @@ class _WeeklyOfferBanner extends StatelessWidget {
                   Text.rich(
                     TextSpan(
                       text: 'Usa el código: ',
-                      style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant),
+                      style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant, fontWeight: FontWeight.w500),
                       children: [
                         TextSpan(
                           text: 'FRESH20',
                           style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                             color: AppColors.primary,
                           ),
                         ),
@@ -617,4 +757,3 @@ class _WeeklyOfferBanner extends StatelessWidget {
     );
   }
 }
-

@@ -56,7 +56,12 @@ class RepetirPedidoScreen extends StatelessWidget {
     AgendarRecoleccionProvider provider,
     Direccion direccionActual,
   ) async {
-    await provider.agendarRecoleccion();
+    final auth = context.read<AuthProvider>();
+    final pedido = await provider.agendarRecoleccion(
+      clienteId: auth.currentUser?.id ?? '2',
+      clienteNombre: auth.currentUser?.nombre ?? 'Cliente Demo',
+      direccion: '${direccionActual.titulo}: ${direccionActual.lineas.join(", ")}',
+    );
     if (!context.mounted) return;
     final fecha = provider.fechaSeleccionada;
     final franjaInfo = franjasDisponibles.firstWhere(
@@ -65,6 +70,7 @@ class RepetirPedidoScreen extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => PedidoRecibidoScreen(
+          pedido: pedido,
           servicioNombre: nombreServicio,
           direccionTitulo: direccionActual.titulo,
           direccionLinea: direccionActual.lineas.join(', '),

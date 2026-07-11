@@ -95,7 +95,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> agendarRecoleccion({
+  Future<Map<String, dynamic>> agendarRecoleccion({
     String? clienteId,
     String? clienteNombre,
     required String direccion,
@@ -109,7 +109,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
           .firstWhere((f) => f.valor == _franja)
           .etiqueta;
 
-      await pedidoService.crearPedido({
+      final res = await pedidoService.crearPedido({
         'clienteId': clienteId ?? '2',
         'clienteNombre': clienteNombre ?? 'Cliente Demo',
         'servicio': servicioInfo.nombre,
@@ -119,6 +119,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
         'instrucciones': instruccionesController.text.trim(),
         'total': totalConDescuento,
       });
+      return res;
     } finally {
       _isLoading = false;
       notifyListeners();

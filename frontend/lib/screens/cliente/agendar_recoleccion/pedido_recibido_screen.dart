@@ -9,6 +9,7 @@ import '../pedido/pedido_screen.dart';
 class PedidoRecibidoScreen extends StatelessWidget {
   const PedidoRecibidoScreen({
     super.key,
+    required this.pedido,
     required this.servicioNombre,
     required this.direccionTitulo,
     required this.direccionLinea,
@@ -17,6 +18,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
     required this.total,
   });
 
+  final Map<String, dynamic> pedido;
   final String servicioNombre;
   final String direccionTitulo;
   final String direccionLinea;
@@ -24,7 +26,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
   final String horarioTexto;
   final double total;
 
-  String get _idPedido => '#FC-${(servicioNombre.hashCode.abs() % 9000) + 1000}';
+  String get _idPedido => '#FC-${pedido['id'] ?? ((servicioNombre.hashCode.abs() % 9000) + 1000)}';
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +171,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const PedidoScreen()),
+                  MaterialPageRoute(builder: (_) => PedidoScreen(pedido: pedido)),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

@@ -1,4 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Google.Cloud.Firestore;
+using backend.Services;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace backend.Controllers;
 
@@ -6,13 +12,18 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = UsuarioRepository.Usuarios;
+    private readonly DatabaseService _db;
 
+    public UsuariosController(DatabaseService db)
+    {
+        _db = db;
+    }
 
     [HttpPut("{id}")]
-    public IActionResult ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
+    public async Task<IActionResult> ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
     {
-        var usuario = Usuarios.FirstOrDefault(u => u.Id == id);
+        var usuarios = await _db.ListarUsuariosAsync();
+        var usuario = usuarios.FirstOrDefault(u => u.Id == id);
         if (usuario == null)
         {
             return NotFound(new { message = "Usuario no encontrado" });
@@ -20,7 +31,7 @@ public class UsuariosController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(request.Correo))
         {
-            var existe = Usuarios.Any(u => u.Id != id && string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
+            var existe = usuarios.Any(u => u.Id != id && string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
             if (existe)
             {
                 return Conflict(new { message = "Ese correo ya está registrado" });
@@ -31,20 +42,22 @@ public class UsuariosController : ControllerBase
         usuario.Correo = string.IsNullOrWhiteSpace(request.Correo) ? usuario.Correo : request.Correo;
         usuario.Telefono = string.IsNullOrWhiteSpace(request.Telefono) ? usuario.Telefono : request.Telefono;
 
+        await _db.GuardarUsuarioAsync(usuario);
         return Ok(usuario);
     }
 
     [HttpPost("cambiar-password")]
-    public IActionResult CambiarPassword([FromBody] CambiarPasswordRequest request)
+    public async Task<IActionResult> CambiarPassword([FromBody] CambiarPasswordRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.PasswordActual) || string.IsNullOrWhiteSpace(request.PasswordNueva))
         {
             return BadRequest(new { message = "Se requieren ambas contraseñas" });
         }
 
+        var usuarios = await _db.ListarUsuariosAsync();
         var usuario = string.IsNullOrWhiteSpace(request.Correo)
-            ? Usuarios.FirstOrDefault(u => string.Equals(u.Password, request.PasswordActual, StringComparison.Ordinal))
-            : Usuarios.FirstOrDefault(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
+            ? usuarios.FirstOrDefault(u => string.Equals(u.Password, request.PasswordActual, StringComparison.Ordinal))
+            : usuarios.FirstOrDefault(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
 
         if (usuario == null)
         {
@@ -57,6 +70,7 @@ public class UsuariosController : ControllerBase
         }
 
         usuario.Password = request.PasswordNueva;
+        await _db.GuardarUsuarioAsync(usuario);
         return Ok(new { message = "Contraseña actualizada" });
     }
 }

@@ -1,4 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Google.Cloud.Firestore;
+using backend.Services;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace backend.Controllers;
 
@@ -6,18 +12,23 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = UsuarioRepository.Usuarios;
+    private readonly DatabaseService _db;
 
+    public AuthController(DatabaseService db)
+    {
+        _db = db;
+    }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Correo y contraseña son requeridos" });
         }
 
-        var usuario = Usuarios.FirstOrDefault(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
+        var usuarios = await _db.ListarUsuariosAsync();
+        var usuario = usuarios.FirstOrDefault(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
         if (usuario == null)
         {
             return NotFound(new { message = "Usuario no encontrado" });
@@ -39,14 +50,15 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("registro")]
-    public IActionResult Registro([FromBody] RegistroRequest request)
+    public async Task<IActionResult> Registro([FromBody] RegistroRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Nombre) || string.IsNullOrWhiteSpace(request.Apellido) || string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Faltan datos obligatorios" });
         }
 
-        var existe = Usuarios.Any(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
+        var usuarios = await _db.ListarUsuariosAsync();
+        var existe = usuarios.Any(u => string.Equals(u.Correo, request.Correo, StringComparison.OrdinalIgnoreCase));
         if (existe)
         {
             return Conflict(new { message = "Ese correo ya está registrado" });
@@ -54,7 +66,7 @@ public class AuthController : ControllerBase
 
         var nuevo = new UsuarioDto
         {
-            Id = (Usuarios.Count + 1).ToString(),
+            Id = (usuarios.Count + 1).ToString(),
             Nombre = $"{request.Nombre} {request.Apellido}",
             Correo = request.Correo,
             Telefono = request.Telefono,
@@ -62,7 +74,7 @@ public class AuthController : ControllerBase
             Rol = "cliente"
         };
 
-        Usuarios.Add(nuevo);
+        await _db.GuardarUsuarioAsync(nuevo);
 
         return StatusCode(201, nuevo);
     }
@@ -99,12 +111,19 @@ public class RecuperarPasswordRequest
     public string? Correo { get; set; }
 }
 
+[FirestoreData]
 public class UsuarioDto
 {
+    [FirestoreProperty]
     public string? Id { get; set; }
+    [FirestoreProperty]
     public string? Nombre { get; set; }
+    [FirestoreProperty]
     public string? Correo { get; set; }
+    [FirestoreProperty]
     public string? Telefono { get; set; }
+    [FirestoreProperty]
     public string? Password { get; set; }
+    [FirestoreProperty]
     public string? Rol { get; set; }
 }

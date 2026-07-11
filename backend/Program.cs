@@ -1,4 +1,5 @@
 using backend;
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSingleton<FirebaseService>();
+builder.Services.AddSingleton<DatabaseService>();
 
 var app = builder.Build();
 

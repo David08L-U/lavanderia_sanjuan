@@ -11,7 +11,9 @@ import '../mis_pedidos/mis_pedidos_screen.dart';
 import '../servicios/servicios_screen.dart';
 
 class SeguimientoEnVivoScreen extends StatelessWidget {
-  const SeguimientoEnVivoScreen({super.key});
+  const SeguimientoEnVivoScreen({super.key, this.pedidoId});
+
+  final String? pedidoId;
 
   void _showComingSoon(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -64,7 +66,7 @@ class SeguimientoEnVivoScreen extends StatelessWidget {
               ),
             ),
             Text(
-              '#FC-8923',
+              pedidoId != null ? '#FC-$pedidoId' : '#FC-8923',
               style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
             ),
           ],

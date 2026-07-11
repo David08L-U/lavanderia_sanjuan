@@ -208,7 +208,11 @@ class _MisPedidosScreenState extends State<MisPedidosScreen> {
                     _PedidoCard(
                       pedido: _pedidos[i],
                       onVerDetalles: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const PedidoScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => PedidoScreen(
+                            pedidoId: _pedidos[i].numero.replaceAll('#FC-', ''),
+                          ),
+                        ),
                       ),
                       onRepetirPedido: () => _repetirPedido(context, _pedidos[i]),
                       onFactura: () => _verFactura(context, _pedidos[i]),

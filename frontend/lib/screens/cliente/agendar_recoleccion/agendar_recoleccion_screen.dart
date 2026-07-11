@@ -88,7 +88,7 @@ class AgendarRecoleccionScreen extends StatelessWidget {
       return;
     }
     final auth = context.read<AuthProvider>();
-    await provider.agendarRecoleccion(
+    final pedido = await provider.agendarRecoleccion(
       clienteId: auth.currentUser?.id ?? '2',
       clienteNombre: auth.currentUser?.nombre ?? 'Cliente Demo',
       direccion: '${direccionActual.titulo}: ${direccionActual.lineas.join(", ")}',
@@ -101,6 +101,7 @@ class AgendarRecoleccionScreen extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => PedidoRecibidoScreen(
+          pedido: pedido,
           servicioNombre: provider.servicioInfo.nombre,
           direccionTitulo: direccionActual.titulo,
           direccionLinea: direccionActual.lineas.join(', '),

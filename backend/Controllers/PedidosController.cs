@@ -1,4 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Google.Cloud.Firestore;
+using backend.Services;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace backend.Controllers;
 
@@ -6,51 +12,44 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class PedidosController : ControllerBase
 {
-    private static readonly List<PedidoDto> Pedidos = new()
+    private readonly DatabaseService _db;
+
+    public PedidosController(DatabaseService db)
     {
-        new()
-        {
-            Id = "1",
-            ClienteId = "2",
-            ClienteNombre = "Cliente Demo",
-            Servicio = "Lavado y Doblado",
-            Fecha = "2026-07-08",
-            FranjaHoraria = "Tarde",
-            Direccion = "Calle 45 # 10-20",
-            Instrucciones = "Lavar con agua fría",
-            Total = 25m,
-            Estado = "En proceso"
-        }
-    };
+        _db = db;
+    }
 
     [HttpGet]
-    public IActionResult Listar([FromQuery] string? clienteId)
+    public async Task<IActionResult> Listar([FromQuery] string? clienteId)
     {
+        var pedidos = await _db.ListarPedidosAsync();
         var result = string.IsNullOrWhiteSpace(clienteId)
-            ? Pedidos
-            : Pedidos.Where(p => p.ClienteId == clienteId).ToList();
+            ? pedidos
+            : pedidos.Where(p => p.ClienteId == clienteId).ToList();
 
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Obtener(string id)
+    public async Task<IActionResult> Obtener(string id)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedidos = await _db.ListarPedidosAsync();
+        var pedido = pedidos.FirstOrDefault(p => p.Id == id);
         return pedido == null ? NotFound(new { message = "Pedido no encontrado" }) : Ok(pedido);
     }
 
     [HttpPost]
-    public IActionResult Crear([FromBody] CrearPedidoRequest request)
+    public async Task<IActionResult> Crear([FromBody] CrearPedidoRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Servicio))
         {
             return BadRequest(new { message = "El servicio es obligatorio" });
         }
 
+        var pedidos = await _db.ListarPedidosAsync();
         var pedido = new PedidoDto
         {
-            Id = (Pedidos.Count + 1).ToString(),
+            Id = (pedidos.Count + 1).ToString(),
             ClienteId = request.ClienteId ?? "2",
             ClienteNombre = request.ClienteNombre ?? "Cliente Demo",
             Servicio = request.Servicio,
@@ -58,37 +57,41 @@ public class PedidosController : ControllerBase
             FranjaHoraria = string.IsNullOrWhiteSpace(request.FranjaHoraria) ? "Tarde" : request.FranjaHoraria,
             Direccion = string.IsNullOrWhiteSpace(request.Direccion) ? "Sin dirección" : request.Direccion,
             Instrucciones = request.Instrucciones ?? string.Empty,
-            Total = request.Total ?? 0m,
-            Estado = "En proceso"
+            Total = (double)(request.Total ?? 0m),
+            Estado = "Pendiente"
         };
 
-        Pedidos.Add(pedido);
+        await _db.GuardarPedidoAsync(pedido);
         return CreatedAtAction(nameof(Obtener), new { id = pedido.Id }, pedido);
     }
 
     [HttpPut("{id}/estado")]
-    public IActionResult ActualizarEstado(string id, [FromBody] ActualizarEstadoRequest request)
+    public async Task<IActionResult> ActualizarEstado(string id, [FromBody] ActualizarEstadoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedidos = await _db.ListarPedidosAsync();
+        var pedido = pedidos.FirstOrDefault(p => p.Id == id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
         }
 
         pedido.Estado = string.IsNullOrWhiteSpace(request.Estado) ? pedido.Estado : request.Estado;
+        await _db.GuardarPedidoAsync(pedido);
         return Ok(pedido);
     }
 
     [HttpPost("{id}/cancelar")]
-    public IActionResult Cancelar(string id, [FromBody] CancelarPedidoRequest request)
+    public async Task<IActionResult> Cancelar(string id, [FromBody] CancelarPedidoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedidos = await _db.ListarPedidosAsync();
+        var pedido = pedidos.FirstOrDefault(p => p.Id == id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
         }
 
         pedido.Estado = "Cancelado";
+        await _db.GuardarPedidoAsync(pedido);
         return Ok(new
         {
             message = "Pedido cancelado correctamente",
@@ -99,9 +102,10 @@ public class PedidosController : ControllerBase
     }
 
     [HttpPost("{id}/calificar")]
-    public IActionResult Calificar(string id, [FromBody] CalificarPedidoRequest request)
+    public async Task<IActionResult> Calificar(string id, [FromBody] CalificarPedidoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedidos = await _db.ListarPedidosAsync();
+        var pedido = pedidos.FirstOrDefault(p => p.Id == id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
@@ -117,9 +121,10 @@ public class PedidosController : ControllerBase
     }
 
     [HttpPost("{id}/reportar")]
-    public IActionResult Reportar(string id, [FromBody] ReportarPedidoRequest request)
+    public async Task<IActionResult> Reportar(string id, [FromBody] ReportarPedidoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedidos = await _db.ListarPedidosAsync();
+        var pedido = pedidos.FirstOrDefault(p => p.Id == id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
@@ -170,16 +175,27 @@ public class ReportarPedidoRequest
     public string? Detalles { get; set; }
 }
 
+[FirestoreData]
 public class PedidoDto
 {
+    [FirestoreProperty]
     public string? Id { get; set; }
+    [FirestoreProperty]
     public string? ClienteId { get; set; }
+    [FirestoreProperty]
     public string? ClienteNombre { get; set; }
+    [FirestoreProperty]
     public string? Servicio { get; set; }
+    [FirestoreProperty]
     public string? Fecha { get; set; }
+    [FirestoreProperty]
     public string? FranjaHoraria { get; set; }
+    [FirestoreProperty]
     public string? Direccion { get; set; }
+    [FirestoreProperty]
     public string? Instrucciones { get; set; }
-    public decimal Total { get; set; }
+    [FirestoreProperty]
+    public double Total { get; set; }
+    [FirestoreProperty]
     public string? Estado { get; set; }
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "Id": "1",
+    "ClienteId": "2",
+    "ClienteNombre": "Cliente Demo",
+    "Servicio": "Lavado y Doblado",
+    "Fecha": "2026-07-08",
+    "FranjaHoraria": "Tarde",
+    "Direccion": "Calle 45 # 10-20",
+    "Instrucciones": "Lavar con agua fr\u00EDa",
+    "Total": 25,
+    "Estado": "Cancelado"
+  }
+]

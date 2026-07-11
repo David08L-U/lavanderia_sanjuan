@@ -1,17 +1,27 @@
 using backend.Controllers;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Xunit;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace backend.tests;
 
 public class PedidosControllerTests
 {
     [Fact]
-    public void CancelarPedido_DeberiaRetornarOk()
+    public async Task CancelarPedido_DeberiaRetornarOk()
     {
-        var controller = new PedidosController();
+        var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["Firebase:Enabled"] = "false"
+        }).Build();
+        var fbService = new FirebaseService(config);
+        var dbService = new DatabaseService(fbService);
+        var controller = new PedidosController(dbService);
 
-        var result = controller.Cancelar("1", new CancelarPedidoRequest
+        var result = await controller.Cancelar("1", new CancelarPedidoRequest
         {
             Razon = "Otro",
             Comentarios = "Necesito cancelar"
