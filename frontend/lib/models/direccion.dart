@@ -17,6 +17,23 @@ class Direccion {
   final String? nota;
   final bool predeterminada;
 
+  factory Direccion.fromJson(Map<String, dynamic> json) => Direccion(
+    icon: iconoParaEtiqueta(json['titulo']?.toString() ?? ''),
+    titulo: json['titulo']?.toString() ?? 'Dirección',
+    lineas: List<String>.from(json['lineas'] ?? []),
+    telefono: json['telefono']?.toString(),
+    nota: json['nota']?.toString(),
+    predeterminada: json['predeterminada'] == true,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'titulo': titulo,
+    'lineas': lineas,
+    'telefono': telefono,
+    'nota': nota,
+    'predeterminada': predeterminada,
+  };
+
   Direccion copyWith({bool? predeterminada}) => Direccion(
     icon: icon,
     titulo: titulo,
