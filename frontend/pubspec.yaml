@@ -1,4 +1,4 @@
-name: fronted
+name: frontend
 description: "A new Flutter project."
 # La siguiente línea evita que el paquete se publique por accidente
 # en pub.dev usando `flutter pub publish`. Se recomienda para paquetes privados.

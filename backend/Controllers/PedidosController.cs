@@ -19,7 +19,13 @@ public class PedidosController : ControllerBase
             Direccion = "Calle 45 # 10-20",
             Instrucciones = "Lavar con agua fría",
             Total = 25m,
-            Estado = "En proceso"
+            Estado = "En proceso",
+            HistorialEstados = new List<EstadoHistorial>
+            {
+                new() { Estado = "Creado", Fecha = "2026-07-08T10:00:00", Observaciones = "Pedido creado exitosamente" },
+                new() { Estado = "Confirmado", Fecha = "2026-07-08T11:30:00", Observaciones = "Pedido confirmado por el equipo" },
+                new() { Estado = "En proceso", Fecha = "2026-07-09T09:00:00", Observaciones = "Inicio del servicio de lavado" }
+            }
         }
     };
 
