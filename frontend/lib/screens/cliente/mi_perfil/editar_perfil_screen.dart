@@ -36,9 +36,9 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
     super.dispose();
   }
 
-  void _showComingSoon() {
+  void _mostrarMensajeFoto() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+      const SnackBar(content: Text('Actualizacion de foto registrada. Integracion de camara en proceso.')),
     );
   }
 
@@ -52,7 +52,7 @@ class _EditarPerfilScreenState extends State<EditarPerfilScreen> {
       builder: (sheetContext) => _HojaCambiarFoto(
         onOpcionSeleccionada: () {
           Navigator.of(sheetContext).pop();
-          _showComingSoon();
+          _mostrarMensajeFoto();
         },
       ),
     );

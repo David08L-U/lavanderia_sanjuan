@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -10,10 +11,55 @@ import 'agregar_tarjeta_screen.dart';
 class MetodosPagoScreen extends StatelessWidget {
   const MetodosPagoScreen({super.key});
 
-  void _showComingSoon(BuildContext context) {
+  Future<void> _mostrarTransferencia(BuildContext context) async {
+    const referencia = 'SANJUAN-CTA-001-998877';
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Transferencia bancaria'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Banco: Banco San Juan'),
+            Text('Cuenta: 001-998877'),
+            Text('Tipo: Ahorros'),
+            SizedBox(height: 8),
+            Text('Usa la referencia SANJUAN-CTA-001-998877 al transferir.'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await Clipboard.setData(const ClipboardData(text: referencia));
+              if (dialogContext.mounted) {
+                Navigator.of(dialogContext).pop();
+              }
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Referencia copiada')),
+                );
+              }
+            },
+            child: const Text('Copiar referencia'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cerrar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _seleccionarEfectivo(BuildContext context) {
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Próximamente disponible')));
+    ).showSnackBar(
+      const SnackBar(
+        content: Text('Pago en efectivo activado para tu proximo pedido'),
+      ),
+    );
   }
 
   Future<void> _eliminar(BuildContext context, int index) async {
@@ -163,13 +209,13 @@ class MetodosPagoScreen extends StatelessWidget {
                     _OtroMetodoTile(
                       icon: Icons.account_balance_rounded,
                       label: 'Transferencia Bancaria',
-                      onTap: () => _showComingSoon(context),
+                      onTap: () => _mostrarTransferencia(context),
                     ),
                     const Divider(height: 1, indent: 16, endIndent: 16),
                     _OtroMetodoTile(
                       icon: Icons.payments_outlined,
                       label: 'Efectivo al Repartidor',
-                      onTap: () => _showComingSoon(context),
+                      onTap: () => _seleccionarEfectivo(context),
                     ),
                   ],
                 ),

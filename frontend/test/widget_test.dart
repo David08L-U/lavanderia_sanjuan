@@ -7,7 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:fronted/main.dart';
+import 'package:frontend/main.dart';
 
 void main() {
   testWidgets('La app arranca en la pantalla de acceso', (WidgetTester tester) async {

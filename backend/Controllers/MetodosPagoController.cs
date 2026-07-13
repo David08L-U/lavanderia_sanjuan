@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using backend;
 
 namespace backend.Controllers;
 
@@ -6,52 +7,39 @@ namespace backend.Controllers;
 [Route("api/metodos-pago")]
 public class MetodosPagoController : ControllerBase
 {
-    private static readonly List<MetodoPagoDto> MetodosPago = new()
+    private readonly AppDataRepository _repository;
+
+    public MetodosPagoController(AppDataRepository repository)
     {
-        new()
-        {
-            Id = "1",
-            Marca = "visa",
-            UltimosDigitos = "4242",
-            Expira = "12/26",
-            Principal = true
-        },
-        new()
-        {
-            Id = "2",
-            Marca = "mastercard",
-            UltimosDigitos = "8819",
-            Expira = "08/24",
-            Principal = false
-        }
-    };
+        _repository = repository;
+    }
 
     [HttpGet]
-    public IActionResult Listar()
+    public async Task<IActionResult> Listar()
     {
-        return Ok(MetodosPago);
+        var metodos = await _repository.ListarMetodosPagoAsync();
+        return Ok(metodos);
     }
 
     [HttpPost]
-    public IActionResult Crear([FromBody] CrearMetodoPagoRequest request)
+    public async Task<IActionResult> Crear([FromBody] CrearMetodoPagoRequest request)
     {
         var metodo = new MetodoPagoDto
         {
-            Id = (MetodosPago.Count + 1).ToString(),
             Marca = string.IsNullOrWhiteSpace(request.Marca) ? "visa" : request.Marca,
             UltimosDigitos = request.UltimosDigitos ?? string.Empty,
             Expira = request.Expira ?? string.Empty,
             Principal = request.Principal
         };
 
-        MetodosPago.Add(metodo);
-        return CreatedAtAction(nameof(Obtener), new { id = metodo.Id }, metodo);
+        var creado = await _repository.CrearMetodoPagoAsync(metodo);
+        return CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Obtener(string id)
+    public async Task<IActionResult> Obtener(string id)
     {
-        var metodo = MetodosPago.FirstOrDefault(m => m.Id == id);
+        var metodo = await _repository.ObtenerMetodoPagoAsync(id);
         return metodo == null ? NotFound(new { message = "Método de pago no encontrado" }) : Ok(metodo);
     }
 }

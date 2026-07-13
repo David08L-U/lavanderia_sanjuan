@@ -15,21 +15,34 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSingleton<FirebaseService>();
+builder.Services.AddSingleton<AppDataRepository>();
 
 var app = builder.Build();
 
 var firebaseService = app.Services.GetRequiredService<FirebaseService>();
+var dataRepository = app.Services.GetRequiredService<AppDataRepository>();
 if (firebaseService.IsConfigured)
 {
-    var credential = firebaseService.CreateCredential();
-    if (credential is not null)
+    try
     {
-        app.Logger.LogInformation("Firebase configurado para el proyecto {ProjectId}", firebaseService.ProjectId);
+        var credential = firebaseService.CreateCredential();
+        if (credential is not null)
+        {
+            app.Logger.LogInformation("Firebase configurado para el proyecto {ProjectId}", firebaseService.ProjectId);
+            app.Logger.LogInformation(
+                dataRepository.IsUsingFirestore
+                    ? "Persistencia activa en Firebase Firestore"
+                    : "Firebase está configurado pero Firestore no pudo inicializarse. Se usará almacenamiento temporal en memoria.");
+        }
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "No fue posible cargar credenciales de Firebase. Se usará almacenamiento temporal en memoria.");
     }
 }
 else
 {
-    app.Logger.LogWarning("Firebase no está configurado. Configure Firebase:Enabled, Firebase:ProjectId y Firebase:CredentialsPath para habilitarlo.");
+    app.Logger.LogWarning("Firebase no está configurado. Configure Firebase:Enabled y Firebase:ProjectId para habilitarlo (CredentialsPath es opcional).");
 }
 
 if (app.Environment.IsDevelopment())

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using backend;
 
 namespace backend.Controllers;
 
@@ -6,16 +7,17 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = new()
+    private readonly AppDataRepository _repository;
+
+    public UsuariosController(AppDataRepository repository)
     {
-        new() { Id = "1", Nombre = "Admin San Juan", Correo = "admin@sanjuan.com", Telefono = "3001234567", Password = "admin123", Rol = "administrador" },
-        new() { Id = "2", Nombre = "Cliente Demo", Correo = "cliente@sanjuan.com", Telefono = "3007654321", Password = "cliente123", Rol = "cliente" }
-    };
+        _repository = repository;
+    }
 
     [HttpPut("{id}")]
-    public IActionResult ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
+    public async Task<IActionResult> ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
     {
-        var usuario = Usuarios.FirstOrDefault(u => u.Id == id);
+        var usuario = await _repository.GetUsuarioByIdAsync(id);
         if (usuario == null)
         {
             return NotFound(new { message = "Usuario no encontrado" });
@@ -23,7 +25,7 @@ public class UsuariosController : ControllerBase
 
         if (!string.IsNullOrWhiteSpace(request.Correo))
         {
-            var existe = Usuarios.Any(u => u.Id != id && u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+            var existe = await _repository.ExisteCorreoAsync(request.Correo.Trim().ToLowerInvariant(), id);
             if (existe)
             {
                 return Conflict(new { message = "Ese correo ya está registrado" });
@@ -34,11 +36,14 @@ public class UsuariosController : ControllerBase
         usuario.Correo = string.IsNullOrWhiteSpace(request.Correo) ? usuario.Correo : request.Correo;
         usuario.Telefono = string.IsNullOrWhiteSpace(request.Telefono) ? usuario.Telefono : request.Telefono;
 
-        return Ok(usuario);
+        var guardado = await _repository.GuardarUsuarioAsync(usuario);
+        return guardado == null
+            ? NotFound(new { message = "Usuario no encontrado" })
+            : Ok(guardado);
     }
 
     [HttpPost("cambiar-password")]
-    public IActionResult CambiarPassword([FromBody] CambiarPasswordRequest request)
+    public async Task<IActionResult> CambiarPassword([FromBody] CambiarPasswordRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.PasswordActual) || string.IsNullOrWhiteSpace(request.PasswordNueva))
         {
@@ -46,8 +51,8 @@ public class UsuariosController : ControllerBase
         }
 
         var usuario = string.IsNullOrWhiteSpace(request.Correo)
-            ? Usuarios.FirstOrDefault(u => u.Password == request.PasswordActual)
-            : Usuarios.FirstOrDefault(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+            ? await _repository.GetUsuarioByPasswordAsync(request.PasswordActual)
+            : await _repository.GetUsuarioByCorreoAsync(request.Correo.Trim().ToLowerInvariant());
 
         if (usuario == null)
         {
@@ -60,6 +65,7 @@ public class UsuariosController : ControllerBase
         }
 
         usuario.Password = request.PasswordNueva;
+        await _repository.GuardarUsuarioAsync(usuario);
         return Ok(new { message = "Contraseña actualizada" });
     }
 }

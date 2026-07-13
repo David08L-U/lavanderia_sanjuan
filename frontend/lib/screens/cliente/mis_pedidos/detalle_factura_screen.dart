@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../models/servicio_lavanderia.dart';
@@ -32,9 +33,21 @@ class DetalleFacturaScreen extends StatelessWidget {
 
   double get _total => montoServicio + _tarifaServicio + _envio;
 
-  void _showComingSoon(BuildContext context) {
+  Future<void> _descargarResumen(BuildContext context) async {
+    final resumen = '''
+Factura $numeroPedido
+Servicio: $servicio
+Fecha entrega: $fechaEntrega
+Subtotal: \$${montoServicio.toStringAsFixed(2)}
+Tarifa servicio: \$${_tarifaServicio.toStringAsFixed(2)}
+Envio: \$${_envio.toStringAsFixed(2)}
+Total: \$${_total.toStringAsFixed(2)}
+''';
+
+    await Clipboard.setData(ClipboardData(text: resumen.trim()));
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+      const SnackBar(content: Text('Resumen de factura copiado al portapapeles')),
     );
   }
 
@@ -144,7 +157,7 @@ class DetalleFacturaScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: _BottomActionBar(
-        onDescargar: () => _showComingSoon(context),
+        onDescargar: () => _descargarResumen(context),
         onRepetir: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => RepetirPedidoScreen(

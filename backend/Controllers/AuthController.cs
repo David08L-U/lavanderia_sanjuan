@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using backend;
 
 namespace backend.Controllers;
 
@@ -6,27 +7,28 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = new()
+    private readonly AppDataRepository _repository;
+
+    public AuthController(AppDataRepository repository)
     {
-        new() { Id = "1", Nombre = "Admin San Juan", Correo = "admin@sanjuan.com", Telefono = "3001234567", Password = "admin123", Rol = "administrador" },
-        new() { Id = "2", Nombre = "Cliente Demo", Correo = "cliente@sanjuan.com", Telefono = "3007654321", Password = "cliente123", Rol = "cliente" }
-    };
+        _repository = repository;
+    }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Correo y contraseña son requeridos" });
         }
 
-        var usuario = Usuarios.FirstOrDefault(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+        var usuario = await _repository.GetUsuarioByCorreoAsync(request.Correo.Trim());
         if (usuario == null)
         {
             return NotFound(new { message = "Usuario no encontrado" });
         }
 
-        if (!usuario.Password.Equals(request.Password))
+        if (!string.Equals(usuario.Password, request.Password, StringComparison.Ordinal))
         {
             return Unauthorized(new { message = "Correo o contraseña incorrectos" });
         }
@@ -42,14 +44,15 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("registro")]
-    public IActionResult Registro([FromBody] RegistroRequest request)
+    public async Task<IActionResult> Registro([FromBody] RegistroRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Nombre) || string.IsNullOrWhiteSpace(request.Apellido) || string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Faltan datos obligatorios" });
         }
 
-        var existe = Usuarios.Any(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
+        var correo = request.Correo.Trim().ToLowerInvariant();
+        var existe = await _repository.ExisteCorreoAsync(correo);
         if (existe)
         {
             return Conflict(new { message = "Ese correo ya está registrado" });
@@ -57,17 +60,16 @@ public class AuthController : ControllerBase
 
         var nuevo = new UsuarioDto
         {
-            Id = (Usuarios.Count + 1).ToString(),
             Nombre = $"{request.Nombre} {request.Apellido}",
-            Correo = request.Correo,
+            Correo = correo,
             Telefono = request.Telefono,
             Password = request.Password,
             Rol = "cliente"
         };
 
-        Usuarios.Add(nuevo);
+        var creado = await _repository.CrearUsuarioAsync(nuevo);
 
-        return CreatedAtAction(nameof(Login), new { id = nuevo.Id }, nuevo);
+        return CreatedAtAction(nameof(Login), new { id = creado.Id }, creado);
     }
 
     [HttpPost("recuperar-password")]

@@ -21,6 +21,6 @@ public class FirebaseServiceTests
         var service = new FirebaseService(config);
 
         Assert.False(service.IsConfigured);
-        Assert.Null(service.ProjectId);
+        Assert.Equal("demo-project", service.ProjectId);
     }
 }

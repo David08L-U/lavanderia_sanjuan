@@ -1,3 +1,26 @@
 node_modules/
+
+# Common build artifacts
 build/
 .dart_tool/
+bin/
+obj/
+
+# Backend generated artifacts
+backend/bin/
+backend/obj/
+backend/test/bin/
+backend/test/obj/
+
+# Frontend generated artifacts
+frontend/build/
+frontend/.dart_tool/
+frontend/.flutter-plugins-dependencies
+frontend/.metadata
+
+# IDE/editor files
+*.iml
+.idea/
+
+# Local secrets
+backend/firebase-service-account.json

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using backend;
 
 namespace backend.Controllers;
 
@@ -6,40 +7,25 @@ namespace backend.Controllers;
 [Route("api/direcciones")]
 public class DireccionesController : ControllerBase
 {
-    private static readonly List<DireccionDto> Direcciones = new()
+    private readonly AppDataRepository _repository;
+
+    public DireccionesController(AppDataRepository repository)
     {
-        new()
-        {
-            Id = "1",
-            Titulo = "Casa Principal",
-            Lineas = new List<string> { "Av. Siempre Viva 742", "Springfield, CP 12345" },
-            Telefono = "+34 555 123 456",
-            Nota = "Entregar en la puerta principal",
-            Predeterminada = true
-        },
-        new()
-        {
-            Id = "2",
-            Titulo = "Oficina",
-            Lineas = new List<string> { "Torre Empresarial, Piso 5", "Centro, CP 54321" },
-            Telefono = "+34 555 987 654",
-            Nota = "Entregar en recepción",
-            Predeterminada = false
-        }
-    };
+        _repository = repository;
+    }
 
     [HttpGet]
-    public IActionResult Listar()
+    public async Task<IActionResult> Listar()
     {
-        return Ok(Direcciones);
+        var direcciones = await _repository.ListarDireccionesAsync();
+        return Ok(direcciones);
     }
 
     [HttpPost]
-    public IActionResult Crear([FromBody] CrearDireccionRequest request)
+    public async Task<IActionResult> Crear([FromBody] CrearDireccionRequest request)
     {
         var direccion = new DireccionDto
         {
-            Id = (Direcciones.Count + 1).ToString(),
             Titulo = string.IsNullOrWhiteSpace(request.Titulo) ? "Nueva dirección" : request.Titulo,
             Lineas = request.Lineas ?? new List<string>(),
             Telefono = request.Telefono,
@@ -47,45 +33,46 @@ public class DireccionesController : ControllerBase
             Predeterminada = request.Predeterminada
         };
 
-        Direcciones.Add(direccion);
-        return CreatedAtAction(nameof(Obtener), new { id = direccion.Id }, direccion);
+        var creada = await _repository.CrearDireccionAsync(direccion);
+        return CreatedAtAction(nameof(Obtener), new { id = creada.Id }, creada);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Obtener(string id)
+    public async Task<IActionResult> Obtener(string id)
     {
-        var direccion = Direcciones.FirstOrDefault(d => d.Id == id);
+        var direccion = await _repository.ObtenerDireccionAsync(id);
         return direccion == null ? NotFound(new { message = "Dirección no encontrada" }) : Ok(direccion);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Actualizar(string id, [FromBody] CrearDireccionRequest request)
+    public async Task<IActionResult> Actualizar(string id, [FromBody] CrearDireccionRequest request)
     {
-        var direccion = Direcciones.FirstOrDefault(d => d.Id == id);
-        if (direccion == null)
+        var direccionActual = await _repository.ObtenerDireccionAsync(id);
+        if (direccionActual == null)
         {
             return NotFound(new { message = "Dirección no encontrada" });
         }
 
-        direccion.Titulo = string.IsNullOrWhiteSpace(request.Titulo) ? direccion.Titulo : request.Titulo;
-        direccion.Lineas = request.Lineas ?? direccion.Lineas;
-        direccion.Telefono = request.Telefono;
-        direccion.Nota = request.Nota;
-        direccion.Predeterminada = request.Predeterminada;
+        direccionActual.Titulo = string.IsNullOrWhiteSpace(request.Titulo) ? direccionActual.Titulo : request.Titulo;
+        direccionActual.Lineas = request.Lineas ?? direccionActual.Lineas;
+        direccionActual.Telefono = request.Telefono;
+        direccionActual.Nota = request.Nota;
+        direccionActual.Predeterminada = request.Predeterminada;
 
-        return Ok(direccion);
+        var actualizada = await _repository.ActualizarDireccionAsync(id, direccionActual);
+        return actualizada == null
+            ? NotFound(new { message = "Dirección no encontrada" })
+            : Ok(actualizada);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Eliminar(string id)
+    public async Task<IActionResult> Eliminar(string id)
     {
-        var direccion = Direcciones.FirstOrDefault(d => d.Id == id);
-        if (direccion == null)
+        var eliminada = await _repository.EliminarDireccionAsync(id);
+        if (!eliminada)
         {
             return NotFound(new { message = "Dirección no encontrada" });
         }
-
-        Direcciones.Remove(direccion);
         return Ok(new { message = "Dirección eliminada" });
     }
 }

@@ -57,9 +57,15 @@ const _pasos = [
 class PedidoScreen extends StatelessWidget {
   const PedidoScreen({super.key});
 
-  void _showComingSoon(BuildContext context) {
+  void _llamarRepartidor(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+      const SnackBar(content: Text('Llamando al repartidor: +57 300 111 2233')),
+    );
+  }
+
+  void _contactarSoporte(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Conectando con soporte: +57 300 000 0000')),
     );
   }
 
@@ -151,7 +157,10 @@ class PedidoScreen extends StatelessWidget {
               const SizedBox(height: 16),
               _TimelineCard(),
               const SizedBox(height: 16),
-              _RepartidorCard(onTap: () => _showComingSoon(context)),
+              _RepartidorCard(
+                onLlamar: () => _llamarRepartidor(context),
+                onSoporte: () => _contactarSoporte(context),
+              ),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -440,9 +449,10 @@ class _TimelineStep extends StatelessWidget {
 }
 
 class _RepartidorCard extends StatelessWidget {
-  const _RepartidorCard({required this.onTap});
+  const _RepartidorCard({required this.onLlamar, required this.onSoporte});
 
-  final VoidCallback onTap;
+  final VoidCallback onLlamar;
+  final VoidCallback onSoporte;
 
   @override
   Widget build(BuildContext context) {
@@ -515,7 +525,7 @@ class _RepartidorCard extends StatelessWidget {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: onTap,
+                  onPressed: onLlamar,
                   icon: const Icon(Icons.call_rounded, size: 20),
                   label: const Text('Llamar'),
                   style: OutlinedButton.styleFrom(
@@ -531,7 +541,7 @@ class _RepartidorCard extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: onTap,
+                  onPressed: onSoporte,
                   icon: const Icon(Icons.support_agent_rounded, size: 20),
                   label: const Text('Soporte'),
                   style: OutlinedButton.styleFrom(

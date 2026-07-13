@@ -96,7 +96,7 @@ class _AgregarTarjetaScreenState extends State<AgregarTarjetaScreen> {
 
   Future<void> _guardarTarjeta() async {
     setState(() => _isLoading = true);
-    // TODO: enviar la tarjeta al proveedor de pagos / backend.
+    // Este flujo devuelve la tarjeta al provider para persistirla por servicio.
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 

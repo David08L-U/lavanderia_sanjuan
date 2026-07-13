@@ -6,19 +6,19 @@ namespace backend.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries =
+    private static readonly string[] Resumenes =
     [
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Helado", "Frio intenso", "Frio", "Fresco", "Templado", "Calido", "Agradable", "Caluroso", "Bochornoso", "Ardiente"
     ];
 
-    [HttpGet(Name = "GetWeatherForecast")]
+    [HttpGet(Name = "ObtenerPronosticoClima")]
     public IEnumerable<WeatherForecast> Get()
     {
         return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
             TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            Summary = Resumenes[Random.Shared.Next(Resumenes.Length)]
         })
         .ToArray();
     }

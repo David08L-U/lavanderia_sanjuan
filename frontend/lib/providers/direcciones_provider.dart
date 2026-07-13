@@ -46,8 +46,14 @@ class DireccionesProvider extends ChangeNotifier {
   }
 
   Future<void> actualizar(int index, Direccion direccion) async {
+    final id = _direcciones[index].id;
     try {
-      final actualizada = await _direccionService.actualizarDireccion(index.toString(), direccion);
+      if (id == null || id.isEmpty) {
+        _direcciones[index] = direccion;
+        notifyListeners();
+        return;
+      }
+      final actualizada = await _direccionService.actualizarDireccion(id, direccion);
       _direcciones[index] = actualizada;
       notifyListeners();
     } catch (_) {
@@ -58,8 +64,11 @@ class DireccionesProvider extends ChangeNotifier {
 
   Future<void> eliminar(int index) async {
     final eraPredeterminada = _direcciones[index].predeterminada;
+    final id = _direcciones[index].id;
     try {
-      await _direccionService.eliminarDireccion((index + 1).toString());
+      if (id != null && id.isNotEmpty) {
+        await _direccionService.eliminarDireccion(id);
+      }
     } catch (_) {}
 
     _direcciones.removeAt(index);

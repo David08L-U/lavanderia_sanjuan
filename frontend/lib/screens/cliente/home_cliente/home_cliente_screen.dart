@@ -256,7 +256,7 @@ class _HeroBanner extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Order Now',
+                      'Pedir ahora',
                       style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(width: 8),

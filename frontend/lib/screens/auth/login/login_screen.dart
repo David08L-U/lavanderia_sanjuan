@@ -16,10 +16,36 @@ import '../recuperar_contrasena/recuperar_contrasena_screen.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+  Future<void> _abrirRegistroDesdeProveedor(
+    BuildContext context,
+    String proveedor,
+  ) async {
+    final irARegistro = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Continuar con $proveedor'),
+        content: const Text(
+          'Aun no tenemos inicio de sesion directo con este proveedor. '
+          'Puedes crear tu cuenta en segundos con correo.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Crear cuenta'),
+          ),
+        ],
+      ),
     );
+
+    if (irARegistro == true && context.mounted) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const CrearCuentaScreen()),
+      );
+    }
   }
 
   Future<void> _submit(BuildContext context, LoginProvider login) async {
@@ -222,7 +248,7 @@ class LoginScreen extends StatelessWidget {
                             child: _SocialButton(
                               label: 'Google',
                               icon: Icons.g_mobiledata_rounded,
-                              onPressed: () => _showComingSoon(context),
+                              onPressed: () => _abrirRegistroDesdeProveedor(context, 'Google'),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -230,7 +256,7 @@ class LoginScreen extends StatelessWidget {
                             child: _SocialButton(
                               label: 'Apple',
                               icon: Icons.apple_rounded,
-                              onPressed: () => _showComingSoon(context),
+                              onPressed: () => _abrirRegistroDesdeProveedor(context, 'Apple'),
                             ),
                           ),
                         ],

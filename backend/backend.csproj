@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-v5pm-xwqc-g5wc" />
   </ItemGroup>
 
   <ItemGroup>

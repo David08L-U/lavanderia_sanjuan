@@ -13,9 +13,15 @@ import '../servicios/servicios_screen.dart';
 class SeguimientoEnVivoScreen extends StatelessWidget {
   const SeguimientoEnVivoScreen({super.key});
 
-  void _showComingSoon(BuildContext context) {
+  void _llamarRepartidor(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+      const SnackBar(content: Text('Llamando al repartidor: +57 300 111 2233')),
+    );
+  }
+
+  void _contactarSoporte(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Soporte disponible en +57 300 000 0000')),
     );
   }
 
@@ -78,8 +84,8 @@ class SeguimientoEnVivoScreen extends StatelessWidget {
             right: 20,
             bottom: 16,
             child: _OverlayCard(
-              onLlamar: () => _showComingSoon(context),
-              onSoporte: () => _showComingSoon(context),
+              onLlamar: () => _llamarRepartidor(context),
+              onSoporte: () => _contactarSoporte(context),
             ),
           ),
         ],

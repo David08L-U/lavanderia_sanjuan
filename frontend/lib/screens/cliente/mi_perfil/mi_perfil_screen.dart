@@ -26,10 +26,64 @@ class MiPerfilScreen extends StatefulWidget {
 class _MiPerfilScreenState extends State<MiPerfilScreen> {
   bool _notificaciones = true;
   bool _ecoFriendly = false;
+  String _fragancia = 'Lavanda';
 
-  void _showComingSoon() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+  Future<void> _seleccionarFragancia() async {
+    const opciones = ['Lavanda', 'Neutra', 'Citrica', 'Sin fragancia'];
+    final seleccion = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Elegir fragancia'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final opcion in opciones)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(
+                  opcion == _fragancia
+                      ? Icons.radio_button_checked_rounded
+                      : Icons.radio_button_off_rounded,
+                ),
+                title: Text(opcion),
+                onTap: () => Navigator.of(dialogContext).pop(opcion),
+              ),
+          ],
+        ),
+      ),
+    );
+
+    if (seleccion != null && mounted) {
+      setState(() => _fragancia = seleccion);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Fragancia actualizada a $seleccion')),
+      );
+    }
+  }
+
+  void _abrirCentroAyuda() {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Centro de Ayuda'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Canales disponibles:'),
+            SizedBox(height: 8),
+            Text('- WhatsApp: +57 300 000 0000'),
+            Text('- Correo: soporte@sanjuan.com'),
+            Text('- Horario: Lun a Sab 8:00 AM - 7:00 PM'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cerrar'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -232,8 +286,8 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
                   _MenuItem(
                     icon: Icons.air_rounded,
                     label: 'Fragancia',
-                    trailingText: 'Lavanda',
-                    onTap: _showComingSoon,
+                    trailingText: _fragancia,
+                    onTap: _seleccionarFragancia,
                   ),
                 ],
               ),
@@ -244,7 +298,7 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
                   _MenuItem(
                     icon: Icons.help_center_outlined,
                     label: 'Centro de Ayuda',
-                    onTap: _showComingSoon,
+                    onTap: _abrirCentroAyuda,
                   ),
                   _MenuItem(
                     icon: Icons.gavel_rounded,

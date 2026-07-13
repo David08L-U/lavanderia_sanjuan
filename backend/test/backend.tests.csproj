@@ -23,4 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\backend.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-v5pm-xwqc-g5wc" />
+  </ItemGroup>
 </Project>

@@ -32,6 +32,7 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
   String? _tipoSeleccionado;
   final _detallesController = TextEditingController();
   bool _isLoading = false;
+  int _evidenciasAdjuntas = 0;
 
   @override
   void dispose() {
@@ -39,10 +40,34 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
     super.dispose();
   }
 
-  void _showComingSoon() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
+  Future<void> _adjuntarEvidencia() async {
+    final agregar = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Adjuntar evidencia'),
+        content: const Text(
+          'Puedes adjuntar evidencia por ahora describiendo el archivo en detalles. '
+          'Deseas registrar una evidencia manual?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Agregar'),
+          ),
+        ],
+      ),
     );
+
+    if (agregar == true && mounted) {
+      setState(() => _evidenciasAdjuntas = (_evidenciasAdjuntas + 1).clamp(0, 3));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Evidencias registradas: $_evidenciasAdjuntas/3')),
+      );
+    }
   }
 
   Future<void> _enviarReporte() async {
@@ -195,14 +220,14 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
                     ),
                   ),
                   Text(
-                    'Máx 3 fotos',
+                    'Máx 3 fotos ($_evidenciasAdjuntas/3)',
                     style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               InkWell(
-                onTap: _showComingSoon,
+                onTap: _evidenciasAdjuntas >= 3 ? null : _adjuntarEvidencia,
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
                   width: 96,

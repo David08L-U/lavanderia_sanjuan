@@ -1,21 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '../config/api_config.dart';
 import '../models/direccion.dart';
 
 class DireccionService {
-  String get _baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:5162/api';
-    }
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:5162/api';
-    }
-    return 'http://localhost:5162/api';
-  }
+  String get _baseUrl => ApiConfig.baseUrl;
 
   Future<List<Direccion>> listarDirecciones() async {
     final response = await http.get(Uri.parse('$_baseUrl/direcciones'));

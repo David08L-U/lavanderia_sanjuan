@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using backend;
 
 namespace backend.Controllers;
 
@@ -6,48 +7,29 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class PedidosController : ControllerBase
 {
-    private static readonly List<PedidoDto> Pedidos = new()
+    private readonly AppDataRepository _repository;
+
+    public PedidosController(AppDataRepository repository)
     {
-        new()
-        {
-            Id = "1",
-            ClienteId = "2",
-            ClienteNombre = "Cliente Demo",
-            Servicio = "Lavado y Doblado",
-            Fecha = "2026-07-08",
-            FranjaHoraria = "Tarde",
-            Direccion = "Calle 45 # 10-20",
-            Instrucciones = "Lavar con agua fría",
-            Total = 25m,
-            Estado = "En proceso",
-            HistorialEstados = new List<EstadoHistorial>
-            {
-                new() { Estado = "Creado", Fecha = "2026-07-08T10:00:00", Observaciones = "Pedido creado exitosamente" },
-                new() { Estado = "Confirmado", Fecha = "2026-07-08T11:30:00", Observaciones = "Pedido confirmado por el equipo" },
-                new() { Estado = "En proceso", Fecha = "2026-07-09T09:00:00", Observaciones = "Inicio del servicio de lavado" }
-            }
-        }
-    };
+        _repository = repository;
+    }
 
     [HttpGet]
-    public IActionResult Listar([FromQuery] string? clienteId)
+    public async Task<IActionResult> Listar([FromQuery] string? clienteId)
     {
-        var result = string.IsNullOrWhiteSpace(clienteId)
-            ? Pedidos
-            : Pedidos.Where(p => p.ClienteId == clienteId).ToList();
-
+        var result = await _repository.ListarPedidosAsync(clienteId);
         return Ok(result);
     }
 
     [HttpGet("{id}")]
-    public IActionResult Obtener(string id)
+    public async Task<IActionResult> Obtener(string id)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedido = await _repository.ObtenerPedidoAsync(id);
         return pedido == null ? NotFound(new { message = "Pedido no encontrado" }) : Ok(pedido);
     }
 
     [HttpPost]
-    public IActionResult Crear([FromBody] CrearPedidoRequest request)
+    public async Task<IActionResult> Crear([FromBody] CrearPedidoRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Servicio))
         {
@@ -56,7 +38,6 @@ public class PedidosController : ControllerBase
 
         var pedido = new PedidoDto
         {
-            Id = (Pedidos.Count + 1).ToString(),
             ClienteId = request.ClienteId ?? "2",
             ClienteNombre = request.ClienteNombre ?? "Cliente Demo",
             Servicio = request.Servicio,
@@ -65,36 +46,61 @@ public class PedidosController : ControllerBase
             Direccion = string.IsNullOrWhiteSpace(request.Direccion) ? "Sin dirección" : request.Direccion,
             Instrucciones = request.Instrucciones ?? string.Empty,
             Total = request.Total ?? 0m,
-            Estado = "En proceso"
+            Estado = "En proceso",
+            HistorialEstados =
+            [
+                new()
+                {
+                    Estado = "En proceso",
+                    Fecha = DateTime.UtcNow.ToString("O"),
+                    Observaciones = "Pedido creado exitosamente"
+                }
+            ]
         };
 
-        Pedidos.Add(pedido);
-        return CreatedAtAction(nameof(Obtener), new { id = pedido.Id }, pedido);
+        var creado = await _repository.CrearPedidoAsync(pedido);
+        return CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado);
     }
 
     [HttpPut("{id}/estado")]
-    public IActionResult ActualizarEstado(string id, [FromBody] ActualizarEstadoRequest request)
+    public async Task<IActionResult> ActualizarEstado(string id, [FromBody] ActualizarEstadoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedido = await _repository.ObtenerPedidoAsync(id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
         }
 
         pedido.Estado = string.IsNullOrWhiteSpace(request.Estado) ? pedido.Estado : request.Estado;
+        pedido.HistorialEstados.Add(new EstadoHistorial
+        {
+            Estado = pedido.Estado,
+            Fecha = DateTime.UtcNow.ToString("O"),
+            Observaciones = "Estado actualizado"
+        });
+
+        await _repository.GuardarPedidoAsync(pedido);
         return Ok(pedido);
     }
 
     [HttpPost("{id}/cancelar")]
-    public IActionResult Cancelar(string id, [FromBody] CancelarPedidoRequest request)
+    public async Task<IActionResult> Cancelar(string id, [FromBody] CancelarPedidoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedido = await _repository.ObtenerPedidoAsync(id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
         }
 
         pedido.Estado = "Cancelado";
+        pedido.HistorialEstados.Add(new EstadoHistorial
+        {
+            Estado = "Cancelado",
+            Fecha = DateTime.UtcNow.ToString("O"),
+            Observaciones = request.Comentarios
+        });
+        await _repository.GuardarPedidoAsync(pedido);
+
         return Ok(new
         {
             message = "Pedido cancelado correctamente",
@@ -105,9 +111,9 @@ public class PedidosController : ControllerBase
     }
 
     [HttpPost("{id}/calificar")]
-    public IActionResult Calificar(string id, [FromBody] CalificarPedidoRequest request)
+    public async Task<IActionResult> Calificar(string id, [FromBody] CalificarPedidoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedido = await _repository.ObtenerPedidoAsync(id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
@@ -123,9 +129,9 @@ public class PedidosController : ControllerBase
     }
 
     [HttpPost("{id}/reportar")]
-    public IActionResult Reportar(string id, [FromBody] ReportarPedidoRequest request)
+    public async Task<IActionResult> Reportar(string id, [FromBody] ReportarPedidoRequest request)
     {
-        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        var pedido = await _repository.ObtenerPedidoAsync(id);
         if (pedido == null)
         {
             return NotFound(new { message = "Pedido no encontrado" });
@@ -188,4 +194,12 @@ public class PedidoDto
     public string? Instrucciones { get; set; }
     public decimal Total { get; set; }
     public string? Estado { get; set; }
+    public List<EstadoHistorial> HistorialEstados { get; set; } = [];
+}
+
+public class EstadoHistorial
+{
+    public string? Estado { get; set; }
+    public string? Fecha { get; set; }
+    public string? Observaciones { get; set; }
 }
