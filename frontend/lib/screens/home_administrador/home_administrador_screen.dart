@@ -17,12 +17,18 @@ class HomeAdministradorScreen extends StatefulWidget {
 class _HomeAdministradorScreenState extends State<HomeAdministradorScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _views = [
-    const DashboardView(),
-    const OrdersView(),
-    const CustomersView(),
-    const ServicesView(),
-  ];
+  late final List<Widget> _views;
+
+  @override
+  void initState() {
+    super.initState();
+    _views = [
+      DashboardView(onViewOrdersTap: () => _onItemTapped(1)),
+      const OrdersView(),
+      const CustomersView(),
+      const ServicesView(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
