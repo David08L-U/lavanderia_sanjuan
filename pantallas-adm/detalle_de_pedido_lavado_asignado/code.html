@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshClean - Detalles de Pedido</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Subtle pulse animation for status */
+        @keyframes pulse-status {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 88, 188, 0.4); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 88, 188, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 88, 188, 0); }
+        }
+        .status-pulse {
+            animation: pulse-status 2s infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#d7e4f1",
+                        "tertiary": "#414546",
+                        "surface-container-highest": "#d8e3fb",
+                        "primary": "#00418f",
+                        "success-blue": "#0070eb",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "on-background": "#111c2d",
+                        "surface-variant": "#d8e3fb",
+                        "outline": "#727784",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-dim": "#cfdaf2",
+                        "secondary-container": "#d7e4f1",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-tertiary-container": "#d2d4d7",
+                        "surface-tint": "#095bbf",
+                        "secondary-fixed-dim": "#bbc8d5",
+                        "outline-variant": "#c2c6d5",
+                        "on-secondary-fixed-variant": "#3c4853",
+                        "background": "#f9f9ff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-surface-variant": "#424753",
+                        "tertiary-container": "#595c5e",
+                        "inverse-primary": "#adc6ff",
+                        "on-primary-container": "#c3d4ff",
+                        "on-error": "#ffffff",
+                        "primary-container": "#0058bc",
+                        "on-secondary-fixed": "#111d26",
+                        "on-tertiary-fixed": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#001a41",
+                        "inverse-surface": "#263143",
+                        "surface-container-high": "#dee8ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-blue-tint": "#e7eeff",
+                        "on-error-container": "#93000a",
+                        "surface": "#f9f9ff",
+                        "secondary": "#54606b",
+                        "on-secondary-container": "#5a6671",
+                        "tertiary-fixed": "#e1e3e5",
+                        "on-primary-fixed-variant": "#004494",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-surface": "#111c2d",
+                        "surface-container": "#e7eeff",
+                        "error-red": "#ba1a1a",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "inline-gap": "0.75rem",
+                        "stack-gap": "1rem",
+                        "hero-padding": "2.5rem",
+                        "section-padding": "2rem",
+                        "container-margin": "1.25rem"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen pb-[96px] md:pb-0">
+<!-- Top App Bar (Mobile & Web Navigation) -->
+<header class="w-full top-0 sticky z-40 shadow-sm bg-surface shadow-[0px_24px_24px_rgba(89,92,94,0.05)]">
+<div class="flex justify-between items-center px-5 h-16 w-full max-w-7xl mx-auto">
+<!-- Mobile Header Content (Back Button + Title) -->
+<div class="flex items-center gap-inline-gap md:hidden">
+<button aria-label="Volver" class="text-on-surface-variant p-2 -ml-2 rounded-full hover:bg-surface-container active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-bold text-on-surface">Pedido #4829</h1>
+</div>
+<!-- Web Navigation Cluster (Hidden on Mobile) -->
+<div class="hidden md:flex items-center gap-6 w-full justify-between">
+<div class="flex items-center gap-2 text-headline-lg font-headline-lg font-bold text-primary">
+<span class="material-symbols-outlined text-[28px] filled">local_laundry_service</span>
+                    FreshClean
+                </div>
+<nav class="flex items-center gap-2">
+<a class="px-4 py-2 rounded-full text-on-surface-variant font-button text-button hover:bg-surface-container transition-colors" href="#">Dashboard</a>
+<a class="px-4 py-2 rounded-full bg-primary-container text-on-primary-container font-button text-button hover:bg-surface-container-high transition-colors" href="#">Orders</a>
+<a class="px-4 py-2 rounded-full text-on-surface-variant font-button text-button hover:bg-surface-container transition-colors" href="#">Customers</a>
+<a class="px-4 py-2 rounded-full text-on-surface-variant font-button text-button hover:bg-surface-container transition-colors" href="#">Services</a>
+</nav>
+<div class="flex items-center gap-4">
+<button aria-label="Notifications" class="p-2 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden flex items-center justify-center text-primary font-title-md text-title-md">
+<span class="material-symbols-outlined filled">person</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-3xl mx-auto px-container-margin md:px-8 py-6 md:py-10 flex flex-col gap-8">
+<!-- Web Only Title (Hidden on Mobile as it's in TopAppBar) -->
+<div class="hidden md:flex items-center gap-4 mb-2">
+<button aria-label="Volver" class="text-on-surface-variant p-2 -ml-2 rounded-full hover:bg-surface-container active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-display-lg font-display-lg text-on-surface">Detalles del Pedido #4829</h1>
+</div>
+<!-- Status Banner -->
+<section class="relative bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-[0px_24px_24px_rgba(89,92,94,0.05)] overflow-hidden">
+<!-- Decorative blur -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-container/30 rounded-full blur-2xl"></div>
+<div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">Estado Actual</p>
+<div class="flex items-center gap-3">
+<div class="w-4 h-4 rounded-full bg-primary status-pulse"></div>
+<h2 class="text-title-md font-title-md text-primary">Repartidor Asignado</h2>
+</div>
+</div>
+<div class="text-right sm:text-left">
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Servicio</p>
+<div class="flex items-center sm:justify-end gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[18px]">local_laundry_service</span>
+<span class="font-button text-button">Lavado y Secado</span>
+</div>
+</div>
+</div>
+<!-- Progress Track -->
+<div class="mt-8 relative">
+<div class="absolute top-1/2 left-0 w-full h-2 bg-surface-container rounded-full -translate-y-1/2 z-0"></div>
+<div class="absolute top-1/2 left-0 w-[60%] h-2 bg-primary rounded-full -translate-y-1/2 z-0"></div>
+<div class="relative z-10 flex justify-between">
+<!-- Step 1: Received -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+<!-- Step 2: Processing -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+</div>
+<!-- Step 3: Courier Assigned (Active) -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest border-2 border-primary text-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[18px] filled">two_wheeler</span>
+</div>
+</div>
+<!-- Step 4: Delivered -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container border-2 border-surface-container text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">home</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Customer Details Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-[0px_24px_24px_rgba(89,92,94,0.05)] flex flex-col gap-stack-gap">
+<h3 class="text-title-md font-title-md text-on-surface flex items-center gap-2 border-b border-surface-variant pb-3">
+<span class="material-symbols-outlined text-primary">person</span>
+                    Cliente
+                </h3>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-title-md">
+                        MJ
+                    </div>
+<div>
+<p class="text-body-lg font-body-lg font-semibold text-on-surface">María Jiménez</p>
+<p class="text-body-md font-body-md text-on-surface-variant">+52 55 1234 5678</p>
+</div>
+</div>
+<div class="mt-2 bg-surface-container-low rounded-lg p-4 flex gap-3">
+<span class="material-symbols-outlined text-primary mt-1">location_on</span>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-1">Dirección de Entrega</p>
+<p class="text-body-md font-body-md text-on-surface">Av. Reforma 222, Depto 4B<br/>Col. Juárez, Cuauhtémoc, CDMX</p>
+</div>
+</div>
+</div>
+<!-- Order Summary Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-[0px_24px_24px_rgba(89,92,94,0.05)] flex flex-col gap-stack-gap">
+<h3 class="text-title-md font-title-md text-on-surface flex items-center gap-2 border-b border-surface-variant pb-3">
+<span class="material-symbols-outlined text-primary">receipt_long</span>
+                    Resumen
+                </h3>
+<ul class="flex flex-col gap-3">
+<li class="flex justify-between items-center text-body-md font-body-md">
+<span class="text-on-surface-variant">2x Carga Ropa Blanca (8kg)</span>
+<span class="text-on-surface font-medium">$180.00</span>
+</li>
+<li class="flex justify-between items-center text-body-md font-body-md">
+<span class="text-on-surface-variant">1x Carga Ropa Color (5kg)</span>
+<span class="text-on-surface font-medium">$120.00</span>
+</li>
+<li class="flex justify-between items-center text-body-md font-body-md">
+<span class="text-on-surface-variant">Suavizante Premium</span>
+<span class="text-on-surface font-medium">$35.00</span>
+</li>
+</ul>
+<div class="mt-auto pt-4 border-t border-surface-variant flex justify-between items-center">
+<span class="text-title-md font-title-md text-on-surface">Total</span>
+<span class="text-title-md font-title-md text-primary">$335.00</span>
+</div>
+</div>
+</div>
+<!-- Assigned Courier Card (Highlight) -->
+<section class="bg-primary-container/10 border border-primary-fixed rounded-xl p-6 shadow-[0px_24px_24px_rgba(89,92,94,0.05)] relative overflow-hidden">
+<!-- Decorative background elements -->
+<div class="absolute -bottom-20 -right-20 w-64 h-64 bg-primary-fixed/30 rounded-full blur-3xl pointer-events-none"></div>
+<h3 class="text-title-md font-title-md text-on-surface flex items-center gap-2 mb-4 relative z-10">
+<span class="material-symbols-outlined text-primary filled">two_wheeler</span>
+                Repartidor Asignado
+            </h3>
+<div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
+<!-- Courier Avatar / Image -->
+<div class="w-24 h-24 rounded-full border-4 border-surface-container-lowest shadow-md overflow-hidden shrink-0 bg-surface-variant">
+<img alt="Foto del repartidor" class="w-full h-full object-cover" data-alt="A professional headshot of a friendly delivery driver wearing a clean blue uniform polo shirt, smiling warmly against a bright, airy white background. Modern, high-key lighting, trustworthy and approachable aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzFGvxemsbf9DKZSawp1xIlXJBgY5Bo1NkqlmnwTtNcdgHI7prG-XOJmztmKwqOfBpOIl6kNksobhmrcHdxMI65J_xmfUkEX-ou1ViqXS6-lgK6eZcUVkcPfQitLlve1CVm7A0XV-ynziT6aM1Q_o9-CL8eIOWe_xGtEu25pZDt38wfNcVw16F5MATmIur-3T-2RGPmM9WxkzjWMp8J5ebfchDBG1J-BTamiccAtHcSVuvDZvcAUQW"/>
+</div>
+<div class="flex-1 text-center sm:text-left flex flex-col gap-2 w-full">
+<div>
+<h4 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">Carlos Mendoza</h4>
+<p class="text-body-md font-body-md text-primary font-medium">Vehículo: Moto Honda Cargo (Placas: 832-XYZ)</p>
+</div>
+<div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-2">
+<div class="flex items-center gap-1 bg-surface-container-lowest px-3 py-1.5 rounded-full border border-surface-variant shadow-sm text-body-md font-body-md">
+<span class="material-symbols-outlined text-[16px] text-[#f59e0b] filled">star</span>
+<span class="font-semibold text-on-surface">4.9</span>
+<span class="text-on-surface-variant">(120+ entregas)</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-md font-body-md">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                            ETA: 15-20 min
+                        </div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="shrink-0 w-full sm:w-auto mt-4 sm:mt-0 flex items-center justify-center gap-2 px-4 h-12 rounded-lg bg-surface-container-lowest border border-outline-variant text-on-surface font-button text-button hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined">call</span>
+                    Contactar
+                </button>
+</div>
+</section>
+<!-- Action Area -->
+<div class="mt-4 flex flex-col sm:flex-row-reverse gap-4">
+<button class="flex-1 h-14 rounded-xl bg-primary text-on-primary font-button text-button flex items-center justify-center gap-2 hover:bg-primary/90 active:scale-[0.98] transition-all shadow-md">
+<span class="material-symbols-outlined">local_shipping</span>
+                Actualizar Estado a 'En Camino'
+            </button>
+<button class="flex-1 sm:flex-none sm:w-48 h-14 rounded-xl bg-surface-container-lowest border border-outline-variant text-on-surface font-button text-button flex items-center justify-center gap-2 hover:bg-surface-container active:scale-[0.98] transition-all shadow-sm">
+<span class="material-symbols-outlined">print</span>
+                Imprimir Ticket
+            </button>
+</div>
+</main>
+<!-- Bottom Nav Bar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl border-t border-surface-variant dark:border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface shadow-[0px_-4px_24px_rgba(89,92,94,0.05)] md:hidden">
+<div class="flex justify-around items-center px-4 py-3 pb-safe w-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200 w-16" href="#">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Active State: Orders -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined mb-1 filled">receipt_long</span>
+<span class="font-label-md text-label-md font-bold">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200 w-16" href="#">
+<span class="material-symbols-outlined mb-1">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200 w-16" href="#">
+<span class="material-symbols-outlined mb-1">settings_suggest</span>
+<span class="font-label-md text-label-md">Services</span>
+</a>
+</div>
+</nav>
+</body></html>

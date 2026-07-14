@@ -1,0 +1,374 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Detalle de Pedido - Planchado (Asignado) | FreshClean Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#d7e4f1",
+                        "inverse-surface": "#263143",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e1e3e5",
+                        "tertiary-container": "#595c5e",
+                        "on-secondary-container": "#5a6671",
+                        "on-primary-container": "#c3d4ff",
+                        "surface-container-low": "#f0f3ff",
+                        "on-background": "#111c2d",
+                        "on-surface": "#111c2d",
+                        "primary-container": "#0058bc",
+                        "on-primary-fixed-variant": "#004494",
+                        "surface-container-high": "#dee8ff",
+                        "secondary": "#54606b",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#e7eeff",
+                        "secondary-fixed": "#d7e4f1",
+                        "surface": "#f9f9ff",
+                        "secondary-fixed-dim": "#bbc8d5",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "outline": "#727784",
+                        "on-secondary-fixed": "#111d26",
+                        "surface-blue-tint": "#e7eeff",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#adc6ff",
+                        "surface-variant": "#d8e3fb",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-tint": "#095bbf",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-secondary-fixed-variant": "#3c4853",
+                        "on-surface-variant": "#424753",
+                        "success-blue": "#0070eb",
+                        "primary-fixed-dim": "#adc6ff",
+                        "error-red": "#ba1a1a",
+                        "on-tertiary-container": "#d2d4d7",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed": "#001a41",
+                        "primary": "#00418f",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#414546",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c2c6d5",
+                        "surface-dim": "#cfdaf2",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-tertiary-fixed-variant": "#444749"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-padding": "2rem",
+                        "container-margin": "1.25rem",
+                        "inline-gap": "0.75rem",
+                        "hero-padding": "2.5rem",
+                        "stack-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "button": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col md:flex-row">
+<!-- TopNavBar (Mobile Hidden, Desktop Flex) -->
+<header class="hidden md:flex items-center justify-between px-section-padding w-full sticky top-0 z-50 bg-surface dark:bg-inverse-surface border-b border-outline-variant dark:border-outline shadow-sm h-16 shrink-0">
+<div class="flex items-center gap-inline-gap">
+<span class="font-display-lg text-display-lg text-primary dark:text-inverse-primary">FreshClean Admin</span>
+</div>
+<div class="flex items-center gap-inline-gap">
+<button class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform text-on-surface-variant dark:text-surface-variant">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform text-on-surface-variant dark:text-surface-variant">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform text-on-surface-variant dark:text-surface-variant">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform text-on-surface-variant dark:text-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container ml-2 overflow-hidden">
+<img alt="Administrator Profile" class="object-cover w-full h-full" data-alt="A professional headshot of a business administrator in a modern office setting. The lighting is bright and clear, reflecting a trustworthy and efficient brand persona. The background is slightly blurred to focus on the individual, embodying a clean, corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9yj2g1j8BzuE4tEO0iCckTvLMSsxAOktBHAVhYbqDpNFtCq1oiS1TMQ2MVIOz7sdv9p9M39dSlI47DrTas-7AKxJrF9kwbwwEO8ReJILN85EI9-XKmhSH5jTejKYF11ncgl7wgxZls0auBQFOXOUk7t_OPKmfWP-HLuM1JNAzVqkPhZb57cOJ8JDxn3Iz2ybxkbvel4FyUS_P168HAgjJMjMGcxkR9pjAD0Y5Q0fwnGJyGbc0sTDC">
+</div>
+</div>
+</header>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline p-4 gap-stack-gap z-40 pt-20">
+<div class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-inline-gap text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-inline-gap bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-on-secondary-fixed rounded-lg px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="local_laundry_service" style="font-variation-settings: 'FILL' 1;">local_laundry_service</span>
+<span class="font-title-md text-title-md">Orders</span>
+</a>
+<a class="flex items-center gap-inline-gap text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-title-md text-title-md">Customers</span>
+</a>
+<a class="flex items-center gap-inline-gap text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-title-md text-title-md">Financials</span>
+</a>
+<a class="flex items-center gap-inline-gap text-on-surface-variant dark:text-surface-variant px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings_applications">settings_applications</span>
+<span class="font-title-md text-title-md">Services</span>
+</a>
+</div>
+<button class="w-full bg-primary text-on-primary font-button text-button h-14 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-fixed-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+            Create New Order
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-container-margin md:p-section-padding max-w-[1280px] mx-auto w-full pb-24 md:pb-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div>
+<a class="inline-flex items-center text-primary font-label-md text-label-md mb-2 hover:underline" href="#">
+<span class="material-symbols-outlined text-[16px] mr-1" data-icon="arrow_back">arrow_back</span>
+                    Volver a Órdenes
+                </a>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-surface flex items-center gap-3">
+                    Detalle de Pedido - Planchado 
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-container-high text-primary border border-surface-variant">
+                        Asignado
+                    </span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">ID: #ORD-2023-8942 • Creado: Hoy, 08:30 AM</p>
+</div>
+<div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+<button class="h-14 px-6 bg-surface-container-lowest text-primary border border-outline-variant rounded-lg font-button text-button flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors shadow-[0_4px_24px_rgba(89,92,94,0.05)] active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+                    Imprimir Ticket
+                </button>
+<button class="h-14 px-6 bg-primary text-on-primary rounded-lg font-button text-button flex items-center justify-center gap-2 hover:bg-opacity-90 transition-colors shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="update">update</span>
+                    Actualizar Estado
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Left Column: Customer & Service Details (8 cols) -->
+<div class="md:col-span-8 flex flex-col gap-6">
+<!-- Customer Card -->
+<section class="bg-surface-container-lowest rounded-xl p-6 border border-surface-variant shadow-[0_4px_24px_rgba(89,92,94,0.05)]">
+<h2 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+                        Detalles del Cliente
+                    </h2>
+<div class="flex flex-col sm:flex-row items-start gap-4">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-3xl text-on-secondary-container" data-icon="account_circle">account_circle</span>
+</div>
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Nombre Completo</p>
+<p class="font-body-lg text-body-lg text-on-surface">María González Pérez</p>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Teléfono</p>
+<p class="font-body-lg text-body-lg text-on-surface">+34 612 345 678</p>
+</div>
+<div class="sm:col-span-2">
+<p class="font-label-md text-label-md text-on-surface-variant mb-1">Dirección de Recogida/Entrega</p>
+<div class="flex items-start gap-2 bg-surface-container-low p-3 rounded-lg mt-1">
+<span class="material-symbols-outlined text-on-surface-variant mt-0.5" data-icon="location_on">location_on</span>
+<p class="font-body-md text-body-md text-on-surface">Calle de la Pirineos 45, 3ºB<br><span class="text-on-surface-variant">28040 Madrid, España</span></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Order Summary Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-surface-variant shadow-[0_4px_24px_rgba(89,92,94,0.05)] overflow-hidden">
+<div class="p-6 border-b border-surface-variant flex justify-between items-center bg-surface/50">
+<h2 class="font-title-md text-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="list_alt">list_alt</span>
+                            Resumen del Servicio
+                        </h2>
+<span class="px-3 py-1 bg-surface-blue-tint text-primary-container rounded-full font-label-md text-label-md">Planchado Express</span>
+</div>
+<div class="p-0">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant font-medium">Prenda</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant font-medium text-center">Cant.</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant font-medium text-right">Precio Unit.</th>
+<th class="px-6 py-3 font-label-md text-label-md text-on-surface-variant font-medium text-right">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Camisa de Vestir (Algodón)</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface text-center">5</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">3.50 €</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface font-medium text-right">17.50 €</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Pantalón de Traje</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface text-center">2</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">4.00 €</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface font-medium text-right">8.00 €</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface">Vestido Sencillo</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface text-center">1</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface-variant text-right">6.00 €</td>
+<td class="px-6 py-4 font-body-md text-body-md text-on-surface font-medium text-right">6.00 €</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low flex flex-col items-end border-t border-surface-variant gap-2">
+<div class="w-full sm:w-64 flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span class="">Subtotal:</span>
+<span class="">31.50 €</span>
+</div>
+<div class="w-full sm:w-64 flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span class="">Recogida Express:</span>
+<span class="">4.99 €</span>
+</div>
+<div class="w-full sm:w-64 flex justify-between font-title-md text-title-md text-primary mt-2 pt-2 border-t border-outline-variant">
+<span class="">Total a Pagar:</span>
+<span class="">36.49 €</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Courier & Status (4 cols) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Courier Assignment Card -->
+<section class="bg-surface-container-lowest rounded-xl p-6 border border-primary/20 shadow-[0_4px_24px_rgba(89,92,94,0.05)] relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-fixed-dim rounded-bl-full opacity-20 -z-10 blur-xl"></div>
+<h2 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="local_shipping">local_shipping</span>
+                        Mensajero Asignado
+                    </h2>
+<div class="flex items-center gap-4 mb-4 bg-surface-container p-3 rounded-lg border border-surface-variant">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-outline-variant shrink-0 relative">
+<img alt="Carlos Mendoza" class="w-full h-full object-cover" data-alt="A portrait of a friendly delivery courier in a clean, modern uniform. The courier is smiling slightly, representing reliable and trustworthy service. The background is a soft, out-of-focus urban environment with bright, natural daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqb57MLRiSqGgi6ZwhCi5wUOE_L0oOs_AX-cgXzdGyApIlUXcK9tzN_Y_i0DAkgyrd_ounVg9R-hNlq_4mpx6zXXm5BSil4N1C_ro9jtkR3WaePvSKB-WbePNPWC69QML5qqh64zkTT8kHxXAgVpWMK7XtWUiOHjJ1O739kSqN5NbJCKIdtfCZXpd6D68ZAaA2vUfEjFTo3iANnlOAXptSvseLb3HNn_nXmHfBOLmT9K3sIILQL4VJ">
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div>
+<p class="font-body-lg text-body-lg text-on-surface font-medium">Carlos Mendoza</p>
+<p class="font-label-md text-label-md text-on-surface-variant">ID: COU-442 • Furgoneta Eléctrica</p>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full h-10 bg-surface text-primary border border-primary/30 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="call">call</span>
+                            Llamar Mensajero
+                        </button>
+<button class="w-full h-10 bg-surface text-on-surface border border-outline-variant rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="swap_horiz">swap_horiz</span>
+                            Reasignar
+                        </button>
+</div>
+</section>
+<!-- Status Timeline Card -->
+<section class="bg-surface-container-lowest rounded-xl p-6 border border-surface-variant shadow-[0_4px_24px_rgba(89,92,94,0.05)]">
+<h2 class="font-title-md text-title-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="timeline">timeline</span>
+                        Progreso
+                    </h2>
+<div class="relative pl-6 border-l-2 border-surface-variant space-y-6">
+<!-- Step 1: Created -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-primary text-on-primary w-6 h-6 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]" data-icon="check">check</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Pedido Creado</p>
+<p class="font-label-md text-label-md text-on-surface-variant">08:30 AM • Vía Web</p>
+</div>
+<!-- Step 2: Assigned -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-primary text-on-primary w-6 h-6 rounded-full flex items-center justify-center shadow-[0_0_0_4px_rgba(0,65,143,0.1)]">
+<span class="material-symbols-outlined text-[14px]" data-icon="motorcycle">motorcycle</span>
+</div>
+<p class="font-body-md text-body-md text-primary font-bold">Mensajero Asignado</p>
+<p class="font-label-md text-label-md text-on-surface-variant">08:45 AM • Carlos M. en camino</p>
+</div>
+<!-- Step 3: Pickup -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-container-highest w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Recogida Pendiente</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Estimado: 09:30 AM - 10:30 AM</p>
+</div>
+<!-- Step 4: Processing -->
+<div class="relative">
+<div class="absolute -left-[31px] bg-surface-container-highest w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center">
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">En Planta (Planchado)</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+
+
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface dark:bg-inverse-surface border-t border-outline-variant dark:border-outline px-6 py-3 flex justify-between items-center z-50">
+  <a href="#" class="flex flex-col items-center gap-1 text-on-surface-variant dark:text-surface-variant">
+    <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+    <span class="text-label-md font-label-md">Panel</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-primary dark:text-inverse-primary">
+    <span class="material-symbols-outlined" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+    <span class="text-label-md font-label-md">Pedidos</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-on-surface-variant dark:text-surface-variant">
+    <span class="material-symbols-outlined" data-icon="group">group</span>
+    <span class="text-label-md font-label-md">Clientes</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-on-surface-variant dark:text-surface-variant">
+    <span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+    <span class="text-label-md font-label-md">Servicios</span>
+  </a>
+</nav></body></html>
