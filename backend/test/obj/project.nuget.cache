@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3svRHo78q6w=",
+  "dgSpecHash": "fpKAtAY6cfc=",
   "success": true,
-  "projectFilePath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
+  "projectFilePath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\manue\\.nuget\\packages\\coverlet.collector\\6.0.0\\coverlet.collector.6.0.0.nupkg.sha512",
     "C:\\Users\\manue\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.3\\microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
@@ -28,10 +28,10 @@
     {
       "code": "NU1903",
       "level": "Warning",
-      "message": "El paquete \"Microsoft.OpenApi\" 2.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
-      "projectPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
       "warningLevel": 1,
-      "filePath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
+      "filePath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"

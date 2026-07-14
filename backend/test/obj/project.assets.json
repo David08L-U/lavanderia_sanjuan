@@ -1167,11 +1167,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
+      "projectUniqueName": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
       "projectName": "backend.tests",
-      "projectPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
+      "projectPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
       "packagesPath": "C:\\Users\\manue\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\obj\\",
+      "outputPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\manue\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1186,8 +1186,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {
-              "projectPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj"
+            "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {
+              "projectPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj"
             }
           }
         }
@@ -1528,7 +1528,7 @@
       "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "El paquete \"Microsoft.OpenApi\" 2.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"
