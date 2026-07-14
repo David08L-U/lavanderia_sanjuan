@@ -178,7 +178,7 @@ class _TintoreriaScreenState extends State<TintoreriaScreen> {
               ),
               const SizedBox(height: 16),
               SizedBox(
-                height: 220,
+                height: 240,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 20),

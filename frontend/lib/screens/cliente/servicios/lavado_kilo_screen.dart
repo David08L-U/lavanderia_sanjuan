@@ -247,7 +247,7 @@ class _InfoCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                  '\$25 / kg',
+                  'Desde \$25 / kg',
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,

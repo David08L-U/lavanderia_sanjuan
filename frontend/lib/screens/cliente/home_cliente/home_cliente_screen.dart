@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/pedido.dart';
 import '../../../models/servicio_lavanderia.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../services/pedido_service.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../mi_perfil/mi_perfil_screen.dart';
@@ -18,8 +20,44 @@ import '../servicios/servicios_screen.dart';
 import '../servicios/tintoreria_screen.dart';
 import 'detalle_oferta_screen.dart';
 
-class HomeClienteScreen extends StatelessWidget {
+class HomeClienteScreen extends StatefulWidget {
   const HomeClienteScreen({super.key});
+
+  @override
+  State<HomeClienteScreen> createState() => _HomeClienteScreenState();
+}
+
+class _HomeClienteScreenState extends State<HomeClienteScreen> {
+  final _pedidoService = PedidoService();
+  bool _isLoading = true;
+  Pedido? _pedidoActivo;
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarPedidoActivo();
+  }
+
+  Future<void> _cargarPedidoActivo() async {
+    final auth = context.read<AuthProvider>();
+    setState(() => _isLoading = true);
+    try {
+      final data = await _pedidoService.listarPedidos(clienteId: auth.currentUser?.id);
+      final pedidos = data.map(Pedido.fromJson);
+      Pedido? activo;
+      for (final pedido in pedidos) {
+        if (pedido.estado == EstadoPedido.enProceso) {
+          activo = pedido;
+          break;
+        }
+      }
+      if (mounted) setState(() => _pedidoActivo = activo);
+    } catch (_) {
+      if (mounted) setState(() => _pedidoActivo = null);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   void _onServicioTap(BuildContext context, ServicioLavanderiaInfo servicio) {
     switch (servicio.tipo) {
@@ -131,11 +169,24 @@ class HomeClienteScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              _ActiveOrderSection(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PedidoScreen()),
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              else if (_pedidoActivo != null)
+                _ActiveOrderSection(
+                  pedido: _pedidoActivo!,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => PedidoScreen(pedido: _pedidoActivo!)),
+                  ),
+                )
+              else
+                _SinPedidoActivoCard(
+                  onOrdenar: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const NuevaOrdenScreen()),
+                  ),
                 ),
-              ),
               const SizedBox(height: 32),
               _ServicesSection(
                 onServicioTap: (servicio) => _onServicioTap(context, servicio),
@@ -256,7 +307,7 @@ class _HeroBanner extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Order Now',
+                      'Ordenar Ahora',
                       style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(width: 8),
@@ -273,8 +324,9 @@ class _HeroBanner extends StatelessWidget {
 }
 
 class _ActiveOrderSection extends StatelessWidget {
-  const _ActiveOrderSection({required this.onTap});
+  const _ActiveOrderSection({required this.pedido, required this.onTap});
 
+  final Pedido pedido;
   final VoidCallback onTap;
 
   @override
@@ -348,14 +400,14 @@ class _ActiveOrderSection extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Orden #FC-8923',
+                              'Orden ${pedido.numero}',
                               style: GoogleFonts.inter(
                                 fontSize: 12,
                                 color: AppColors.secondary,
                               ),
                             ),
                             Text(
-                              'Lavando',
+                              pedido.servicio,
                               style: GoogleFonts.inter(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -370,11 +422,11 @@ class _ActiveOrderSection extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'Entrega est.',
+                          'Ventana',
                           style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary),
                         ),
                         Text(
-                          'Hoy, 18:00',
+                          pedido.franjaHoraria.isEmpty ? pedido.fechaFormateada : pedido.franjaHoraria,
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -390,11 +442,11 @@ class _ActiveOrderSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Progreso',
+                      'Estado',
                       style: GoogleFonts.inter(fontSize: 12, color: AppColors.primary),
                     ),
                     Text(
-                      '60%',
+                      'En proceso',
                       style: GoogleFonts.inter(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -407,7 +459,7 @@ class _ActiveOrderSection extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: LinearProgressIndicator(
-                    value: 0.6,
+                    value: 0.5,
                     minHeight: 8,
                     backgroundColor: AppColors.surfaceVariant,
                     valueColor: const AlwaysStoppedAnimation(AppColors.primary),
@@ -435,6 +487,62 @@ class _ActiveOrderSection extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _SinPedidoActivoCard extends StatelessWidget {
+  const _SinPedidoActivoCard({required this.onOrdenar});
+
+  final VoidCallback onOrdenar;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.surfaceVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.inventory_2_outlined, color: AppColors.primary, size: 28),
+          const SizedBox(height: 12),
+          Text(
+            'No tienes pedidos activos',
+            style: GoogleFonts.inter(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Agenda una recolección para ver aquí el seguimiento en tiempo real.',
+            style: GoogleFonts.inter(fontSize: 13, color: AppColors.onSurfaceVariant),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: onOrdenar,
+              icon: const Icon(Icons.add_rounded, size: 18),
+              label: const Text('Ordenar Ahora'),
+              style: OutlinedButton.styleFrom(
+                backgroundColor: AppColors.surfaceContainerLow,
+                foregroundColor: AppColors.primary,
+                side: BorderSide.none,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                textStyle: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

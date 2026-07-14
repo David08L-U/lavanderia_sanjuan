@@ -16,10 +16,16 @@ class DireccionesProvider extends ChangeNotifier {
 
   List<Direccion> get direcciones => List.unmodifiable(_direcciones);
 
-  Direccion get predeterminada => _direcciones.firstWhere(
-    (direccion) => direccion.predeterminada,
-    orElse: () => _direcciones.first,
-  );
+  /// Null si todavía no ha cargado ninguna dirección (primera carga en
+  /// curso, falló la conexión, o el cliente aún no tiene direcciones
+  /// guardadas). Las pantallas que la usan deben manejar ese caso en vez
+  /// de asumir que siempre hay al menos una.
+  Direccion? get predeterminada => _direcciones.isEmpty
+      ? null
+      : _direcciones.firstWhere(
+          (direccion) => direccion.predeterminada,
+          orElse: () => _direcciones.first,
+        );
 
   Future<void> cargar() async {
     try {
@@ -46,8 +52,17 @@ class DireccionesProvider extends ChangeNotifier {
   }
 
   Future<void> actualizar(int index, Direccion direccion) async {
+    final id = _direcciones[index].id;
+    if (id == null) {
+      // Nunca se guardó en el backend (id desconocido): solo se puede
+      // actualizar el estado local.
+      _direcciones[index] = direccion;
+      notifyListeners();
+      return;
+    }
+
     try {
-      final actualizada = await _direccionService.actualizarDireccion(index.toString(), direccion);
+      final actualizada = await _direccionService.actualizarDireccion(id, direccion);
       _direcciones[index] = actualizada;
       notifyListeners();
     } catch (_) {
@@ -58,9 +73,12 @@ class DireccionesProvider extends ChangeNotifier {
 
   Future<void> eliminar(int index) async {
     final eraPredeterminada = _direcciones[index].predeterminada;
-    try {
-      await _direccionService.eliminarDireccion((index + 1).toString());
-    } catch (_) {}
+    final id = _direcciones[index].id;
+    if (id != null) {
+      try {
+        await _direccionService.eliminarDireccion(id);
+      } catch (_) {}
+    }
 
     _direcciones.removeAt(index);
     if (eraPredeterminada && _direcciones.isNotEmpty) {

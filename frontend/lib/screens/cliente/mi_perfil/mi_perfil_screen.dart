@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/auth_provider.dart';
+import '../../../providers/preferencias_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../../auth/login/login_screen.dart';
@@ -15,6 +16,7 @@ import 'cambiar_contrasena_screen.dart';
 import 'editar_perfil_screen.dart';
 import 'metodos_pago_screen.dart';
 import 'mis_direcciones_screen.dart';
+import 'seleccionar_fragancia_screen.dart';
 
 class MiPerfilScreen extends StatefulWidget {
   const MiPerfilScreen({super.key});
@@ -25,7 +27,6 @@ class MiPerfilScreen extends StatefulWidget {
 
 class _MiPerfilScreenState extends State<MiPerfilScreen> {
   bool _notificaciones = true;
-  bool _ecoFriendly = false;
 
   void _showComingSoon() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -80,6 +81,7 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
     if (confirmado != true || !mounted) return;
 
     context.read<AuthProvider>().logout();
+    context.read<PreferenciasProvider>().limpiar();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (route) => false,
@@ -89,6 +91,9 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
   @override
   Widget build(BuildContext context) {
     final usuario = context.watch<AuthProvider>().currentUser;
+    final preferencias = context.watch<PreferenciasProvider>();
+    final ecoFriendly = preferencias.ecoFriendly;
+    final fragancia = preferencias.fragancia;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -226,14 +231,17 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
                   _SwitchItem(
                     icon: Icons.eco_outlined,
                     label: 'Eco-friendly',
-                    value: _ecoFriendly,
-                    onChanged: (value) => setState(() => _ecoFriendly = value),
+                    value: ecoFriendly,
+                    onChanged: (value) =>
+                        context.read<PreferenciasProvider>().alternarEcoFriendly(value),
                   ),
                   _MenuItem(
                     icon: Icons.air_rounded,
                     label: 'Fragancia',
-                    trailingText: 'Lavanda',
-                    onTap: _showComingSoon,
+                    trailingText: fragancia,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const SeleccionarFraganciaScreen()),
+                    ),
                   ),
                 ],
               ),

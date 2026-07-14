@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/direccion.dart';
+import '../../../models/fragancia.dart';
 import '../../../models/franja_horaria.dart';
 import '../../../models/servicio_lavanderia.dart';
 import '../../../models/tarjeta.dart';
@@ -10,9 +11,11 @@ import '../../../providers/agendar_recoleccion_provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/direcciones_provider.dart';
 import '../../../providers/metodos_pago_provider.dart';
+import '../../../providers/preferencias_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../home_cliente/home_cliente_screen.dart';
+import '../mi_perfil/formulario_direccion_screen.dart';
 import '../mi_perfil/mi_perfil_screen.dart';
 import '../mi_perfil/seleccionar_direccion_screen.dart';
 import '../mi_perfil/seleccionar_metodo_pago_screen.dart';
@@ -21,20 +24,6 @@ import '../servicios/servicios_screen.dart';
 import 'pedido_recibido_screen.dart';
 
 const _diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-const _meses = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
 
 String _etiquetaChip(int index, DateTime fecha) {
   if (index == 0) return 'Hoy';
@@ -45,13 +34,20 @@ String _etiquetaChip(int index, DateTime fecha) {
 class AgendarRecoleccionScreen extends StatelessWidget {
   const AgendarRecoleccionScreen({super.key});
 
-  static Route<void> route({TipoServicio? servicioInicial}) {
+  static Route<void> route({TipoServicio? servicioInicial, int cantidadInicial = 1}) {
     return MaterialPageRoute(
-      builder: (_) => ChangeNotifierProvider(
-        create: (_) =>
-            AgendarRecoleccionProvider(servicioInicial: servicioInicial),
-        child: const AgendarRecoleccionScreen(),
-      ),
+      builder: (context) {
+        final preferencias = context.read<PreferenciasProvider>();
+        return ChangeNotifierProvider(
+          create: (_) => AgendarRecoleccionProvider(
+            servicioInicial: servicioInicial,
+            ecoFriendlyInicial: preferencias.ecoFriendly,
+            fraganciaInicial: preferencias.fragancia,
+            cantidadInicial: cantidadInicial,
+          ),
+          child: const AgendarRecoleccionScreen(),
+        );
+      },
     );
   }
 
@@ -79,29 +75,39 @@ class AgendarRecoleccionScreen extends StatelessWidget {
   Future<void> _submit(
     BuildContext context,
     AgendarRecoleccionProvider provider,
-    Direccion direccionActual,
+    Direccion? direccionActual,
   ) async {
+    if (direccionActual == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Agrega una dirección de recolección primero.')),
+      );
+      return;
+    }
+
     final auth = context.read<AuthProvider>();
-    await provider.agendarRecoleccion(
+    final pedido = await provider.agendarRecoleccion(
       clienteId: auth.currentUser?.id ?? '2',
       clienteNombre: auth.currentUser?.nombre ?? 'Cliente Demo',
     );
     if (!context.mounted) return;
-    final fecha = provider.fechaSeleccionada;
+
+    if (pedido == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo agendar el pedido. Intenta de nuevo.')),
+      );
+      return;
+    }
+
     final franjaInfo = franjasDisponibles.firstWhere(
       (f) => f.valor == provider.franja,
     );
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => PedidoRecibidoScreen(
-          servicioNombre: provider.servicioInfo.nombre,
+          pedido: pedido,
           direccionTitulo: direccionActual.titulo,
           direccionLinea: direccionActual.lineas.join(', '),
-          fechaTexto:
-              '${_diasSemana[fecha.weekday - 1]}, ${fecha.day} de '
-              '${_meses[fecha.month - 1].substring(0, 3)}',
           horarioTexto: '${franjaInfo.etiqueta} (${franjaInfo.horario})',
-          total: provider.totalConDescuento,
         ),
       ),
     );
@@ -110,8 +116,21 @@ class AgendarRecoleccionScreen extends StatelessWidget {
   Future<void> _seleccionarDireccion(
     BuildContext context,
     AgendarRecoleccionProvider provider,
-    Direccion direccionActual,
+    Direccion? direccionActual,
   ) async {
+    if (direccionActual == null) {
+      // Todavía no hay ninguna dirección guardada: se va directo al alta
+      // en vez de un selector que no tendría nada que mostrar.
+      final nueva = await Navigator.of(context).push<Direccion>(
+        MaterialPageRoute(builder: (_) => const FormularioDireccionScreen()),
+      );
+      if (nueva != null && context.mounted) {
+        await context.read<DireccionesProvider>().agregar(nueva);
+        provider.seleccionarDireccion(nueva);
+      }
+      return;
+    }
+
     final resultado = await Navigator.of(context).push<Direccion>(
       MaterialPageRoute(
         builder: (_) =>
@@ -214,9 +233,22 @@ class AgendarRecoleccionScreen extends StatelessWidget {
                           _seleccionarTarjeta(context, provider, tarjetaActual),
               ),
               const SizedBox(height: 32),
+              const _SectionTitle('Preferencias del Pedido'),
+              const SizedBox(height: 4),
+              Text(
+                'Se usan tus preferencias predeterminadas, pero puedes cambiarlas solo para este pedido.',
+                style: GoogleFonts.inter(fontSize: 13, color: AppColors.onSurfaceVariant),
+              ),
+              const SizedBox(height: 16),
+              _PreferenciasPedidoCard(provider: provider),
+              const SizedBox(height: 32),
               const _SectionTitle('Instrucciones especiales'),
               const SizedBox(height: 16),
               _InstructionsField(provider: provider),
+              const SizedBox(height: 32),
+              const _SectionTitle('Resumen'),
+              const SizedBox(height: 16),
+              _ResumenEstimadoCard(provider: provider),
             ],
           ),
         ),
@@ -261,11 +293,12 @@ class _SectionTitle extends StatelessWidget {
 class _AddressCard extends StatelessWidget {
   const _AddressCard({required this.direccion, required this.onTap});
 
-  final Direccion direccion;
+  final Direccion? direccion;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final direccion = this.direccion;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -291,31 +324,43 @@ class _AddressCard extends StatelessWidget {
                 color: AppColors.secondaryContainer,
                 shape: BoxShape.circle,
               ),
-              child: Icon(direccion.icon, color: AppColors.primary),
+              child: Icon(
+                direccion?.icon ?? Icons.add_location_alt_rounded,
+                color: AppColors.primary,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    direccion.titulo,
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.onSurface,
+              child: direccion == null
+                  ? Text(
+                      'Agregar dirección de recolección',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.onSurface,
+                      ),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          direccion.titulo,
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          direccion.lineas.join(', '),
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            color: AppColors.secondary,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    direccion.lineas.join(', '),
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: AppColors.secondary,
-                    ),
-                  ),
-                ],
-              ),
             ),
             const Icon(Icons.chevron_right_rounded, color: AppColors.outline),
           ],
@@ -408,6 +453,188 @@ class _PaymentCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PreferenciasPedidoCard extends StatelessWidget {
+  const _PreferenciasPedidoCard({required this.provider});
+
+  final AgendarRecoleccionProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.secondaryContainer),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 16),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.eco_outlined, color: AppColors.primary, size: 20),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Eco-friendly',
+                  style: GoogleFonts.inter(fontSize: 15, color: AppColors.onSurface),
+                ),
+              ),
+              Switch(
+                value: provider.ecoFriendly,
+                onChanged: provider.alternarEcoFriendly,
+                activeThumbColor: Colors.white,
+                activeTrackColor: AppColors.primary,
+              ),
+            ],
+          ),
+          const Divider(height: 24),
+          Text(
+            'Fragancia',
+            style: GoogleFonts.inter(
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final fragancia in fraganciasDisponibles)
+                _FraganciaChip(
+                  label: fragancia.nombre,
+                  seleccionada: provider.fragancia == fragancia.nombre,
+                  onTap: () => provider.seleccionarFragancia(fragancia.nombre),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FraganciaChip extends StatelessWidget {
+  const _FraganciaChip({
+    required this.label,
+    required this.seleccionada,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool seleccionada;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(999),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        decoration: BoxDecoration(
+          color: seleccionada ? AppColors.primary : AppColors.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: seleccionada ? Colors.white : AppColors.primary,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ResumenEstimadoCard extends StatelessWidget {
+  const _ResumenEstimadoCard({required this.provider});
+
+  final AgendarRecoleccionProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    final unidad = provider.servicioInfo.unidad;
+    final unidadPlural = provider.cantidad == 1 ? unidad : '${unidad}s';
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.secondaryContainer),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.03), blurRadius: 16),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Cantidad aproximada',
+                style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant),
+              ),
+              Text(
+                '${provider.cantidad} $unidadPlural',
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.onSurface,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Total Estimado',
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              Text(
+                '\$${provider.totalConDescuento.toStringAsFixed(2)} MXN',
+                style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.onSurfaceVariant),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Este total es una referencia. El precio final se confirma cuando se pesa o verifica tu pedido en la recolección.',
+                  style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

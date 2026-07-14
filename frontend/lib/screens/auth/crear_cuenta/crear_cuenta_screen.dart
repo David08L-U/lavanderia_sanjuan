@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/auth_provider.dart';
 import '../../../providers/crear_cuenta_provider.dart';
+import '../../../providers/preferencias_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../cliente/home_cliente/home_cliente_screen.dart';
 import '../terminos_condiciones/terminos_condiciones_screen.dart';
@@ -48,6 +49,9 @@ class CrearCuentaScreen extends StatelessWidget {
       );
       return;
     }
+
+    await context.read<PreferenciasProvider>().cargarParaUsuario(auth.currentUser!.id);
+    if (!context.mounted) return;
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const HomeClienteScreen()),

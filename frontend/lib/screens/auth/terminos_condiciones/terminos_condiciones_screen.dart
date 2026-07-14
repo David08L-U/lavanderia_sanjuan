@@ -81,7 +81,7 @@ class TerminosCondicionesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Última actualización: 15 de Octubre de 2023',
+                  'Última actualización: 1 de Julio de 2026',
                   style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant),
                 ),
                 const SizedBox(height: 16),
