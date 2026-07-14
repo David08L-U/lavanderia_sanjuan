@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/direccion.dart';
 import '../models/franja_horaria.dart';
+import '../models/pedido.dart';
 import '../models/servicio_lavanderia.dart';
 import '../models/tarjeta.dart';
 import '../services/pedido_service.dart';
@@ -10,10 +11,42 @@ const _codigoPromoCorrecto = 'FRESH20';
 const _tasaDescuentoPromo = 0.20;
 
 class AgendarRecoleccionProvider extends ChangeNotifier {
-  AgendarRecoleccionProvider({TipoServicio? servicioInicial})
-    : fechasDisponibles = _generarFechas(),
-      _servicio = servicioInicial ?? TipoServicio.lavadoYPlegado {
+  AgendarRecoleccionProvider({
+    TipoServicio? servicioInicial,
+    bool ecoFriendlyInicial = false,
+    String fraganciaInicial = 'Lavanda',
+    int cantidadInicial = 1,
+  }) : fechasDisponibles = _generarFechas(),
+       _servicio = servicioInicial ?? TipoServicio.lavadoYPlegado,
+       _ecoFriendly = ecoFriendlyInicial,
+       _fragancia = fraganciaInicial,
+       _cantidad = cantidadInicial < 1 ? 1 : cantidadInicial {
     _fechaSeleccionada = fechasDisponibles.first;
+  }
+
+  /// Cantidad aproximada (kg o piezas, según el servicio) que el cliente
+  /// eligió como referencia. Es solo una estimación: el total real se
+  /// confirma cuando el pedido se pesa/verifica en la recolección.
+  final int _cantidad;
+  int get cantidad => _cantidad;
+
+  /// Preferencias del pedido: arrancan con el valor predeterminado del
+  /// cliente (Ajustes), pero se pueden cambiar solo para este pedido sin
+  /// afectar su preferencia guardada.
+  bool _ecoFriendly;
+  bool get ecoFriendly => _ecoFriendly;
+
+  void alternarEcoFriendly(bool valor) {
+    _ecoFriendly = valor;
+    notifyListeners();
+  }
+
+  String _fragancia;
+  String get fragancia => _fragancia;
+
+  void seleccionarFragancia(String valor) {
+    _fragancia = valor;
+    notifyListeners();
   }
 
   static List<DateTime> _generarFechas() {
@@ -73,7 +106,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
   ServicioLavanderiaInfo get servicioInfo =>
       serviciosDisponibles.firstWhere((s) => s.tipo == _servicio);
 
-  double get totalEstimado => servicioInfo.totalEstimado;
+  double get totalEstimado => servicioInfo.totalEstimado * _cantidad;
 
   double get descuento => totalEstimado * tasaDescuento;
 
@@ -95,7 +128,10 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> agendarRecoleccion({String? clienteId, String? clienteNombre}) async {
+  /// Crea el pedido en el backend y devuelve el pedido real ya creado
+  /// (con su ID real), para que la pantalla de confirmación y el
+  /// seguimiento no dependan de datos inventados.
+  Future<Pedido?> agendarRecoleccion({String? clienteId, String? clienteNombre}) async {
     _isLoading = true;
     notifyListeners();
 
@@ -105,7 +141,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
           .firstWhere((f) => f.valor == _franja)
           .etiqueta;
 
-      await pedidoService.crearPedido({
+      final creado = await pedidoService.crearPedido({
         'clienteId': clienteId ?? '2',
         'clienteNombre': clienteNombre ?? 'Cliente Demo',
         'servicio': servicioInfo.nombre,
@@ -113,8 +149,14 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
         'franjaHoraria': franjaEtiqueta,
         'direccion': direccionSeleccionada?.titulo ?? 'Dirección no definida',
         'instrucciones': instruccionesController.text.trim(),
+        'ecoFriendly': _ecoFriendly,
+        'fragancia': _fragancia,
+        'cantidadAproximada': _cantidad,
         'total': totalConDescuento,
       });
+      return Pedido.fromJson(creado);
+    } catch (_) {
+      return null;
     } finally {
       _isLoading = false;
       notifyListeners();

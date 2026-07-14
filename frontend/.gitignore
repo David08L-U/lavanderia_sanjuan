@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Proyecto mobile-only: nunca se debe commitear la carpeta web/ que genera
+# `flutter create . --platforms web` (se usa solo temporalmente para QA visual).
+/web/

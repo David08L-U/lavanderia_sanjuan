@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../utils/app_colors.dart';
 import '../home_cliente/detalle_oferta_screen.dart';
 import '../mis_pedidos/mis_pedidos_screen.dart';
-import '../pedido/pedido_screen.dart';
 import 'notificaciones_screen.dart';
 
 class NotificacionDetalleScreen extends StatelessWidget {
@@ -16,9 +15,9 @@ class NotificacionDetalleScreen extends StatelessWidget {
     switch (notificacion.tipo) {
       case TipoNotificacion.pedidoRecolectado:
         return (
-          texto: 'Ver Seguimiento del Pedido',
+          texto: 'Ver Mis Pedidos',
           icon: Icons.local_shipping_rounded,
-          builder: (_) => const PedidoScreen(),
+          builder: (_) => const MisPedidosScreen(),
         );
       case TipoNotificacion.promocion:
         return (

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../models/servicio_lavanderia.dart';
 import '../../../utils/app_colors.dart';
+import '../../../widgets/quantity_selector.dart';
 import '../agendar_recoleccion/agendar_recoleccion_screen.dart';
 
 class _Beneficio {
@@ -28,12 +29,28 @@ const _beneficios = [
   ),
 ];
 
-class PlanchadoScreen extends StatelessWidget {
+class PlanchadoScreen extends StatefulWidget {
   const PlanchadoScreen({super.key});
+
+  @override
+  State<PlanchadoScreen> createState() => _PlanchadoScreenState();
+}
+
+class _PlanchadoScreenState extends State<PlanchadoScreen> {
+  int _piezas = 1;
+
+  void _incrementarPiezas() => setState(() => _piezas++);
+
+  void _decrementarPiezas() {
+    if (_piezas > 1) setState(() => _piezas--);
+  }
 
   void _contratarServicio(BuildContext context) {
     Navigator.of(context).push(
-      AgendarRecoleccionScreen.route(servicioInicial: TipoServicio.planchado),
+      AgendarRecoleccionScreen.route(
+        servicioInicial: TipoServicio.planchado,
+        cantidadInicial: _piezas,
+      ),
     );
   }
 
@@ -78,7 +95,7 @@ class PlanchadoScreen extends StatelessWidget {
                             icon: Icons.payments_rounded,
                             iconBg: AppColors.primaryFixed,
                             titulo: 'Precio',
-                            valor: '\$15',
+                            valor: 'Desde \$15',
                             unidad: '/ pza',
                           ),
                         ),
@@ -103,6 +120,27 @@ class PlanchadoScreen extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Piezas Aproximadas',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Es solo una referencia para el precio estimado. El total final se confirma al contar tus prendas en la recolección.',
+                      style: GoogleFonts.inter(fontSize: 13, color: AppColors.onSurfaceVariant),
+                    ),
+                    const SizedBox(height: 16),
+                    QuantitySelector(
+                      label: 'Piezas',
+                      cantidad: _piezas,
+                      onIncrementar: _incrementarPiezas,
+                      onDecrementar: _decrementarPiezas,
                     ),
                     const SizedBox(height: 32),
                     Text(

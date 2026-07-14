@@ -14,7 +14,9 @@ const _razones = [
 ];
 
 class CancelarPedidoScreen extends StatefulWidget {
-  const CancelarPedidoScreen({super.key});
+  const CancelarPedidoScreen({super.key, required this.pedidoId});
+
+  final String pedidoId;
 
   @override
   State<CancelarPedidoScreen> createState() => _CancelarPedidoScreenState();
@@ -36,7 +38,7 @@ class _CancelarPedidoScreenState extends State<CancelarPedidoScreen> {
     setState(() => _isLoading = true);
     try {
       await _pedidoOpsService.cancelarPedido(
-        '1',
+        widget.pedidoId,
         razon: _razonSeleccionada,
         comentarios: _comentariosController.text.trim(),
       );

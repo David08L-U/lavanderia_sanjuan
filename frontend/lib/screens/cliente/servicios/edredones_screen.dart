@@ -52,7 +52,10 @@ class _EdredonesScreenState extends State<EdredonesScreen> {
 
   void _contratarAhora() {
     Navigator.of(context).push(
-      AgendarRecoleccionScreen.route(servicioInicial: TipoServicio.edredones),
+      AgendarRecoleccionScreen.route(
+        servicioInicial: TipoServicio.edredones,
+        cantidadInicial: _cantidad,
+      ),
     );
   }
 
