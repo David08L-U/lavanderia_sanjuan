@@ -18,8 +18,9 @@ const _criterios = [
 ];
 
 class CalificarServicioScreen extends StatefulWidget {
-  const CalificarServicioScreen({super.key, this.numeroPedido = '#FC-8921'});
+  const CalificarServicioScreen({super.key, required this.pedidoId, required this.numeroPedido});
 
+  final String pedidoId;
   final String numeroPedido;
 
   @override
@@ -43,7 +44,7 @@ class _CalificarServicioScreenState extends State<CalificarServicioScreen> {
     setState(() => _isLoading = true);
     try {
       await _pedidoOpsService.calificarPedido(
-        '1',
+        widget.pedidoId,
         calificacionGeneral: _calificacionGeneral,
         resena: _resenaController.text.trim(),
       );

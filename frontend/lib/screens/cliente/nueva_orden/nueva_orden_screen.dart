@@ -4,12 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../models/servicio_lavanderia.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
-import '../agendar_recoleccion/agendar_recoleccion_screen.dart';
 import '../home_cliente/home_cliente_screen.dart';
 import '../mi_perfil/mi_perfil_screen.dart';
 import '../mis_pedidos/mis_pedidos_screen.dart';
 import '../notificaciones/notificaciones_screen.dart';
+import '../servicios/edredones_screen.dart';
+import '../servicios/lavado_kilo_screen.dart';
+import '../servicios/planchado_screen.dart';
 import '../servicios/servicios_screen.dart';
+import '../servicios/tintoreria_screen.dart';
 
 class NuevaOrdenScreen extends StatefulWidget {
   const NuevaOrdenScreen({super.key});
@@ -43,9 +46,26 @@ class _NuevaOrdenScreenState extends State<NuevaOrdenScreen> {
   }
 
   void _continuar() {
-    final seleccionado = _seleccionado;
-    if (seleccionado == null) return;
-    Navigator.of(context).push(AgendarRecoleccionScreen.route(servicioInicial: seleccionado));
+    switch (_seleccionado) {
+      case TipoServicio.tintoreria:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const TintoreriaScreen()),
+        );
+      case TipoServicio.planchado:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const PlanchadoScreen()),
+        );
+      case TipoServicio.edredones:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const EdredonesScreen()),
+        );
+      case TipoServicio.lavadoYPlegado:
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const LavadoKiloScreen()),
+        );
+      case null:
+        break;
+    }
   }
 
   @override
