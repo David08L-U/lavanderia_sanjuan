@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/auth_provider.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/app_colors.dart';
 
@@ -62,7 +64,13 @@ class _CambiarContrasenaScreenState extends State<CambiarContrasenaScreen> {
 
     setState(() => _isLoading = true);
     try {
+      final correo = context.read<AuthProvider>().currentUser?.correo;
+      if (correo == null || correo.isEmpty) {
+        throw AuthException('No se pudo identificar el usuario actual');
+      }
+
       await _authService.cambiarContrasena(
+        correo: correo,
         passwordActual: _actualController.text,
         passwordNueva: _nuevaController.text,
       );
