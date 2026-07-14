@@ -63,6 +63,7 @@ class _FormularioDireccionScreenState extends State<FormularioDireccionScreen> {
     final cp = _cpController.text.trim();
 
     final direccion = Direccion(
+      id: widget.direccionExistente?.id,
       icon: iconoParaEtiqueta(_etiquetaController.text.trim()),
       titulo: _etiquetaController.text.trim(),
       lineas: [

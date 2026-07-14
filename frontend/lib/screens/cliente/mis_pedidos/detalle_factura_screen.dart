@@ -1,36 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../models/pedido.dart';
 import '../../../models/servicio_lavanderia.dart';
 import '../../../utils/app_colors.dart';
+import '../agendar_recoleccion/agendar_recoleccion_screen.dart';
 import '../mi_perfil/metodos_pago_screen.dart';
 import '../pedido/calificar_servicio_screen.dart';
-import 'repetir_pedido_screen.dart';
-
-const _tarifaServicio = 15.00;
-const _envio = 25.00;
 
 class DetalleFacturaScreen extends StatelessWidget {
-  const DetalleFacturaScreen({
-    super.key,
-    required this.numeroPedido,
-    required this.servicio,
-    required this.fechaEntrega,
-    required this.montoServicio,
-    required this.tipoServicio,
-    this.pesoEstimado,
-    this.direccionRecogida = 'Residencial Arcos 21',
-  });
+  const DetalleFacturaScreen({super.key, required this.pedido});
 
-  final String numeroPedido;
-  final String servicio;
-  final String fechaEntrega;
-  final double montoServicio;
-  final TipoServicio tipoServicio;
-  final String? pesoEstimado;
-  final String direccionRecogida;
-
-  double get _total => montoServicio + _tarifaServicio + _envio;
+  final Pedido pedido;
 
   void _showComingSoon(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -40,7 +21,7 @@ class DetalleFacturaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final servicioInfo = serviciosDisponibles.firstWhere((s) => s.tipo == tipoServicio);
+    final servicioInfo = serviciosDisponibles.firstWhere((s) => s.tipo == pedido.tipoServicio);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -64,7 +45,7 @@ class DetalleFacturaScreen extends StatelessWidget {
               ),
             ),
             Text(
-              numeroPedido,
+              pedido.numero,
               style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
             ),
           ],
@@ -77,12 +58,15 @@ class DetalleFacturaScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _ResumenCard(fechaEntrega: fechaEntrega, direccionRecogida: direccionRecogida),
+              _ResumenCard(pedido: pedido),
               const SizedBox(height: 16),
               OutlinedButton.icon(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => CalificarServicioScreen(numeroPedido: numeroPedido),
+                    builder: (_) => CalificarServicioScreen(
+                      pedidoId: pedido.id,
+                      numeroPedido: pedido.numero,
+                    ),
                   ),
                 ),
                 icon: const Icon(Icons.star_outline_rounded, size: 20),
@@ -112,13 +96,13 @@ class DetalleFacturaScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _ServiciosCard(
                 icon: servicioInfo.icon,
-                nombre: servicio,
+                nombre: pedido.servicio,
                 descripcion: servicioInfo.descripcion,
-                pesoEstimado: pesoEstimado,
-                monto: montoServicio,
+                instrucciones: pedido.instrucciones,
+                monto: pedido.total,
               ),
               const SizedBox(height: 24),
-              _DesgloseCard(subtotal: montoServicio, total: _total),
+              _TotalCard(total: pedido.total),
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -146,15 +130,7 @@ class DetalleFacturaScreen extends StatelessWidget {
       bottomNavigationBar: _BottomActionBar(
         onDescargar: () => _showComingSoon(context),
         onRepetir: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => RepetirPedidoScreen(
-              nombreServicio: servicio,
-              fechaAnterior: fechaEntrega,
-              precioBase: montoServicio,
-              tipoServicio: tipoServicio,
-              pesoEstimado: pesoEstimado,
-            ),
-          ),
+          AgendarRecoleccionScreen.route(servicioInicial: pedido.tipoServicio),
         ),
       ),
     );
@@ -162,13 +138,32 @@ class DetalleFacturaScreen extends StatelessWidget {
 }
 
 class _ResumenCard extends StatelessWidget {
-  const _ResumenCard({required this.fechaEntrega, required this.direccionRecogida});
+  const _ResumenCard({required this.pedido});
 
-  final String fechaEntrega;
-  final String direccionRecogida;
+  final Pedido pedido;
 
   @override
   Widget build(BuildContext context) {
+    final (badgeColor, badgeTextColor, badgeIcon, badgeTexto) = switch (pedido.estado) {
+      EstadoPedido.entregado => (
+        const Color(0xFFDCFCE7),
+        const Color(0xFF15803D),
+        Icons.check_circle_rounded,
+        'Entregado',
+      ),
+      EstadoPedido.cancelado => (
+        AppColors.errorContainer,
+        AppColors.onErrorContainer,
+        Icons.cancel_rounded,
+        'Cancelado',
+      ),
+      EstadoPedido.enProceso => (
+        AppColors.primaryContainer,
+        AppColors.primary,
+        Icons.local_laundry_service_rounded,
+        'En proceso',
+      ),
+    };
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -199,7 +194,7 @@ class _ResumenCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        fechaEntrega,
+                        pedido.fechaFormateada,
                         style: GoogleFonts.inter(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -207,7 +202,7 @@ class _ResumenCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Fecha de entrega',
+                        'Fecha del pedido',
                         style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
                       ),
                     ],
@@ -217,20 +212,20 @@ class _ResumenCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFDCFCE7),
+                  color: badgeColor,
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.check_circle_rounded, color: Color(0xFF15803D), size: 14),
+                    Icon(badgeIcon, color: badgeTextColor, size: 14),
                     const SizedBox(width: 4),
                     Text(
-                      'Entregado',
+                      badgeTexto,
                       style: GoogleFonts.inter(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF15803D),
+                        color: badgeTextColor,
                       ),
                     ),
                   ],
@@ -258,11 +253,11 @@ class _ResumenCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Pedido Completado',
+                      pedido.numero,
                       style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurface),
                     ),
                     Text(
-                      'Recogido en: $direccionRecogida',
+                      'Recolectado en: ${pedido.direccion}',
                       style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
                     ),
                   ],
@@ -282,14 +277,14 @@ class _ServiciosCard extends StatelessWidget {
     required this.nombre,
     required this.descripcion,
     required this.monto,
-    this.pesoEstimado,
+    this.instrucciones,
   });
 
   final IconData icon;
   final String nombre;
   final String descripcion;
   final double monto;
-  final String? pesoEstimado;
+  final String? instrucciones;
 
   @override
   Widget build(BuildContext context) {
@@ -311,13 +306,24 @@ class _ServiciosCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pesoEstimado != null ? '$nombre ($pesoEstimado)' : nombre,
+                  nombre,
                   style: GoogleFonts.inter(fontSize: 16, color: AppColors.onSurface),
                 ),
                 Text(
                   descripcion,
                   style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
                 ),
+                if (instrucciones != null) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    'Instrucciones: $instrucciones',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -335,10 +341,9 @@ class _ServiciosCard extends StatelessWidget {
   }
 }
 
-class _DesgloseCard extends StatelessWidget {
-  const _DesgloseCard({required this.subtotal, required this.total});
+class _TotalCard extends StatelessWidget {
+  const _TotalCard({required this.total});
 
-  final double subtotal;
   final double total;
 
   @override
@@ -352,14 +357,6 @@ class _DesgloseCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _FilaMonto(label: 'Subtotal', valor: subtotal),
-          const SizedBox(height: 12),
-          const _FilaMonto(label: 'Tarifa de Servicio', valor: _tarifaServicio),
-          const SizedBox(height: 12),
-          const _FilaMonto(label: 'Envío', valor: _envio),
-          const SizedBox(height: 16),
-          const Divider(color: AppColors.outlineVariant, height: 1),
-          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -396,26 +393,6 @@ class _DesgloseCard extends StatelessWidget {
   }
 }
 
-class _FilaMonto extends StatelessWidget {
-  const _FilaMonto({required this.label, required this.valor});
-
-  final String label;
-  final double valor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant)),
-        Text(
-          '\$${valor.toStringAsFixed(2)} MXN',
-          style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant),
-        ),
-      ],
-    );
-  }
-}
 
 class _MetodoPagoCard extends StatelessWidget {
   const _MetodoPagoCard({required this.onTap});

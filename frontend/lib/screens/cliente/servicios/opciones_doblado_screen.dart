@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/servicio_lavanderia.dart';
+import '../../../providers/preferencias_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
+import '../../../widgets/quantity_selector.dart';
 import '../agendar_recoleccion/agendar_recoleccion_screen.dart';
 import '../home_cliente/home_cliente_screen.dart';
 import '../mi_perfil/mi_perfil_screen.dart';
@@ -47,6 +50,7 @@ const _opciones = [
 ];
 
 const _preferencias = ['Sin aroma', 'Jabón ecológico', 'Acabado con almidón', 'Envoltura de regalo'];
+const _preferenciaEcoFriendly = 'Jabón ecológico';
 
 class OpcionesDobladoScreen extends StatefulWidget {
   const OpcionesDobladoScreen({super.key});
@@ -57,7 +61,24 @@ class OpcionesDobladoScreen extends StatefulWidget {
 
 class _OpcionesDobladoScreenState extends State<OpcionesDobladoScreen> {
   int _seleccionado = 0;
+  int _kilos = 1;
   final Set<String> _preferenciasElegidas = {};
+
+  void _incrementarKilos() => setState(() => _kilos++);
+
+  void _decrementarKilos() {
+    if (_kilos > 1) setState(() => _kilos--);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Si el cliente ya activó "Eco-friendly" en Ajustes, no se lo volvemos a
+    // preguntar aquí: arrancamos con "Jabón ecológico" preseleccionado.
+    if (context.read<PreferenciasProvider>().ecoFriendly) {
+      _preferenciasElegidas.add(_preferenciaEcoFriendly);
+    }
+  }
 
   void _onTabSelected(AppBottomTab tab) {
     switch (tab) {
@@ -82,7 +103,10 @@ class _OpcionesDobladoScreenState extends State<OpcionesDobladoScreen> {
 
   void _confirmarSeleccion() {
     Navigator.of(context).push(
-      AgendarRecoleccionScreen.route(servicioInicial: TipoServicio.lavadoYPlegado),
+      AgendarRecoleccionScreen.route(
+        servicioInicial: TipoServicio.lavadoYPlegado,
+        cantidadInicial: _kilos,
+      ),
     );
   }
 
@@ -131,6 +155,27 @@ class _OpcionesDobladoScreenState extends State<OpcionesDobladoScreen> {
                 ),
                 if (i != _opciones.length - 1) const SizedBox(height: 16),
               ],
+              const SizedBox(height: 32),
+              Text(
+                'Kilos Aproximados',
+                style: GoogleFonts.inter(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.onSurface,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Es solo una referencia para el precio estimado. El total final se confirma al pesar tu ropa en la recolección.',
+                style: GoogleFonts.inter(fontSize: 13, color: AppColors.onSurfaceVariant),
+              ),
+              const SizedBox(height: 16),
+              QuantitySelector(
+                label: 'Kilos',
+                cantidad: _kilos,
+                onIncrementar: _incrementarKilos,
+                onDecrementar: _decrementarKilos,
+              ),
               const SizedBox(height: 32),
               Text(
                 'Preferencias Adicionales',
