@@ -15,10 +15,10 @@ public class PedidosControllerTests
     {
         var config = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
         {
-            ["Firebase:Enabled"] = "false"
+            ["Supabase:Enabled"] = "false"
         }).Build();
-        var fbService = new FirebaseService(config);
-        var dbService = new DatabaseService(fbService);
+        var supabaseService = new SupabaseService(config);
+        var dbService = new DatabaseService(supabaseService);
         var controller = new PedidosController(dbService);
 
         var result = await controller.Cancelar("1", new CancelarPedidoRequest

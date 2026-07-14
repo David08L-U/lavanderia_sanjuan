@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Google.Cloud.Firestore;
 using backend.Controllers;
+using Npgsql;
 
 namespace backend.Services;
 
 public class DatabaseService
 {
-    private readonly FirestoreDb? _firestoreDb;
+    private readonly string? _connectionString;
     private readonly string _localDataDir;
 
-    public DatabaseService(FirebaseService firebaseService)
+    public DatabaseService(SupabaseService supabaseService)
     {
         _localDataDir = Path.Combine(AppContext.BaseDirectory, "data");
         if (!Directory.Exists(_localDataDir))
@@ -21,40 +21,109 @@ public class DatabaseService
             Directory.CreateDirectory(_localDataDir);
         }
 
-        if (firebaseService.IsConfigured)
+        if (supabaseService.IsConfigured)
         {
             try
             {
-                var dbBuilder = new FirestoreDbBuilder
-                {
-                    ProjectId = firebaseService.ProjectId,
-                    Credential = firebaseService.CreateCredential()
-                };
-                _firestoreDb = dbBuilder.Build();
-                Console.WriteLine($"Firestore inicializado con éxito para el proyecto: {firebaseService.ProjectId}");
+                _connectionString = supabaseService.ConnectionString;
+                EnsureSchemaAsync().GetAwaiter().GetResult();
+                Console.WriteLine("Supabase/Postgres inicializado con éxito.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al inicializar Firestore: {ex.Message}");
+                Console.WriteLine($"Error al inicializar Supabase/Postgres: {ex.Message}");
             }
         }
     }
 
-    public bool IsCloud => _firestoreDb != null;
+    public bool IsCloud => !string.IsNullOrWhiteSpace(_connectionString);
+
+    private NpgsqlConnection CreateConnection() => new(_connectionString!);
+
+    private async Task EnsureSchemaAsync()
+    {
+        if (!IsCloud)
+        {
+            return;
+        }
+
+        const string sql = @"
+CREATE TABLE IF NOT EXISTS usuarios (
+    id TEXT PRIMARY KEY,
+    nombre TEXT NOT NULL,
+    correo TEXT NOT NULL UNIQUE,
+    telefono TEXT,
+    password TEXT NOT NULL,
+    rol TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pedidos (
+    id TEXT PRIMARY KEY,
+    cliente_id TEXT,
+    cliente_nombre TEXT NOT NULL,
+    servicio TEXT NOT NULL,
+    fecha DATE,
+    franja_horaria TEXT,
+    direccion TEXT,
+    instrucciones TEXT NOT NULL,
+    total NUMERIC(10,2) NOT NULL,
+    estado TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS direcciones (
+    id TEXT PRIMARY KEY,
+    usuario_id TEXT,
+    titulo TEXT NOT NULL,
+    lineas TEXT[] NOT NULL,
+    telefono TEXT,
+    nota TEXT,
+    predeterminada BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS metodos_pago (
+    id TEXT PRIMARY KEY,
+    usuario_id TEXT,
+    marca TEXT NOT NULL,
+    ultimos_digitos TEXT NOT NULL,
+    expira TEXT NOT NULL,
+    principal BOOLEAN NOT NULL
+);";
+
+        await using var connection = CreateConnection();
+        await connection.OpenAsync();
+        await using var command = new NpgsqlCommand(sql, connection);
+        await command.ExecuteNonQueryAsync();
+    }
 
     // Pedidos
     public async Task<List<PedidoDto>> ListarPedidosAsync()
     {
         if (IsCloud)
         {
-            var snapshot = await _firestoreDb!.Collection("pedidos").GetSnapshotAsync();
             var list = new List<PedidoDto>();
-            foreach (var doc in snapshot.Documents)
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = "SELECT id, cliente_id, cliente_nombre, servicio, to_char(fecha, 'YYYY-MM-DD') AS fecha, franja_horaria, direccion, instrucciones, total, estado FROM pedidos";
+            await using var command = new NpgsqlCommand(sql, connection);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                var item = doc.ConvertTo<PedidoDto>();
-                item.Id = doc.Id;
-                list.Add(item);
+                list.Add(new PedidoDto
+                {
+                    Id = reader["id"] as string,
+                    ClienteId = reader["cliente_id"] as string,
+                    ClienteNombre = reader["cliente_nombre"] as string,
+                    Servicio = reader["servicio"] as string,
+                    Fecha = reader["fecha"] as string,
+                    FranjaHoraria = reader["franja_horaria"] as string,
+                    Direccion = reader["direccion"] as string,
+                    Instrucciones = reader["instrucciones"] as string,
+                    Total = reader["total"] is DBNull ? 0d : Convert.ToDouble(reader["total"]),
+                    Estado = reader["estado"] as string
+                });
             }
+
             return list;
         }
         else
@@ -82,8 +151,36 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var docRef = _firestoreDb!.Collection("pedidos").Document(pedido.Id);
-            await docRef.SetAsync(pedido);
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = @"
+INSERT INTO pedidos (id, cliente_id, cliente_nombre, servicio, fecha, franja_horaria, direccion, instrucciones, total, estado)
+VALUES (@id, @cliente_id, @cliente_nombre, @servicio, @fecha, @franja_horaria, @direccion, @instrucciones, @total, @estado)
+ON CONFLICT (id)
+DO UPDATE SET
+    cliente_id = EXCLUDED.cliente_id,
+    cliente_nombre = EXCLUDED.cliente_nombre,
+    servicio = EXCLUDED.servicio,
+    fecha = EXCLUDED.fecha,
+    franja_horaria = EXCLUDED.franja_horaria,
+    direccion = EXCLUDED.direccion,
+    instrucciones = EXCLUDED.instrucciones,
+    total = EXCLUDED.total,
+    estado = EXCLUDED.estado;";
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("id", pedido.Id ?? Guid.NewGuid().ToString());
+            command.Parameters.AddWithValue("cliente_id", (object?)pedido.ClienteId ?? DBNull.Value);
+            command.Parameters.AddWithValue("cliente_nombre", pedido.ClienteNombre ?? "Cliente");
+            command.Parameters.AddWithValue("servicio", pedido.Servicio ?? "Servicio");
+            var fecha = DateTime.TryParse(pedido.Fecha, out var parsedDate) ? parsedDate.Date : DateTime.UtcNow.Date;
+            command.Parameters.AddWithValue("fecha", fecha);
+            command.Parameters.AddWithValue("franja_horaria", (object?)pedido.FranjaHoraria ?? DBNull.Value);
+            command.Parameters.AddWithValue("direccion", (object?)pedido.Direccion ?? DBNull.Value);
+            command.Parameters.AddWithValue("instrucciones", pedido.Instrucciones ?? string.Empty);
+            command.Parameters.AddWithValue("total", Convert.ToDecimal(pedido.Total));
+            command.Parameters.AddWithValue("estado", pedido.Estado ?? "En proceso");
+            await command.ExecuteNonQueryAsync();
         }
         else
         {
@@ -100,14 +197,26 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var snapshot = await _firestoreDb!.Collection("usuarios").GetSnapshotAsync();
             var list = new List<UsuarioDto>();
-            foreach (var doc in snapshot.Documents)
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = "SELECT id, nombre, correo, telefono, password, rol FROM usuarios";
+            await using var command = new NpgsqlCommand(sql, connection);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                var item = doc.ConvertTo<UsuarioDto>();
-                item.Id = doc.Id;
-                list.Add(item);
+                list.Add(new UsuarioDto
+                {
+                    Id = reader["id"] as string,
+                    Nombre = reader["nombre"] as string,
+                    Correo = reader["correo"] as string,
+                    Telefono = reader["telefono"] as string,
+                    Password = reader["password"] as string,
+                    Rol = reader["rol"] as string
+                });
             }
+
             return list;
         }
         else
@@ -124,8 +233,27 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var docRef = _firestoreDb!.Collection("usuarios").Document(usuario.Id);
-            await docRef.SetAsync(usuario);
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = @"
+INSERT INTO usuarios (id, nombre, correo, telefono, password, rol)
+VALUES (@id, @nombre, @correo, @telefono, @password, @rol)
+ON CONFLICT (id)
+DO UPDATE SET
+    nombre = EXCLUDED.nombre,
+    correo = EXCLUDED.correo,
+    telefono = EXCLUDED.telefono,
+    password = EXCLUDED.password,
+    rol = EXCLUDED.rol;";
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("id", usuario.Id ?? Guid.NewGuid().ToString());
+            command.Parameters.AddWithValue("nombre", usuario.Nombre ?? string.Empty);
+            command.Parameters.AddWithValue("correo", usuario.Correo ?? string.Empty);
+            command.Parameters.AddWithValue("telefono", (object?)usuario.Telefono ?? DBNull.Value);
+            command.Parameters.AddWithValue("password", usuario.Password ?? string.Empty);
+            command.Parameters.AddWithValue("rol", usuario.Rol ?? "cliente");
+            await command.ExecuteNonQueryAsync();
         }
         else
         {
@@ -142,14 +270,27 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var snapshot = await _firestoreDb!.Collection("direcciones").GetSnapshotAsync();
             var list = new List<DireccionDto>();
-            foreach (var doc in snapshot.Documents)
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = "SELECT id, titulo, lineas, telefono, nota, predeterminada FROM direcciones";
+            await using var command = new NpgsqlCommand(sql, connection);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                var item = doc.ConvertTo<DireccionDto>();
-                item.Id = doc.Id;
-                list.Add(item);
+                var lineasArray = reader["lineas"] as string[];
+                list.Add(new DireccionDto
+                {
+                    Id = reader["id"] as string,
+                    Titulo = reader["titulo"] as string,
+                    Lineas = lineasArray?.ToList() ?? new List<string>(),
+                    Telefono = reader["telefono"] as string,
+                    Nota = reader["nota"] as string,
+                    Predeterminada = reader["predeterminada"] is bool value && value
+                });
             }
+
             return list;
         }
         else
@@ -182,8 +323,27 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var docRef = _firestoreDb!.Collection("direcciones").Document(direccion.Id);
-            await docRef.SetAsync(direccion);
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = @"
+INSERT INTO direcciones (id, titulo, lineas, telefono, nota, predeterminada)
+VALUES (@id, @titulo, @lineas, @telefono, @nota, @predeterminada)
+ON CONFLICT (id)
+DO UPDATE SET
+    titulo = EXCLUDED.titulo,
+    lineas = EXCLUDED.lineas,
+    telefono = EXCLUDED.telefono,
+    nota = EXCLUDED.nota,
+    predeterminada = EXCLUDED.predeterminada;";
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("id", direccion.Id ?? Guid.NewGuid().ToString());
+            command.Parameters.AddWithValue("titulo", direccion.Titulo ?? "Nueva direccion");
+            command.Parameters.AddWithValue("lineas", (direccion.Lineas ?? new List<string>()).ToArray());
+            command.Parameters.AddWithValue("telefono", (object?)direccion.Telefono ?? DBNull.Value);
+            command.Parameters.AddWithValue("nota", (object?)direccion.Nota ?? DBNull.Value);
+            command.Parameters.AddWithValue("predeterminada", direccion.Predeterminada);
+            await command.ExecuteNonQueryAsync();
         }
         else
         {
@@ -199,8 +359,12 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var docRef = _firestoreDb!.Collection("direcciones").Document(id);
-            await docRef.DeleteAsync();
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = "DELETE FROM direcciones WHERE id = @id";
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("id", id);
+            await command.ExecuteNonQueryAsync();
         }
         else
         {
@@ -215,14 +379,25 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var snapshot = await _firestoreDb!.Collection("metodosPago").GetSnapshotAsync();
             var list = new List<MetodoPagoDto>();
-            foreach (var doc in snapshot.Documents)
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = "SELECT id, marca, ultimos_digitos, expira, principal FROM metodos_pago";
+            await using var command = new NpgsqlCommand(sql, connection);
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
             {
-                var item = doc.ConvertTo<MetodoPagoDto>();
-                item.Id = doc.Id;
-                list.Add(item);
+                list.Add(new MetodoPagoDto
+                {
+                    Id = reader["id"] as string,
+                    Marca = reader["marca"] as string,
+                    UltimosDigitos = reader["ultimos_digitos"] as string,
+                    Expira = reader["expira"] as string,
+                    Principal = reader["principal"] is bool value && value
+                });
             }
+
             return list;
         }
         else
@@ -239,8 +414,25 @@ public class DatabaseService
     {
         if (IsCloud)
         {
-            var docRef = _firestoreDb!.Collection("metodosPago").Document(metodo.Id);
-            await docRef.SetAsync(metodo);
+            await using var connection = CreateConnection();
+            await connection.OpenAsync();
+            const string sql = @"
+INSERT INTO metodos_pago (id, marca, ultimos_digitos, expira, principal)
+VALUES (@id, @marca, @ultimos_digitos, @expira, @principal)
+ON CONFLICT (id)
+DO UPDATE SET
+    marca = EXCLUDED.marca,
+    ultimos_digitos = EXCLUDED.ultimos_digitos,
+    expira = EXCLUDED.expira,
+    principal = EXCLUDED.principal;";
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("id", metodo.Id ?? Guid.NewGuid().ToString());
+            command.Parameters.AddWithValue("marca", metodo.Marca ?? "visa");
+            command.Parameters.AddWithValue("ultimos_digitos", metodo.UltimosDigitos ?? string.Empty);
+            command.Parameters.AddWithValue("expira", metodo.Expira ?? string.Empty);
+            command.Parameters.AddWithValue("principal", metodo.Principal);
+            await command.ExecuteNonQueryAsync();
         }
         else
         {

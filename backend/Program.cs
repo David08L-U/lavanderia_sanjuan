@@ -15,23 +15,19 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSingleton<FirebaseService>();
+builder.Services.AddSingleton<SupabaseService>();
 builder.Services.AddSingleton<DatabaseService>();
 
 var app = builder.Build();
 
-var firebaseService = app.Services.GetRequiredService<FirebaseService>();
-if (firebaseService.IsConfigured)
+var supabaseService = app.Services.GetRequiredService<SupabaseService>();
+if (supabaseService.IsConfigured)
 {
-    var credential = firebaseService.CreateCredential();
-    if (credential is not null)
-    {
-        app.Logger.LogInformation("Firebase configurado para el proyecto {ProjectId}", firebaseService.ProjectId);
-    }
+    app.Logger.LogInformation("Supabase habilitado para el proyecto {ProjectUrl}", supabaseService.ProjectUrl ?? "No definido");
 }
 else
 {
-    app.Logger.LogWarning("Firebase no está configurado. Configure Firebase:Enabled, Firebase:ProjectId y Firebase:CredentialsPath para habilitarlo.");
+    app.Logger.LogWarning("Supabase no está configurado. Configure Supabase:Enabled y Supabase:ConnectionString para habilitarlo.");
 }
 
 if (app.Environment.IsDevelopment())

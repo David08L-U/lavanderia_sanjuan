@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Google.Cloud.Firestore;
 using backend.Services;
 using System.Threading.Tasks;
 using System;
@@ -175,27 +174,16 @@ public class ReportarPedidoRequest
     public string? Detalles { get; set; }
 }
 
-[FirestoreData]
 public class PedidoDto
 {
-    [FirestoreProperty]
     public string? Id { get; set; }
-    [FirestoreProperty]
     public string? ClienteId { get; set; }
-    [FirestoreProperty]
     public string? ClienteNombre { get; set; }
-    [FirestoreProperty]
     public string? Servicio { get; set; }
-    [FirestoreProperty]
     public string? Fecha { get; set; }
-    [FirestoreProperty]
     public string? FranjaHoraria { get; set; }
-    [FirestoreProperty]
     public string? Direccion { get; set; }
-    [FirestoreProperty]
     public string? Instrucciones { get; set; }
-    [FirestoreProperty]
     public double Total { get; set; }
-    [FirestoreProperty]
     public string? Estado { get; set; }
 }

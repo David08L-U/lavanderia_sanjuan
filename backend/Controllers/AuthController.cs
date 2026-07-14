@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Google.Cloud.Firestore;
 using backend.Services;
 using System.Threading.Tasks;
 using System;
@@ -111,19 +110,12 @@ public class RecuperarPasswordRequest
     public string? Correo { get; set; }
 }
 
-[FirestoreData]
 public class UsuarioDto
 {
-    [FirestoreProperty]
     public string? Id { get; set; }
-    [FirestoreProperty]
     public string? Nombre { get; set; }
-    [FirestoreProperty]
     public string? Correo { get; set; }
-    [FirestoreProperty]
     public string? Telefono { get; set; }
-    [FirestoreProperty]
     public string? Password { get; set; }
-    [FirestoreProperty]
     public string? Rol { get; set; }
 }

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Google.Cloud.Firestore;
 using backend.Services;
 using System.Threading.Tasks;
 using System;
@@ -96,19 +95,12 @@ public class CrearDireccionRequest
     public bool Predeterminada { get; set; }
 }
 
-[FirestoreData]
 public class DireccionDto
 {
-    [FirestoreProperty]
     public string? Id { get; set; }
-    [FirestoreProperty]
     public string? Titulo { get; set; }
-    [FirestoreProperty]
     public List<string>? Lineas { get; set; }
-    [FirestoreProperty]
     public string? Telefono { get; set; }
-    [FirestoreProperty]
     public string? Nota { get; set; }
-    [FirestoreProperty]
     public bool Predeterminada { get; set; }
 }

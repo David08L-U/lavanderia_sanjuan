@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {}
+    "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {
+    "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj",
+        "projectUniqueName": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj",
+        "projectPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\manue\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\obj\\",
+        "outputPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\manue\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,17 +44,13 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
-            "Google.Apis.Auth": {
-              "target": "Package",
-              "version": "[1.75.0, )"
-            },
-            "Google.Cloud.Firestore": {
-              "target": "Package",
-              "version": "[4.3.0, )"
-            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.3, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[8.0.4, )"
             }
           },
           "imports": [

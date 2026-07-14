@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Google.Cloud.Firestore;
 using backend.Services;
 using System.Threading.Tasks;
 using System;
@@ -60,17 +59,11 @@ public class CrearMetodoPagoRequest
     public bool Principal { get; set; }
 }
 
-[FirestoreData]
 public class MetodoPagoDto
 {
-    [FirestoreProperty]
     public string? Id { get; set; }
-    [FirestoreProperty]
     public string? Marca { get; set; }
-    [FirestoreProperty]
     public string? UltimosDigitos { get; set; }
-    [FirestoreProperty]
     public string? Expira { get; set; }
-    [FirestoreProperty]
     public bool Principal { get; set; }
 }
