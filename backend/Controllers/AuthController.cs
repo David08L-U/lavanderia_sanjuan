@@ -6,76 +6,80 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = new()
+    private readonly SupabaseService _supabaseService;
+
+    public AuthController(SupabaseService supabaseService)
     {
-        new() { Id = "1", Nombre = "Admin San Juan", Correo = "admin@sanjuan.com", Telefono = "3001234567", Password = "admin123", Rol = "administrador" },
-        new() { Id = "2", Nombre = "Cliente Demo", Correo = "cliente@sanjuan.com", Telefono = "3007654321", Password = "cliente123", Rol = "cliente" }
-    };
+        _supabaseService = supabaseService;
+    }
 
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
+        if (!_supabaseService.IsConfigured)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = "Supabase no está configurado en el backend" });
+        }
+
         if (string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Correo y contraseña son requeridos" });
         }
 
-        var usuario = Usuarios.FirstOrDefault(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
-        if (usuario == null)
+        var login = await _supabaseService.LoginAsync(request.Correo, request.Password);
+        if (!login.Success)
         {
-            return NotFound(new { message = "Usuario no encontrado" });
+            return StatusCode(login.StatusCode, new { message = login.ErrorMessage ?? "No se pudo iniciar sesión" });
         }
 
-        if (!usuario.Password.Equals(request.Password))
-        {
-            return Unauthorized(new { message = "Correo o contraseña incorrectos" });
-        }
-
-        return Ok(new UsuarioDto
-        {
-            Id = usuario.Id,
-            Nombre = usuario.Nombre,
-            Correo = usuario.Correo,
-            Telefono = usuario.Telefono,
-            Rol = usuario.Rol
-        });
+        return Ok(login.Usuario);
     }
 
     [HttpPost("registro")]
-    public IActionResult Registro([FromBody] RegistroRequest request)
+    public async Task<IActionResult> Registro([FromBody] RegistroRequest request)
     {
+        if (!_supabaseService.IsConfigured)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = "Supabase no está configurado en el backend" });
+        }
+
         if (string.IsNullOrWhiteSpace(request.Nombre) || string.IsNullOrWhiteSpace(request.Apellido) || string.IsNullOrWhiteSpace(request.Correo) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "Faltan datos obligatorios" });
         }
 
-        var existe = Usuarios.Any(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
-        if (existe)
+        var registro = await _supabaseService.RegisterAsync(
+            request.Nombre,
+            request.Apellido,
+            request.Correo,
+            request.Telefono ?? string.Empty,
+            request.Password);
+
+        if (!registro.Success)
         {
-            return Conflict(new { message = "Ese correo ya está registrado" });
+            return StatusCode(registro.StatusCode, new { message = registro.ErrorMessage ?? "No se pudo crear la cuenta" });
         }
 
-        var nuevo = new UsuarioDto
-        {
-            Id = (Usuarios.Count + 1).ToString(),
-            Nombre = $"{request.Nombre} {request.Apellido}",
-            Correo = request.Correo,
-            Telefono = request.Telefono,
-            Password = request.Password,
-            Rol = "cliente"
-        };
-
-        Usuarios.Add(nuevo);
-
-        return CreatedAtAction(nameof(Login), new { id = nuevo.Id }, nuevo);
+        return CreatedAtAction(nameof(Login), new { id = registro.Usuario?.Id }, registro.Usuario);
     }
 
     [HttpPost("recuperar-password")]
-    public IActionResult RecuperarPassword([FromBody] RecuperarPasswordRequest request)
+    public async Task<IActionResult> RecuperarPassword([FromBody] RecuperarPasswordRequest request)
     {
+        if (!_supabaseService.IsConfigured)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = "Supabase no está configurado en el backend" });
+        }
+
         if (string.IsNullOrWhiteSpace(request.Correo))
         {
             return BadRequest(new { message = "Correo requerido" });
+        }
+
+        var result = await _supabaseService.RequestPasswordRecoveryAsync(request.Correo);
+        if (!result.Success)
+        {
+            return StatusCode(result.StatusCode, new { message = result.ErrorMessage ?? "No se pudo procesar la recuperación" });
         }
 
         return Ok(new { message = "Si el correo existe, se enviará un enlace de recuperación" });
