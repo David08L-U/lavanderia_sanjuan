@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalles del Pedido #ORD-4092 - FreshClean Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "error-red": "#ba1a1a",
+                      "tertiary-fixed": "#e1e3e5",
+                      "tertiary-container": "#595c5e",
+                      "on-secondary-fixed-variant": "#3c4853",
+                      "on-primary-container": "#c3d4ff",
+                      "on-surface": "#111c2d",
+                      "surface-dim": "#cfdaf2",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#727784",
+                      "error": "#ba1a1a",
+                      "outline-variant": "#c2c6d5",
+                      "on-secondary-container": "#5a6671",
+                      "secondary-fixed-dim": "#bbc8d5",
+                      "secondary": "#54606b",
+                      "surface": "#f9f9ff",
+                      "on-background": "#111c2d",
+                      "primary": "#00418f",
+                      "on-primary-fixed-variant": "#004494",
+                      "surface-tint": "#095bbf",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed": "#d7e4f1",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface-variant": "#d8e3fb",
+                      "background": "#f9f9ff",
+                      "surface-container-highest": "#d8e3fb",
+                      "on-secondary-fixed": "#111d26",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#d2d4d7",
+                      "tertiary": "#414546",
+                      "surface-blue-tint": "#e7eeff",
+                      "inverse-primary": "#adc6ff",
+                      "on-surface-variant": "#424753",
+                      "success-blue": "#0070eb",
+                      "primary-fixed": "#d8e2ff",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#e7eeff",
+                      "secondary-container": "#d7e4f1",
+                      "on-error": "#ffffff",
+                      "inverse-on-surface": "#ecf1ff",
+                      "surface-container-low": "#f0f3ff",
+                      "surface-container-high": "#dee8ff",
+                      "primary-container": "#0058bc",
+                      "on-primary-fixed": "#001a41",
+                      "surface-bright": "#f9f9ff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#191c1e",
+                      "on-error-container": "#93000a",
+                      "inverse-surface": "#263143",
+                      "on-tertiary-fixed-variant": "#444749"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-padding": "2rem",
+                      "stack-gap": "1rem",
+                      "container-margin": "1.25rem",
+                      "inline-gap": "0.75rem",
+                      "hero-padding": "2.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "title-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "button": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "button": [
+                              "16px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md antialiased pb-24 md:pb-8">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky shadow-sm bg-surface dark:bg-on-background shadow-[0px_24px_24px_rgba(89,92,94,0.05)] z-40 hidden md:block"><div class="flex justify-between items-center px-8 h-16 w-full max-w-7xl mx-auto"><div class="flex items-center gap-4"><button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container p-2 rounded-full transition-colors">arrow_back</button><div class="flex flex-col"><h1 class="text-title-md font-title-md text-on-surface">Detalles del Pedido</h1><p class="text-label-md text-on-surface-variant">#ORD-4092</p></div></div><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold font-label-md text-label-md">AP</div></div></div></header>
+<!-- Mobile TopAppBar -->
+<header class="w-full top-0 sticky shadow-sm bg-surface dark:bg-on-background shadow-[0px_24px_24px_rgba(89,92,94,0.05)] z-40 md:hidden">
+<div class="flex items-center px-5 h-16 w-full gap-4">
+<button class="material-symbols-outlined text-on-surface-variant active:scale-95 transition-transform duration-200">arrow_back</button>
+<h1 class="text-title-md font-title-md text-on-surface flex-grow text-center">Detalles del Pedido</h1>
+<div class="w-6 h-6"></div> <!-- Spacer -->
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin md:px-8 py-8 w-full flex flex-col gap-stack-gap">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-surface-container-lowest p-6 rounded-xl shadow-[0px_24px_24px_rgba(89,92,94,0.05)] border border-surface-variant relative overflow-hidden">
+<div class="absolute -right-16 -top-16 w-48 h-48 bg-primary/5 rounded-full blur-2xl"></div>
+<div class="z-10">
+<div class="flex items-center gap-3 mb-1">
+<h2 class="font-headline-lg text-headline-lg text-on-surface m-0">#ORD-4092</h2>
+<span class="bg-surface-container-high text-primary px-2.5 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary inline-block"></span> En Proceso
+                    </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                    Recibido: 24 Oct 2023, 10:30 AM
+                </p>
+</div>
+<div class="flex gap-3 z-10 w-full md:w-auto mt-2 md:mt-0">
+<button class="flex-1 md:flex-none border border-outline text-on-surface hover:bg-surface-container px-6 py-3 rounded-lg font-button text-button transition-colors flex items-center justify-center gap-2 h-14">
+<span class="material-symbols-outlined">print</span> Imprimir
+                </button>
+<button class="flex-1 md:flex-none bg-primary text-on-primary hover:bg-on-primary-fixed-variant px-6 py-3 rounded-lg font-button text-button shadow-sm transition-colors flex items-center justify-center gap-2 h-14">
+<span class="material-symbols-outlined">check_circle</span> Actualizar Estado
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-2">
+<!-- Left Column: Details -->
+<div class="lg:col-span-2 flex flex-col gap-6">
+<!-- Progress Section -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_24px_24px_rgba(89,92,94,0.05)] border border-surface-variant">
+<h3 class="font-title-md text-title-md text-on-surface mb-4">Estado Actual</h3>
+<div class="w-full bg-surface-variant rounded-full h-2 mb-2">
+<div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
+</div>
+<div class="flex justify-between font-label-md text-label-md text-on-surface-variant">
+<span>Recibido</span>
+<span>Lavado</span>
+<span class="text-primary font-bold">En Proceso (60%)</span>
+<span>Listo</span>
+</div>
+</section>
+<!-- Items Section -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0px_24px_24px_rgba(89,92,94,0.05)] border border-surface-variant overflow-hidden">
+<div class="p-6 border-b border-surface-variant bg-surface/50">
+<h3 class="font-title-md text-title-md text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary">checkroom</span> Detalle del Servicio</h3>
+</div>
+<div class="p-0">
+<!-- Item 1 -->
+<div class="flex items-start p-6 border-b border-surface-variant gap-4 hover:bg-surface-container-low transition-colors">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">dry_cleaning</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-title-md text-title-md text-on-surface m-0">Traje Completo (2 piezas)</h4>
+<span class="font-title-md text-title-md text-on-surface">$20.00</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">Servicio: Tintorería Premium</p>
+<div class="flex items-center gap-2 bg-surface-variant/50 p-2 rounded text-on-surface-variant font-label-md text-label-md w-fit">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                                    Instrucción: Cuidado con botones de seda
+                                </div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-start p-6 gap-4 hover:bg-surface-container-low transition-colors">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">apparel</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-title-md text-title-md text-on-surface m-0">Abrigo Largo</h4>
+<span class="font-title-md text-title-md text-on-surface">$22.00</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-2">Servicio: Limpieza Profunda</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Breakdown -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_24px_24px_rgba(89,92,94,0.05)] border border-surface-variant">
+<h3 class="font-title-md text-title-md text-on-surface mb-4">Resumen de Pago</h3>
+<div class="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant">
+<div class="flex justify-between">
+<span>Subtotal Servicios (2 artículos)</span>
+<span>$42.00</span>
+</div>
+<div class="flex justify-between text-on-surface">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">sell</span> Opción: Hanger Fold (x2)</span>
+<span>$3.00</span>
+</div>
+<div class="h-px bg-surface-variant my-2 w-full"></div>
+<div class="flex justify-between font-title-md text-title-md text-on-surface">
+<span>Total</span>
+<span>$45.00</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Sidebar -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<!-- Customer Info Card -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_24px_24px_rgba(89,92,94,0.05)] border border-surface-variant">
+<h3 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary">person</span> Información del Cliente</h3>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-title-md">
+                            EV
+                        </div>
+<div>
+<p class="font-title-md text-title-md text-on-surface m-0">Eleanor Vance</p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">star</span> VIP Member
+                            </p>
+</div>
+</div>
+<div class="flex flex-col gap-3 font-body-md text-body-md">
+<a class="flex items-center gap-3 text-on-surface hover:text-primary transition-colors" href="tel:+123456789">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</div>
+                            +1 (555) 123-4567
+                        </a>
+<a class="flex items-center gap-3 text-on-surface hover:text-primary transition-colors" href="mailto:eleanor@example.com">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+</div>
+                            eleanor@example.com
+                        </a>
+</div>
+</section>
+<!-- Internal Notes Card -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_24px_24px_rgba(89,92,94,0.05)] border border-surface-variant bg-surface/30">
+<h3 class="font-title-md text-title-md text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary">checkroom</span> Detalle del Servicio</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4 italic">
+                        Sin notas adicionales del personal por el momento.
+                    </p>
+<button class="w-full text-primary font-button text-button hover:bg-surface-container py-2 rounded transition-colors text-center">
+                        + Añadir Nota
+                    </button>
+</section>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl border-t border-surface-variant dark:border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface shadow-[0px_-4px_24px_rgba(89,92,94,0.05)] md:hidden"><div class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe"><a class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-2 rounded-lg" href="#"><span class="material-symbols-outlined mb-1">dashboard</span><span class="font-label-md text-label-md">Panel</span></a><a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1" href="#"><span class="material-symbols-outlined mb-1 icon-filled">receipt_long</span><span class="font-label-md text-label-md font-bold">Pedidos</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-2 rounded-lg" href="#"><span class="material-symbols-outlined mb-1">group</span><span class="font-label-md text-label-md">Clientes</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-2 rounded-lg" href="#"><span class="material-symbols-outlined mb-1">settings_suggest</span><span class="font-label-md text-label-md">Servicios</span></a></div></nav>
+</body></html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Detalle de Pedido #ORD-5022</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "success-blue": "#0070eb",
+                      "inverse-primary": "#adc6ff",
+                      "tertiary": "#414546",
+                      "surface-container": "#e7eeff",
+                      "primary-fixed": "#d8e2ff",
+                      "on-tertiary-container": "#d2d4d7",
+                      "on-surface": "#111c2d",
+                      "surface-tint": "#095bbf",
+                      "surface-container-low": "#f0f3ff",
+                      "surface-container-high": "#dee8ff",
+                      "on-secondary-fixed-variant": "#3c4853",
+                      "background": "#f9f9ff",
+                      "on-primary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#c3d4ff",
+                      "surface-bright": "#f9f9ff",
+                      "on-tertiary-fixed": "#191c1e",
+                      "tertiary-fixed": "#e1e3e5",
+                      "secondary": "#54606b",
+                      "on-secondary-container": "#5a6671",
+                      "surface": "#f9f9ff",
+                      "primary-container": "#0058bc",
+                      "tertiary-container": "#595c5e",
+                      "on-secondary-fixed": "#111d26",
+                      "error-container": "#ffdad6",
+                      "inverse-on-surface": "#ecf1ff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#bbc8d5",
+                      "surface-variant": "#d8e3fb",
+                      "primary": "#00418f",
+                      "on-primary-fixed": "#001a41",
+                      "surface-blue-tint": "#e7eeff",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#c4c7c9",
+                      "surface-dim": "#cfdaf2",
+                      "surface-container-highest": "#d8e3fb",
+                      "on-primary-fixed-variant": "#004494",
+                      "on-surface-variant": "#424753",
+                      "on-background": "#111c2d",
+                      "primary-fixed-dim": "#adc6ff",
+                      "secondary-container": "#d7e4f1",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#444749",
+                      "secondary-fixed": "#d7e4f1",
+                      "on-error": "#ffffff",
+                      "outline": "#727784",
+                      "on-tertiary": "#ffffff",
+                      "error-red": "#ba1a1a",
+                      "outline-variant": "#c2c6d5",
+                      "inverse-surface": "#263143"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-margin": "1.25rem",
+                      "stack-gap": "1rem",
+                      "section-padding": "2rem",
+                      "inline-gap": "0.75rem",
+                      "hero-padding": "2.5rem"
+              },
+              "fontFamily": {
+                      "display-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "button": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "title-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "button": ["16px", {"lineHeight": "20px", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c2c6d5; border-radius: 4px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased pb-48">
+<!-- Top App Bar (Task-Focused Detail View) -->
+<header class="sticky top-0 z-50 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/30 px-container-margin md:px-section-padding h-16 flex items-center justify-between shadow-[0_4px_24px_rgba(89,92,94,0.02)]">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low active:scale-95 transition-all text-on-surface">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<div class="flex items-center gap-3">
+<h1 class="font-title-md text-title-md text-on-surface truncate max-w-[200px] md:max-w-none">Detalle de Pedido #ORD-5022</h1>
+<span class="bg-primary-fixed text-primary font-label-md text-label-md px-2.5 py-1 rounded-full flex items-center gap-1 border border-primary/10">
+<span class="w-1.5 h-1.5 rounded-full bg-primary block"></span>
+                    Listo
+                </span>
+</div>
+</div>
+</header>
+<!-- Main Content Container -->
+<main class="max-w-4xl mx-auto w-full p-container-margin md:p-section-padding flex flex-col gap-stack-gap md:gap-8">
+<!-- Client Info Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-[0_8px_24px_rgba(89,92,94,0.04)] p-4 md:p-6 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<img class="w-14 h-14 rounded-full object-cover border border-outline-variant/30" data-alt="A professional headshot of a young modern Mexican woman with a friendly smile, wearing smart casual business attire, well-lit in a bright contemporary office setting, evoking a sense of trust and professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmi9tHgDb2qkVvdkTSeye8cpwWMxuGKm465vnGtjX2jk2l_WaygkQVtrF03oEQyqVDdOBgN2Cikill6Agec4bG0UK_P_kTo7UjAb3Y_QT9gQBBRSfhCL2e8otBudgomGJxiBZzDvKlYv-DAksdtfxn-hRpvKQF0No3Ch3qcopRYVAL1bFhfEuTl2wxiXE8iNtU4YJgkMr8DopRDy38RU261GyBzFUT0gYrvcXKQbrAd_nPy79Qb5y0">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface">Laura G.</h2>
+<div class="flex items-center gap-3 mt-1">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">call</span>
+                            55 1234 5678
+                        </span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-surface-container-low text-primary flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined icon-filled">mail</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined icon-filled">call</span>
+</button>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-gap md:gap-6">
+<!-- Logistics & Delivery Section -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-[0_8px_24px_rgba(89,92,94,0.04)] overflow-hidden flex flex-col">
+<div class="p-4 md:p-6 pb-0">
+<h2 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                        Dirección de Recolección
+                    </h2>
+</div>
+<!-- Map Placeholder -->
+<div class="px-4 md:px-6">
+<div class="w-full h-32 md:h-40 rounded-lg bg-cover bg-center border border-outline-variant/20 mb-4" data-alt="A clean, minimalist 2D digital map view centered on a residential neighborhood in a modern city. The map features soft grey and blue tones, matching a crisp corporate UI aesthetic, with subtle stylized roads and a prominent blue location pin marking a specific building." data-location="Monterrey, Mexico" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuALozMEhKNc_9neGUpyJn_Br6fEUZBzXSODxOHaJ85zsgVgI-5yolBjoKFu9BCEtL2RmhcCr1QYtAUAWCFK4Df46c9gV37fgusBjsAvi7ckGOX5dnwY5SuZDleWsY74sVo_6K4tVy3uwSk7uMUWKWXnn5fEuv5kGEfufGUwnaIGCaKR6JfmJ1VI89qzWFJJSRP8vfUCxW2jOajfp636QMVcEmbkj9ZeIs5h8zPaqcRgpiEne6i1-iwE')"></div>
+</div>
+<div class="px-4 md:px-6 flex flex-col gap-3 pb-4">
+<p class="font-body-md text-body-md text-on-surface-variant flex items-start gap-2">
+                        Av. Revolución 1234, Col. Centro<br>Monterrey, N.L. 64000
+                    </p>
+<div class="bg-surface-container text-on-surface-variant p-3 rounded-lg border border-outline-variant/20 flex gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary shrink-0 mt-0.5">info</span>
+<p class="font-body-md text-body-md">Instrucciones: Tocar timbre fuerte</p>
+</div>
+</div>
+<hr class="border-t border-outline-variant/30 mx-4 md:mx-6">
+<!-- Delivery Person -->
+<div class="p-4 md:p-6 flex items-center gap-4 bg-surface-bright/50">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined icon-filled">local_shipping</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-0.5">Repartidor Asignado</p>
+<p class="font-title-md text-title-md text-on-surface">Juan Pérez</p>
+</div>
+</div>
+</section>
+<div class="flex flex-col gap-stack-gap md:gap-6">
+<!-- Service Details -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-[0_8px_24px_rgba(89,92,94,0.04)] p-4 md:p-6">
+<h2 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">dry_cleaning</span>
+                        Detalle del Servicio
+                    </h2>
+<div class="flex flex-col gap-4">
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors border border-transparent hover:border-outline-variant/20">
+<div class="w-12 h-12 rounded-lg bg-surface-variant flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined">bedroom_parent</span>
+</div>
+<div class="flex-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface">1x King Size Duvet</h3>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Servicio: Edredones</p>
+<p class="font-label-md text-label-md text-secondary mt-0.5 bg-secondary-container inline-block px-2 py-0.5 rounded-md">Special Garment Fold</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Summary -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-[0_8px_24px_rgba(89,92,94,0.04)] p-4 md:p-6">
+<h2 class="font-title-md text-title-md text-on-surface mb-4">Resumen de Pago</h2>
+<div class="flex justify-between items-center py-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Subtotal</span>
+<span class="font-body-md text-body-md text-on-surface">$25.86</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-body-md text-body-md text-on-surface-variant">IVA (16%)</span>
+<span class="font-body-md text-body-md text-on-surface">$4.14</span>
+</div>
+<hr class="border-t border-outline-variant/30 my-3">
+<div class="flex justify-between items-center py-2">
+<span class="font-title-md text-title-md text-on-surface">Total</span>
+<span class="font-headline-lg text-headline-lg text-primary">$30.00 <span class="text-body-md text-on-surface-variant font-normal">MXN</span></span>
+</div>
+<div class="mt-4 bg-success-blue/10 text-success-blue font-label-md text-label-md p-3 rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined icon-filled text-[18px]">check_circle</span>
+                        Pago completado vía Tarjeta terminada en 4242
+                    </div>
+</section>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Actions -->
+<div class="fixed left-0 w-full bg-surface-container-lowest border-t border-outline-variant/30 shadow-[0_-8px_32px_rgba(89,92,94,0.08)] p-container-margin md:px-section-padding py-4 z-40 flex flex-col sm:flex-row gap-3 justify-end items-center bottom-16">
+<button class="w-full sm:w-auto px-6 h-14 rounded-full border border-outline text-primary font-button text-button flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors active:scale-95">
+<span class="material-symbols-outlined">print</span>
+            Imprimir Ticket
+        </button>
+<button class="w-full sm:w-auto px-8 h-14 rounded-full bg-primary text-on-primary font-button text-button flex items-center justify-center gap-2 hover:bg-on-primary-fixed-variant transition-colors shadow-sm active:scale-95">
+<span class="material-symbols-outlined">task_alt</span>
+            Marcar como Entregado
+        </button>
+</div>
+
+
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant/30 flex items-center justify-around h-16 pb-safe z-50">
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span class="font-label-md text-[10px]">Panel</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-primary active:scale-95 transition-transform" href="#">
+<div class="bg-secondary-container px-4 py-1 rounded-full mb-1">
+<span class="material-symbols-outlined icon-filled" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+</div>
+<span class="font-label-md text-[10px] font-bold">Pedidos</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">group</span>
+<span class="font-label-md text-[10px]">Clientes</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-md text-[10px]">Servicios</span>
+</a>
+</nav></body></html>
