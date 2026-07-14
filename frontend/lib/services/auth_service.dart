@@ -115,6 +115,7 @@ class AuthService {
   /// - Si el backend responde 401 (contraseña actual incorrecta), lanzar
   ///   [AuthException] con un mensaje para mostrar en pantalla.
   Future<void> cambiarContrasena({
+    required String correo,
     required String passwordActual,
     required String passwordNueva,
   }) async {
@@ -122,6 +123,7 @@ class AuthService {
       Uri.parse('$_baseUrl/usuarios/cambiar-password'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
+        'correo': correo,
         'passwordActual': passwordActual,
         'passwordNueva': passwordNueva,
       }),
@@ -150,5 +152,21 @@ class AuthService {
     if (response.statusCode != 200) {
       throw AuthException('No se pudo enviar el correo, intenta de nuevo');
     }
+  }
+
+  Future<List<Usuario>> listarClientes() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/usuarios?rol=cliente'),
+    );
+
+    if (response.statusCode != 200) {
+      throw AuthException('No se pudieron cargar los clientes');
+    }
+
+    final decoded = jsonDecode(response.body);
+    if (decoded is List) {
+      return decoded.map((item) => Usuario.fromJson(item)).toList();
+    }
+    return [];
   }
 }

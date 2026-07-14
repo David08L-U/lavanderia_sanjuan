@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../utils/app_colors.dart';
 import '../../cliente/notificaciones/notificaciones_screen.dart';
+import '../administrar_clientes_screen.dart';
+import '../configurar_servicios_screen.dart';
+import '../monitorear_pedidos_screen.dart';
 
 class HomeAdministradorScreen extends StatelessWidget {
   const HomeAdministradorScreen({super.key});
@@ -116,25 +119,34 @@ class HomeAdministradorScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              const _ActionTile(
+              _ActionTile(
                 title: 'Monitorear pedidos',
                 subtitle:
                     'Visualiza y actualiza estados en cuanto entren nuevas órdenes',
                 icon: Icons.assignment_turned_in_outlined,
                 tone: _ActionTone.primary,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MonitorearPedidosScreen()),
+                ),
               ),
-              const _ActionTile(
+              _ActionTile(
                 title: 'Configurar servicios',
                 subtitle:
                     'Define precios, tiempos y reglas antes de recibir demanda',
                 icon: Icons.price_change_outlined,
                 tone: _ActionTone.neutral,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ConfigurarServiciosScreen()),
+                ),
               ),
-              const _ActionTile(
+              _ActionTile(
                 title: 'Administrar clientes',
                 subtitle: 'Consulta nuevos registros y su historial de actividad',
                 icon: Icons.people_alt_outlined,
                 tone: _ActionTone.neutral,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AdministrarClientesScreen()),
+                ),
               ),
             ],
           ),
@@ -207,67 +219,72 @@ class _ActionTile extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.tone,
+    required this.onTap,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
   final _ActionTone tone;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final isPrimary = tone == _ActionTone.primary;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isPrimary
-            ? AppColors.primaryContainer
-            : AppColors.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isPrimary ? AppColors.primary : AppColors.secondaryContainer,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isPrimary
+              ? AppColors.primaryContainer
+              : AppColors.surfaceContainerLowest,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isPrimary ? AppColors.primary : AppColors.secondaryContainer,
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: isPrimary
-                  ? AppColors.surfaceContainerLowest
-                  : AppColors.primaryContainer,
-              shape: BoxShape.circle,
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: isPrimary
+                    ? AppColors.surfaceContainerLowest
+                    : AppColors.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: AppColors.primary),
             ),
-            child: Icon(icon, color: AppColors.primary),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.inter(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.onSurface,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.inter(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.onSurface,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    color: AppColors.secondary,
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      color: AppColors.secondary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.onSurfaceVariant),
-        ],
+            const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.onSurfaceVariant),
+          ],
+        ),
       ),
     );
   }

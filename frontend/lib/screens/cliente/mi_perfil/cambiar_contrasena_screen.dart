@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/auth_provider.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/app_colors.dart';
 
@@ -60,9 +62,11 @@ class _CambiarContrasenaScreenState extends State<CambiarContrasenaScreen> {
       return;
     }
 
+    final correo = context.read<AuthProvider>().currentUser?.correo ?? '';
     setState(() => _isLoading = true);
     try {
       await _authService.cambiarContrasena(
+        correo: correo,
         passwordActual: _actualController.text,
         passwordNueva: _nuevaController.text,
       );

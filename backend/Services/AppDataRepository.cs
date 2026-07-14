@@ -22,6 +22,7 @@ public class AppDataRepository
         _firebaseService = firebaseService;
         _logger = logger;
         _db = CreateFirestoreDb();
+        SeedData();
     }
 
     public bool IsUsingFirestore => _db is not null;
@@ -170,6 +171,27 @@ public class AppDataRepository
 
             _usuarios[index] = usuario;
             return usuario;
+        }
+    }
+
+    public async Task<List<UsuarioDto>> ListarUsuariosAsync()
+    {
+        if (_db is not null)
+        {
+            var snapshot = await _db.Collection("usuarios").GetSnapshotAsync();
+            return snapshot.Documents.Select(MapUsuario).ToList();
+        }
+
+        lock (_sync)
+        {
+            return _usuarios.Select(u => new UsuarioDto
+            {
+                Id = u.Id,
+                Nombre = u.Nombre,
+                Correo = u.Correo,
+                Telefono = u.Telefono,
+                Rol = u.Rol
+            }).ToList();
         }
     }
 
@@ -413,6 +435,114 @@ public class AppDataRepository
 
             _pedidos[index] = ClonePedido(pedido);
             return ClonePedido(pedido);
+        }
+    }
+
+    private void SeedData()
+    {
+        lock (_sync)
+        {
+            var adminId = "admin-id-12345";
+            var clienteId = "cliente-id-12345";
+
+            _usuarios.Add(new UsuarioDto
+            {
+                Id = adminId,
+                Nombre = "Administrador FreshClean",
+                Correo = "admin@freshclean.com",
+                Telefono = "9998887777",
+                Password = "Admin123!",
+                Rol = "administrador"
+            });
+
+            _usuarios.Add(new UsuarioDto
+            {
+                Id = clienteId,
+                Nombre = "Abraham San Juan",
+                Correo = "cliente@freshclean.com",
+                Telefono = "1234567890",
+                Password = "Cliente123!",
+                Rol = "cliente"
+            });
+
+            _direcciones.Add(new DireccionDto
+            {
+                Id = "dir-1",
+                Titulo = "Casa",
+                Lineas = new List<string> { "Av. Linda Vista #402", "Col. Linda Vista", "San Juan" },
+                Telefono = "1234567890",
+                Nota = "Portón verde, timbre al lado de la reja",
+                Predeterminada = true
+            });
+
+            _direcciones.Add(new DireccionDto
+            {
+                Id = "dir-2",
+                Titulo = "Trabajo",
+                Lineas = new List<string> { "Paseo de la Reforma #115", "Oficinas Center, Piso 4", "San Juan" },
+                Telefono = "0987654321",
+                Nota = "Dejar en recepción",
+                Predeterminada = false
+            });
+
+            _metodosPago.Add(new MetodoPagoDto
+            {
+                Id = "met-1",
+                Marca = "visa",
+                UltimosDigitos = "4242",
+                Expira = "12/28",
+                Principal = true
+            });
+
+            _metodosPago.Add(new MetodoPagoDto
+            {
+                Id = "met-2",
+                Marca = "mastercard",
+                UltimosDigitos = "5555",
+                Expira = "08/29",
+                Principal = false
+            });
+
+            // Seed some orders
+            _pedidos.Add(new PedidoDto
+            {
+                Id = "ped-1",
+                ClienteId = clienteId,
+                ClienteNombre = "Abraham San Juan",
+                Servicio = "Lavado por Kilo (Estándar)",
+                Fecha = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd"),
+                FranjaHoraria = "10:00 AM - 12:00 PM",
+                Direccion = "Av. Linda Vista #402, Col. Linda Vista",
+                Instrucciones = "Cuidado con las prendas delicadas",
+                Total = 150.00m,
+                Estado = "Entregado",
+                HistorialEstados = new List<EstadoHistorial>
+                {
+                    new() { Estado = "En proceso", Fecha = DateTime.UtcNow.AddDays(-2).ToString("O"), Observaciones = "Pedido creado" },
+                    new() { Estado = "Recolectado", Fecha = DateTime.UtcNow.AddDays(-1.9).ToString("O"), Observaciones = "Prendas recolectadas" },
+                    new() { Estado = "En lavado", Fecha = DateTime.UtcNow.AddDays(-1.5).ToString("O"), Observaciones = "En lavadora" },
+                    new() { Estado = "Listo para entrega", Fecha = DateTime.UtcNow.AddDays(-1.1).ToString("O"), Observaciones = "Empacado" },
+                    new() { Estado = "Entregado", Fecha = DateTime.UtcNow.AddDays(-1.0).ToString("O"), Observaciones = "Entregado en domicilio" }
+                }
+            });
+
+            _pedidos.Add(new PedidoDto
+            {
+                Id = "ped-2",
+                ClienteId = clienteId,
+                ClienteNombre = "Abraham San Juan",
+                Servicio = "Tintorería (Traje 2 piezas)",
+                Fecha = DateTime.Now.ToString("yyyy-MM-dd"),
+                FranjaHoraria = "04:00 PM - 06:00 PM",
+                Direccion = "Av. Linda Vista #402, Col. Linda Vista",
+                Instrucciones = "Planchar con raya marcada",
+                Total = 280.00m,
+                Estado = "En proceso",
+                HistorialEstados = new List<EstadoHistorial>
+                {
+                    new() { Estado = "En proceso", Fecha = DateTime.UtcNow.ToString("O"), Observaciones = "Pedido recibido" }
+                }
+            });
         }
     }
 

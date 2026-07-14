@@ -14,6 +14,17 @@ public class UsuariosController : ControllerBase
         _repository = repository;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Listar([FromQuery] string? rol)
+    {
+        var usuarios = await _repository.ListarUsuariosAsync();
+        if (!string.IsNullOrWhiteSpace(rol))
+        {
+            usuarios = usuarios.Where(u => string.Equals(u.Rol, rol, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        return Ok(usuarios);
+    }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
     {
