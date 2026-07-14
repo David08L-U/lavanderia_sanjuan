@@ -2,44 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/servicio_lavanderia.dart';
+import '../../../models/pedido.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../services/pedido_service.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
+import '../agendar_recoleccion/agendar_recoleccion_screen.dart';
 import '../home_cliente/home_cliente_screen.dart';
 import '../mi_perfil/mi_perfil_screen.dart';
 import '../notificaciones/notificaciones_screen.dart';
 import '../pedido/pedido_screen.dart';
 import '../servicios/servicios_screen.dart';
 import 'detalle_factura_screen.dart';
-import 'repetir_pedido_screen.dart';
-
-enum _EstadoPedido { enProceso, entregado }
-
-class _Pedido {
-  const _Pedido({
-    required this.numero,
-    required this.servicio,
-    required this.fecha,
-    required this.monto,
-    required this.montoNumerico,
-    required this.estado,
-    required this.tipoServicio,
-    this.pesoEstimado,
-    this.progreso = 1.0,
-  });
-
-  final String numero;
-  final String servicio;
-  final String fecha;
-  final String monto;
-  final double montoNumerico;
-  final _EstadoPedido estado;
-  final TipoServicio tipoServicio;
-  final String? pesoEstimado;
-  final double progreso;
-}
 
 class MisPedidosScreen extends StatefulWidget {
   const MisPedidosScreen({super.key});
@@ -52,7 +26,7 @@ class _MisPedidosScreenState extends State<MisPedidosScreen> {
   final _pedidoService = PedidoService();
   bool _isLoading = true;
   String? _error;
-  final List<_Pedido> _pedidos = [];
+  final List<Pedido> _pedidos = [];
 
   @override
   void initState() {
@@ -70,22 +44,9 @@ class _MisPedidosScreenState extends State<MisPedidosScreen> {
     try {
       final data = await _pedidoService.listarPedidos(clienteId: auth.currentUser?.id);
       setState(() {
-        _pedidos.clear();
-        _pedidos.addAll(
-          data.map((item) => _Pedido(
-            numero: '#FC-${item['id']}',
-            servicio: item['servicio']?.toString() ?? 'Servicio',
-            fecha: item['fecha']?.toString() ?? 'Sin fecha',
-            monto: '\$${item['total']?.toString() ?? '0'} MXN',
-            montoNumerico: double.tryParse(item['total']?.toString() ?? '0') ?? 0,
-            estado: item['estado']?.toString() == 'Entregado'
-                ? _EstadoPedido.entregado
-                : _EstadoPedido.enProceso,
-            tipoServicio: TipoServicio.lavadoYPlegado,
-            pesoEstimado: item['instrucciones']?.toString(),
-            progreso: item['estado']?.toString() == 'Entregado' ? 1.0 : 0.45,
-          )),
-        );
+        _pedidos
+          ..clear()
+          ..addAll(data.map(Pedido.fromJson));
       });
     } catch (_) {
       setState(() => _error = 'No se pudieron cargar los pedidos');
@@ -115,32 +76,21 @@ class _MisPedidosScreenState extends State<MisPedidosScreen> {
     }
   }
 
-  void _repetirPedido(BuildContext context, _Pedido pedido) {
+  void _verDetalles(BuildContext context, Pedido pedido) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => RepetirPedidoScreen(
-          nombreServicio: pedido.servicio,
-          fechaAnterior: pedido.fecha,
-          precioBase: pedido.montoNumerico,
-          tipoServicio: pedido.tipoServicio,
-          pesoEstimado: pedido.pesoEstimado,
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => PedidoScreen(pedido: pedido)),
     );
   }
 
-  void _verFactura(BuildContext context, _Pedido pedido) {
+  void _repetirPedido(BuildContext context, Pedido pedido) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => DetalleFacturaScreen(
-          numeroPedido: pedido.numero,
-          servicio: pedido.servicio,
-          fechaEntrega: pedido.fecha,
-          montoServicio: pedido.montoNumerico,
-          tipoServicio: pedido.tipoServicio,
-          pesoEstimado: pedido.pesoEstimado,
-        ),
-      ),
+      AgendarRecoleccionScreen.route(servicioInicial: pedido.tipoServicio),
+    );
+  }
+
+  void _verFactura(BuildContext context, Pedido pedido) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => DetalleFacturaScreen(pedido: pedido)),
     );
   }
 
@@ -207,9 +157,7 @@ class _MisPedidosScreenState extends State<MisPedidosScreen> {
                   for (var i = 0; i < _pedidos.length; i++) ...[
                     _PedidoCard(
                       pedido: _pedidos[i],
-                      onVerDetalles: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const PedidoScreen()),
-                      ),
+                      onVerDetalles: () => _verDetalles(context, _pedidos[i]),
                       onRepetirPedido: () => _repetirPedido(context, _pedidos[i]),
                       onFactura: () => _verFactura(context, _pedidos[i]),
                     ),
@@ -236,14 +184,15 @@ class _PedidoCard extends StatelessWidget {
     required this.onFactura,
   });
 
-  final _Pedido pedido;
+  final Pedido pedido;
   final VoidCallback onVerDetalles;
   final VoidCallback onRepetirPedido;
   final VoidCallback onFactura;
 
   @override
   Widget build(BuildContext context) {
-    final enProceso = pedido.estado == _EstadoPedido.enProceso;
+    final enProceso = pedido.estado == EstadoPedido.enProceso;
+    final cancelado = pedido.estado == EstadoPedido.cancelado;
 
     return Container(
       width: double.infinity,
@@ -281,32 +230,7 @@ class _PedidoCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: enProceso ? AppColors.primaryContainer : AppColors.surfaceContainer,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      enProceso ? Icons.local_laundry_service_rounded : Icons.check_circle_rounded,
-                      size: 14,
-                      color: enProceso ? Colors.white : AppColors.primary,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      enProceso ? 'En proceso' : 'Entregado',
-                      style: GoogleFonts.inter(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: enProceso ? Colors.white : AppColors.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _EstadoBadge(estado: pedido.estado),
             ],
           ),
           const SizedBox(height: 12),
@@ -315,14 +239,14 @@ class _PedidoCard extends StatelessWidget {
               const Icon(Icons.calendar_today_rounded, size: 15, color: AppColors.primary),
               const SizedBox(width: 4),
               Text(
-                pedido.fecha,
+                pedido.fechaFormateada,
                 style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant),
               ),
               const SizedBox(width: 16),
               const Icon(Icons.payments_rounded, size: 15, color: AppColors.primary),
               const SizedBox(width: 4),
               Text(
-                pedido.monto,
+                '\$${pedido.total.toStringAsFixed(2)} MXN',
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -331,18 +255,6 @@ class _PedidoCard extends StatelessWidget {
               ),
             ],
           ),
-          if (enProceso) ...[
-            const SizedBox(height: 14),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: LinearProgressIndicator(
-                value: pedido.progreso,
-                minHeight: 6,
-                backgroundColor: AppColors.surfaceContainerLow,
-                valueColor: const AlwaysStoppedAnimation(AppColors.primary),
-              ),
-            ),
-          ],
           const SizedBox(height: 16),
           if (enProceso)
             SizedBox(
@@ -359,6 +271,24 @@ class _PedidoCard extends StatelessWidget {
                 child: Text(
                   'Ver Detalles',
                   style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+              ),
+            )
+          else if (cancelado)
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: onRepetirPedido,
+                icon: const Icon(Icons.replay_rounded, size: 18),
+                label: Text(
+                  'Volver a Pedir',
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(48),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               ),
             )
@@ -399,6 +329,42 @@ class _PedidoCard extends StatelessWidget {
                 ),
               ],
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EstadoBadge extends StatelessWidget {
+  const _EstadoBadge({required this.estado});
+
+  final EstadoPedido estado;
+
+  @override
+  Widget build(BuildContext context) {
+    final (color, icon, texto) = switch (estado) {
+      EstadoPedido.enProceso => (AppColors.primaryContainer, Icons.local_laundry_service_rounded, 'En proceso'),
+      EstadoPedido.entregado => (AppColors.surfaceContainer, Icons.check_circle_rounded, 'Entregado'),
+      EstadoPedido.cancelado => (AppColors.errorContainer, Icons.cancel_rounded, 'Cancelado'),
+    };
+    final iconColor = estado == EstadoPedido.enProceso
+        ? Colors.white
+        : estado == EstadoPedido.cancelado
+        ? AppColors.onErrorContainer
+        : AppColors.primary;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: iconColor),
+          const SizedBox(width: 4),
+          Text(
+            texto,
+            style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: iconColor),
+          ),
         ],
       ),
     );

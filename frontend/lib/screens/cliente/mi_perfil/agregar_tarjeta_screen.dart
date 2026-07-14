@@ -88,10 +88,28 @@ class _AgregarTarjetaScreenState extends State<AgregarTarjetaScreen> {
     super.dispose();
   }
 
+  /// Valida que el MM/AA tenga un mes real (01-12) y que la tarjeta no
+  /// esté ya vencida respecto a la fecha actual.
+  bool get _expiracionValida {
+    final texto = _expiracionController.text;
+    if (texto.length != 5) return false;
+
+    final partes = texto.split('/');
+    if (partes.length != 2) return false;
+
+    final mes = int.tryParse(partes[0]);
+    final anio = int.tryParse(partes[1]);
+    if (mes == null || anio == null) return false;
+    if (mes < 1 || mes > 12) return false;
+
+    final finDeVigencia = DateTime(2000 + anio, mes + 1);
+    return finDeVigencia.isAfter(DateTime.now());
+  }
+
   bool get _formularioValido =>
       _nombreController.text.trim().isNotEmpty &&
       _numeroController.text.replaceAll(' ', '').length == 16 &&
-      _expiracionController.text.length == 5 &&
+      _expiracionValida &&
       _cvvController.text.length >= 3;
 
   Future<void> _guardarTarjeta() async {
@@ -169,13 +187,26 @@ class _AgregarTarjetaScreenState extends State<AgregarTarjetaScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: _CampoFormulario(
-                      etiqueta: 'Fecha de Expiración',
-                      icon: Icons.calendar_month_rounded,
-                      controller: _expiracionController,
-                      hint: 'MM/AA',
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [_ExpiracionFormatter()],
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _CampoFormulario(
+                          etiqueta: 'Fecha de Expiración',
+                          icon: Icons.calendar_month_rounded,
+                          controller: _expiracionController,
+                          hint: 'MM/AA',
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [_ExpiracionFormatter()],
+                        ),
+                        if (_expiracionController.text.length == 5 && !_expiracionValida)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6, left: 4),
+                            child: Text(
+                              'Fecha inválida o vencida',
+                              style: GoogleFonts.inter(fontSize: 12, color: AppColors.error),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 12),

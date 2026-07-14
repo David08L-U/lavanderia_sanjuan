@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../models/usuario.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/login_provider.dart';
+import '../../../providers/preferencias_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/labeled_text_field.dart';
 import '../../admin/home_administrador/home_administrador_screen.dart';
@@ -39,6 +40,9 @@ class LoginScreen extends StatelessWidget {
       );
       return;
     }
+
+    await context.read<PreferenciasProvider>().cargarParaUsuario(auth.currentUser!.id);
+    if (!context.mounted) return;
 
     final destino = auth.currentUser!.rol == UserRole.administrador
         ? const HomeAdministradorScreen()
