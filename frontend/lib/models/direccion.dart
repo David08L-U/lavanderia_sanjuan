@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Direccion {
   const Direccion({
+    this.id,
     required this.icon,
     required this.titulo,
     required this.lineas,
@@ -10,6 +11,9 @@ class Direccion {
     this.predeterminada = false,
   });
 
+  /// ID real asignado por el backend. Es null para una dirección armada
+  /// localmente que todavía no se guardó (o no se pudo guardar) en la API.
+  final String? id;
   final IconData icon;
   final String titulo;
   final List<String> lineas;
@@ -18,6 +22,7 @@ class Direccion {
   final bool predeterminada;
 
   factory Direccion.fromJson(Map<String, dynamic> json) => Direccion(
+    id: json['id']?.toString(),
     icon: iconoParaEtiqueta(json['titulo']?.toString() ?? ''),
     titulo: json['titulo']?.toString() ?? 'Dirección',
     lineas: List<String>.from(json['lineas'] ?? []),
@@ -35,6 +40,7 @@ class Direccion {
   };
 
   Direccion copyWith({bool? predeterminada}) => Direccion(
+    id: id,
     icon: icon,
     titulo: titulo,
     lineas: lineas,

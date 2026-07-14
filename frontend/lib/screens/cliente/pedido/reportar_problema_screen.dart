@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../models/pedido.dart';
 import '../../../services/pedido_ops_service.dart';
 import '../../../utils/app_colors.dart';
-import 'pedido_screen.dart';
 
 class _TipoProblema {
   const _TipoProblema({required this.icon, required this.etiqueta});
@@ -21,7 +21,9 @@ const _tiposProblema = [
 ];
 
 class ReportarProblemaScreen extends StatefulWidget {
-  const ReportarProblemaScreen({super.key});
+  const ReportarProblemaScreen({super.key, required this.pedido});
+
+  final Pedido pedido;
 
   @override
   State<ReportarProblemaScreen> createState() => _ReportarProblemaScreenState();
@@ -49,7 +51,7 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
     setState(() => _isLoading = true);
     try {
       await _pedidoOpsService.reportarProblema(
-        '1',
+        widget.pedido.id,
         tipo: _tipoSeleccionado ?? 'Otro problema',
         detalles: _detallesController.text.trim(),
       );
@@ -100,9 +102,8 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _OrdenActualCard(
-                onVerDetalles: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PedidoScreen()),
-                ),
+                numeroPedido: widget.pedido.numero,
+                onVerDetalles: () => Navigator.of(context).maybePop(),
               ),
               const SizedBox(height: 32),
               Text(
@@ -282,8 +283,9 @@ class _ReportarProblemaScreenState extends State<ReportarProblemaScreen> {
 }
 
 class _OrdenActualCard extends StatelessWidget {
-  const _OrdenActualCard({required this.onVerDetalles});
+  const _OrdenActualCard({required this.numeroPedido, required this.onVerDetalles});
 
+  final String numeroPedido;
   final VoidCallback onVerDetalles;
 
   @override
@@ -321,7 +323,7 @@ class _OrdenActualCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '#FC-8921',
+                  numeroPedido,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

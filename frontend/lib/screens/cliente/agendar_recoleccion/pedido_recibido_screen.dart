@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../models/pedido.dart';
 import '../../../utils/app_colors.dart';
 import '../home_cliente/home_cliente_screen.dart';
 import '../notificaciones/notificaciones_screen.dart';
@@ -9,22 +10,16 @@ import '../pedido/pedido_screen.dart';
 class PedidoRecibidoScreen extends StatelessWidget {
   const PedidoRecibidoScreen({
     super.key,
-    required this.servicioNombre,
+    required this.pedido,
     required this.direccionTitulo,
     required this.direccionLinea,
-    required this.fechaTexto,
     required this.horarioTexto,
-    required this.total,
   });
 
-  final String servicioNombre;
+  final Pedido pedido;
   final String direccionTitulo;
   final String direccionLinea;
-  final String fechaTexto;
   final String horarioTexto;
-  final double total;
-
-  String get _idPedido => '#FC-${(servicioNombre.hashCode.abs() % 9000) + 1000}';
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +78,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
                   style: GoogleFonts.inter(fontSize: 16, color: AppColors.onSurfaceVariant),
                   children: [
                     TextSpan(
-                      text: _idPedido,
+                      text: pedido.numero,
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w600,
                         color: AppColors.onSurface,
@@ -123,7 +118,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
                     _ResumenItem(
                       icon: Icons.local_laundry_service_rounded,
                       label: 'SERVICIO',
-                      valor: servicioNombre,
+                      valor: pedido.servicio,
                     ),
                     const SizedBox(height: 16),
                     _ResumenItem(
@@ -136,7 +131,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
                     _ResumenItem(
                       icon: Icons.schedule_rounded,
                       label: 'FECHA Y HORA',
-                      valor: fechaTexto,
+                      valor: pedido.fechaFormateada,
                       subvalor: horarioTexto,
                     ),
                     const SizedBox(height: 16),
@@ -154,7 +149,7 @@ class PedidoRecibidoScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '\$${total.toStringAsFixed(2)} MXN',
+                          '\$${pedido.total.toStringAsFixed(2)} MXN',
                           style: GoogleFonts.inter(
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
@@ -163,13 +158,18 @@ class PedidoRecibidoScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Se confirma al pesar/verificar tu pedido en la recolección.',
+                      style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
+                    ),
                   ],
                 ),
               ),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const PedidoScreen()),
+                  MaterialPageRoute(builder: (_) => PedidoScreen(pedido: pedido)),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

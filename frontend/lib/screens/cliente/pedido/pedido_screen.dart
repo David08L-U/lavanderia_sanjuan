@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../models/pedido.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../home_cliente/home_cliente_screen.dart';
@@ -14,48 +15,39 @@ import 'seguimiento_en_vivo_screen.dart';
 enum _PasoEstado { completado, actual, pendiente }
 
 class _PasoPedido {
-  const _PasoPedido({
-    required this.titulo,
-    required this.descripcion,
-    required this.estado,
-    this.hora,
-  });
+  const _PasoPedido({required this.titulo, required this.descripcion, required this.estado});
 
   final String titulo;
   final String descripcion;
   final _PasoEstado estado;
-  final String? hora;
 }
 
-const _pasos = [
-  _PasoPedido(
-    titulo: 'Recolectado',
-    hora: '09:00 AM',
-    descripcion: 'El repartidor recogió tu ropa.',
+List<_PasoPedido> _pasosPara(Pedido pedido) {
+  final confirmado = _PasoPedido(
+    titulo: 'Pedido Confirmado',
+    descripcion: 'Programado para ${pedido.franjaHoraria.isEmpty ? pedido.fechaFormateada : '${pedido.franjaHoraria}, ${pedido.fechaFormateada}'}.',
     estado: _PasoEstado.completado,
-  ),
-  _PasoPedido(
-    titulo: 'En Planta',
-    hora: '09:45 AM',
-    descripcion: 'Ropa clasificada e inspeccionada.',
-    estado: _PasoEstado.completado,
-  ),
-  _PasoPedido(
-    titulo: 'Lavando',
-    descripcion: 'Limpieza profunda en proceso.',
-    estado: _PasoEstado.actual,
-  ),
-  _PasoPedido(
-    titulo: 'Secado y Doblado',
-    descripcion: 'Preparando para entrega.',
-    estado: _PasoEstado.pendiente,
-  ),
-  _PasoPedido(titulo: 'En camino', descripcion: '', estado: _PasoEstado.pendiente),
-  _PasoPedido(titulo: 'Entregado', descripcion: '', estado: _PasoEstado.pendiente),
-];
+  );
+
+  final enProceso = _PasoPedido(
+    titulo: 'En Proceso',
+    descripcion: 'Tu pedido está siendo atendido en planta.',
+    estado: pedido.estado == EstadoPedido.entregado ? _PasoEstado.completado : _PasoEstado.actual,
+  );
+
+  final entregado = _PasoPedido(
+    titulo: 'Entregado',
+    descripcion: 'Tu ropa fue entregada.',
+    estado: pedido.estado == EstadoPedido.entregado ? _PasoEstado.completado : _PasoEstado.pendiente,
+  );
+
+  return [confirmado, enProceso, entregado];
+}
 
 class PedidoScreen extends StatelessWidget {
-  const PedidoScreen({super.key});
+  const PedidoScreen({super.key, required this.pedido});
+
+  final Pedido pedido;
 
   void _showComingSoon(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -86,6 +78,14 @@ class PedidoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enProceso = pedido.estado == EstadoPedido.enProceso;
+    final cancelado = pedido.estado == EstadoPedido.cancelado;
+    final (chipColor, chipTexto) = switch (pedido.estado) {
+      EstadoPedido.enProceso => (AppColors.primary, 'En Proceso'),
+      EstadoPedido.entregado => (AppColors.primary, 'Entregado'),
+      EstadoPedido.cancelado => (AppColors.error, 'Cancelado'),
+    };
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -97,7 +97,7 @@ class PedidoScreen extends StatelessWidget {
         ),
         titleSpacing: 0,
         title: Text(
-          'Pedido #FC-8923',
+          'Pedido ${pedido.numero}',
           style: GoogleFonts.inter(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -119,15 +119,15 @@ class PedidoScreen extends StatelessWidget {
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                    decoration: BoxDecoration(color: chipColor, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    'En Proceso',
+                    chipTexto,
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.primary,
+                      color: chipColor,
                     ),
                   ),
                 ],
@@ -143,50 +143,61 @@ class PedidoScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _EstimacionCard(
-                onVerMapa: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const SeguimientoEnVivoScreen()),
+              if (cancelado)
+                _PedidoCanceladoCard(pedido: pedido)
+              else ...[
+                _EstimacionCard(
+                  pedido: pedido,
+                  onVerMapa: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => SeguimientoEnVivoScreen(numeroPedido: pedido.numero),
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              _TimelineCard(),
-              const SizedBox(height: 16),
-              _RepartidorCard(onTap: () => _showComingSoon(context)),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton.icon(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const ReportarProblemaScreen()),
-                      ),
-                      icon: const Icon(Icons.flag_outlined, size: 18),
-                      label: Text(
-                        'Reportar un Problema',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
-                      ),
-                      style: TextButton.styleFrom(foregroundColor: AppColors.secondary),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextButton.icon(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const CancelarPedidoScreen()),
-                      ),
-                      icon: const Icon(Icons.cancel_outlined, size: 18),
-                      label: Text(
-                        'Cancelar Pedido',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
-                      ),
-                      style: TextButton.styleFrom(foregroundColor: AppColors.error),
-                    ),
-                  ),
+                const SizedBox(height: 16),
+                _TimelineCard(pedido: pedido),
+                if (enProceso) ...[
+                  const SizedBox(height: 16),
+                  _RepartidorCard(onTap: () => _showComingSoon(context)),
                 ],
-              ),
+              ],
+              if (enProceso) ...[
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton.icon(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => ReportarProblemaScreen(pedido: pedido)),
+                        ),
+                        icon: const Icon(Icons.flag_outlined, size: 18),
+                        label: Text(
+                          'Reportar un Problema',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                        style: TextButton.styleFrom(foregroundColor: AppColors.secondary),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextButton.icon(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => CancelarPedidoScreen(pedidoId: pedido.id)),
+                        ),
+                        icon: const Icon(Icons.cancel_outlined, size: 18),
+                        label: Text(
+                          'Cancelar Pedido',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                        style: TextButton.styleFrom(foregroundColor: AppColors.error),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),
@@ -199,13 +210,50 @@ class PedidoScreen extends StatelessWidget {
   }
 }
 
-class _EstimacionCard extends StatelessWidget {
-  const _EstimacionCard({required this.onVerMapa});
+class _PedidoCanceladoCard extends StatelessWidget {
+  const _PedidoCanceladoCard({required this.pedido});
 
+  final Pedido pedido;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.secondaryContainer),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.cancel_rounded, color: AppColors.error, size: 32),
+          const SizedBox(height: 12),
+          Text(
+            'Este pedido fue cancelado',
+            style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.onSurface),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${pedido.servicio} · ${pedido.fechaFormateada}',
+            style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EstimacionCard extends StatelessWidget {
+  const _EstimacionCard({required this.pedido, required this.onVerMapa});
+
+  final Pedido pedido;
   final VoidCallback onVerMapa;
 
   @override
   Widget build(BuildContext context) {
+    final entregado = pedido.estado == EstadoPedido.entregado;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -224,7 +272,7 @@ class _EstimacionCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Entrega estimada',
+                    entregado ? 'Entrega realizada' : 'Ventana de recolección/entrega',
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -233,7 +281,9 @@ class _EstimacionCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Hoy, 6:00 PM',
+                    pedido.franjaHoraria.isEmpty
+                        ? pedido.fechaFormateada
+                        : '${pedido.franjaHoraria} · ${pedido.fechaFormateada}',
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -261,7 +311,7 @@ class _EstimacionCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: LinearProgressIndicator(
-              value: 0.5,
+              value: entregado ? 1.0 : 0.5,
               minHeight: 8,
               backgroundColor: AppColors.secondaryContainer,
               valueColor: const AlwaysStoppedAnimation(AppColors.primary),
@@ -271,9 +321,9 @@ class _EstimacionCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Recolección', style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary)),
-              Text('Planta', style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary)),
-              Text('Entrega', style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary)),
+              Text('Confirmado', style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary)),
+              Text('En proceso', style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary)),
+              Text('Entregado', style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary)),
             ],
           ),
         ],
@@ -283,10 +333,13 @@ class _EstimacionCard extends StatelessWidget {
 }
 
 class _TimelineCard extends StatelessWidget {
-  const _TimelineCard();
+  const _TimelineCard({required this.pedido});
+
+  final Pedido pedido;
 
   @override
   Widget build(BuildContext context) {
+    final pasos = _pasosPara(pedido);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -307,8 +360,8 @@ class _TimelineCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          for (var i = 0; i < _pasos.length; i++)
-            _TimelineStep(paso: _pasos[i], isLast: i == _pasos.length - 1),
+          for (var i = 0; i < pasos.length; i++)
+            _TimelineStep(paso: pasos[i], isLast: i == pasos.length - 1),
         ],
       ),
     );
@@ -360,12 +413,7 @@ class _TimelineStep extends StatelessWidget {
                               : AppColors.onSurface,
                         ),
                       ),
-                      if (paso.hora != null)
-                        Text(
-                          paso.hora!,
-                          style: GoogleFonts.inter(fontSize: 12, color: AppColors.secondary),
-                        )
-                      else if (paso.estado == _PasoEstado.actual)
+                      if (paso.estado == _PasoEstado.actual)
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
@@ -383,17 +431,16 @@ class _TimelineStep extends StatelessWidget {
                         ),
                     ],
                   ),
-                  if (paso.descripcion.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        paso.descripcion,
-                        style: GoogleFonts.inter(
-                          fontSize: 14,
-                          color: atenuado ? AppColors.secondary : AppColors.onSurfaceVariant,
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      paso.descripcion,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: atenuado ? AppColors.secondary : AppColors.onSurfaceVariant,
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
