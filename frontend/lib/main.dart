@@ -25,13 +25,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
-<<<<<<< HEAD
         ChangeNotifierProvider(create: (_) => DireccionesProvider()),
         ChangeNotifierProvider(create: (_) => MetodosPagoProvider()),
         ChangeNotifierProvider(create: (_) => PreferenciasProvider()),
-=======
         ChangeNotifierProvider(create: (_) => AdminProvider()),
->>>>>>> 5c9e703d44001684717913344e4e3fdd2b2ce222
       ],
       child: MaterialApp(
         title: 'Lavanderia San Juan',

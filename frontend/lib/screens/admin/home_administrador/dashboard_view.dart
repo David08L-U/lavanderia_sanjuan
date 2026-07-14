@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../../models/pedido.dart';
+import '../../../models/pedido_admin.dart';
 import '../../../providers/admin_provider.dart';
 import '../../../utils/app_colors.dart';
-import '../order_detail_screen.dart';
+import 'order_detail_screen.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key, this.onViewOrdersTap});
@@ -180,7 +180,7 @@ class DashboardView extends StatelessWidget {
           border: Border.all(color: AppColors.surfaceVariant),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 24,
               offset: const Offset(0, 4),
             ),
@@ -263,7 +263,7 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderCard(BuildContext context, Pedido pedido) {
+  Widget _buildOrderCard(BuildContext context, PedidoAdmin pedido) {
     Color tagBg;
     Color tagText;
     String tagLabel;
@@ -395,7 +395,7 @@ class DashboardView extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.errorContainer.withOpacity(0.3),
+                    color: AppColors.errorContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.errorContainer),
                   ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../models/pedido.dart';
-import '../../providers/admin_provider.dart';
-import '../../utils/app_colors.dart';
+import '../../../models/pedido_admin.dart';
+import '../../../providers/admin_provider.dart';
+import '../../../utils/app_colors.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   const OrderDetailScreen({super.key, required this.pedido});
 
-  final Pedido pedido;
+  final PedidoAdmin pedido;
 
   IconData _getIconForStatus(PedidoEstado estado) {
     switch (estado) {
@@ -329,7 +329,7 @@ class OrderDetailScreen extends StatelessWidget {
             ),
           ],
         ),
-        if (trailing != null) trailing,
+        ?trailing,
       ],
     );
   }
@@ -357,7 +357,7 @@ class OrderDetailScreen extends StatelessWidget {
     }
   }
 
-  void _showDriverSelectionDialog(BuildContext context, Pedido currentPedido) {
+  void _showDriverSelectionDialog(BuildContext context, PedidoAdmin currentPedido) {
     final drivers = [
       (name: 'Carlos Mendoza', vehicle: 'FreshVan #042', rating: '4.9 (124 viajes)', initials: 'CM'),
       (name: 'Laura Gómez', vehicle: 'FreshBike #12', rating: '4.7 (89 viajes)', initials: 'LG'),
@@ -408,7 +408,7 @@ class OrderDetailScreen extends StatelessWidget {
                       ),
                     ),
                     color: isCurrentlySelected
-                        ? AppColors.primaryFixed.withOpacity(0.3)
+                        ? AppColors.primaryFixed.withValues(alpha: 0.3)
                         : AppColors.surfaceContainerLowest,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
