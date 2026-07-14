@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../../models/pedido.dart';
+import '../../../models/pedido_admin.dart';
 import '../../../providers/admin_provider.dart';
 import '../../../utils/app_colors.dart';
-import '../order_detail_screen.dart';
+import 'order_detail_screen.dart';
 
 class OrdersView extends StatefulWidget {
   const OrdersView({super.key});
@@ -190,7 +190,7 @@ class _OrdersViewState extends State<OrdersView> {
     );
   }
 
-  Widget _buildOrderListItem(BuildContext context, Pedido pedido) {
+  Widget _buildOrderListItem(BuildContext context, PedidoAdmin pedido) {
     Color tagBg;
     Color tagText;
     String tagLabel;
@@ -373,7 +373,7 @@ class _OrdersViewState extends State<OrdersView> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.errorContainer.withOpacity(0.3),
+                    color: AppColors.errorContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.errorContainer),
                   ),

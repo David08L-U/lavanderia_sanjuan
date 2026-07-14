@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/pedido.dart';
+import '../models/pedido_admin.dart';
 import '../models/servicio.dart';
 
 class AdminProvider extends ChangeNotifier {
-  final List<Pedido> _pedidos = [
-    Pedido(
+  final List<PedidoAdmin> _pedidos = [
+    PedidoAdmin(
       id: 'ORD-4923',
       clienteNombre: 'David Miller',
       clienteEmail: 'david.miller@example.com',
@@ -16,7 +16,7 @@ class AdminProvider extends ChangeNotifier {
       fecha: 'Hoy, 08:30 AM',
       warningMessage: 'Falta artículo en el inventario. Se requiere verificación manual.',
     ),
-    Pedido(
+    PedidoAdmin(
       id: 'ORD-1042',
       clienteNombre: 'Marcus Sterling',
       clienteEmail: 'marcus.s@example.com',
@@ -27,7 +27,7 @@ class AdminProvider extends ChangeNotifier {
       progreso: 0.4,
       fecha: 'Hoy, 09:15 AM',
     ),
-    Pedido(
+    PedidoAdmin(
       id: 'ORD-3819',
       clienteNombre: 'Sophia Chen',
       clienteEmail: 'sophia.chen@example.com',
@@ -39,7 +39,7 @@ class AdminProvider extends ChangeNotifier {
       fecha: 'Hoy, 10:00 AM',
       detallesAdicionales: 'Programado para hoy, 14:00 - 16:00',
     ),
-    Pedido(
+    PedidoAdmin(
       id: 'ORD-8492',
       clienteNombre: 'María González',
       clienteEmail: 'maria.g@example.com',
@@ -50,7 +50,7 @@ class AdminProvider extends ChangeNotifier {
       progreso: 0.1,
       fecha: 'Hoy, 09:30 AM',
     ),
-    Pedido(
+    PedidoAdmin(
       id: 'ORD-8924',
       clienteNombre: 'Laura G.',
       clienteEmail: 'laura.g@example.com',
@@ -62,7 +62,7 @@ class AdminProvider extends ChangeNotifier {
       fecha: 'Ayer, 06:00 PM',
       repartidorNombre: 'Carlos Mendoza',
     ),
-    Pedido(
+    PedidoAdmin(
       id: 'ORD-2718',
       clienteNombre: 'Juan Pérez',
       clienteEmail: 'juan.perez@example.com',
@@ -114,7 +114,7 @@ class AdminProvider extends ChangeNotifier {
     ),
   ];
 
-  List<Pedido> get pedidos => List.unmodifiable(_pedidos);
+  List<PedidoAdmin> get pedidos => List.unmodifiable(_pedidos);
   List<Servicio> get servicios => List.unmodifiable(_servicios);
 
   void updatePedidoEstado(String id, PedidoEstado nuevoEstado) {
