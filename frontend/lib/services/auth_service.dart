@@ -45,6 +45,14 @@ class AuthService {
     // return Usuario.fromJson(jsonDecode(response.body));
 
     await Future.delayed(const Duration(milliseconds: 600));
+    if (correo.contains('admin')) {
+      return Usuario(
+        id: '1',
+        nombre: 'Admin San Juan',
+        correo: correo,
+        rol: UserRole.administrador,
+      );
+    }
     return Usuario(
       id: '0',
       nombre: 'Usuario',
