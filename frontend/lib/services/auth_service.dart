@@ -124,6 +124,7 @@ class AuthService {
   /// - Si el backend responde 401 (contraseña actual incorrecta), lanzar
   ///   [AuthException] con un mensaje para mostrar en pantalla.
   Future<void> cambiarContrasena({
+    required String correo,
     required String passwordActual,
     required String passwordNueva,
   }) async {
@@ -131,6 +132,7 @@ class AuthService {
       Uri.parse('$_baseUrl/usuarios/cambiar-password'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
+        'correo': correo,
         'passwordActual': passwordActual,
         'passwordNueva': passwordNueva,
       }),
