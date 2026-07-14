@@ -1,0 +1,402 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>FreshClean Admin - Detalle de Pedido #ORD-5021</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "success-blue": "#0070eb",
+                        "inverse-primary": "#adc6ff",
+                        "tertiary": "#414546",
+                        "surface-container": "#e7eeff",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary-container": "#d2d4d7",
+                        "on-surface": "#111c2d",
+                        "surface-tint": "#095bbf",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-container-high": "#dee8ff",
+                        "on-secondary-fixed-variant": "#3c4853",
+                        "background": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#c3d4ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "tertiary-fixed": "#e1e3e5",
+                        "secondary": "#54606b",
+                        "on-secondary-container": "#5a6671",
+                        "surface": "#f9f9ff",
+                        "primary-container": "#0058bc",
+                        "tertiary-container": "#595c5e",
+                        "on-secondary-fixed": "#111d26",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#bbc8d5",
+                        "surface-variant": "#d8e3fb",
+                        "primary": "#00418f",
+                        "on-primary-fixed": "#001a41",
+                        "surface-blue-tint": "#e7eeff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "surface-dim": "#cfdaf2",
+                        "surface-container-highest": "#d8e3fb",
+                        "on-primary-fixed-variant": "#004494",
+                        "on-surface-variant": "#424753",
+                        "on-background": "#111c2d",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary-container": "#d7e4f1",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "secondary-fixed": "#d7e4f1",
+                        "on-error": "#ffffff",
+                        "outline": "#727784",
+                        "on-tertiary": "#ffffff",
+                        "error-red": "#ba1a1a",
+                        "outline-variant": "#c2c6d5",
+                        "inverse-surface": "#263143"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "1.25rem",
+                        "stack-gap": "1rem",
+                        "section-padding": "2rem",
+                        "inline-gap": "0.75rem",
+                        "hero-padding": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "button": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "title-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ambient-shadow {
+            box-shadow: 0 4px 24px rgba(89, 92, 94, 0.05);
+        }
+        
+        /* Progress Bar Animation */
+        @keyframes fillProgress {
+            0% { width: 50%; }
+            100% { width: 100%; }
+        }
+        .progress-animate {
+            animation: fillProgress 1s ease-out forwards;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased md:flex">
+<!-- Navigations Shells -->
+<!-- Desktop SideNav (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant p-4 gap-stack-gap z-50">
+<div class="flex items-center gap-inline-gap mb-8">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary font-bold">F</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary">FreshClean</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Management Portal</p>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary rounded-full py-3 px-6 font-button text-button flex items-center justify-center gap-2 mb-6 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+            Create New Order
+        </button>
+<div class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-inline-gap text-on-surface-variant px-4 py-3 hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-title-md text-title-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-inline-gap bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3" href="#">
+<span class="material-symbols-outlined icon-filled">local_laundry_service</span>
+<span class="font-title-md text-title-md">Orders</span>
+</a>
+<a class="flex items-center gap-inline-gap text-on-surface-variant px-4 py-3 hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-title-md text-title-md">Customers</span>
+</a>
+<a class="flex items-center gap-inline-gap text-on-surface-variant px-4 py-3 hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-title-md text-title-md">Financials</span>
+</a>
+<a class="flex items-center gap-inline-gap text-on-surface-variant px-4 py-3 hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings_applications</span>
+<span class="font-title-md text-title-md">Services</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="w-full md:ml-64 flex-grow relative pb-24 md:pb-0 min-h-screen flex flex-col">
+<!-- Top App Bar (Mobile & Desktop) -->
+<header class="flex items-center justify-between px-container-margin md:px-section-padding w-full h-16 sticky top-0 z-40 bg-surface shadow-sm border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<button class="text-on-surface hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface truncate max-w-[200px] md:max-w-none">
+                    Detalle de Pedido #ORD-5021
+                </h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-success-blue animate-pulse"></span>
+                    En Camino
+                </span>
+<div class="hidden md:flex items-center gap-2 border-l border-outline-variant pl-4 ml-2">
+<button class="text-on-surface-variant hover:text-primary p-2 rounded-full hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary p-2 rounded-full hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined">help</span></button>
+<button class="text-on-surface-variant hover:text-primary p-2 rounded-full hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined">settings</span></button>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full ml-2 object-cover border border-outline-variant" data-alt="A professional headshot of a business administrator in a modern office setting. Light, clean aesthetic with blue and grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrCU-No-Eb1yHyieh6bHq-caJOOdPd_tKjl6k5HIKsm9X6eZUplCkPTJG7P1kR5_0VizLvZxovvp5XBll03dKT3R-tUygAap_iKvpnEdTHK_RtsRgTvD8Yj8Yr9fQ-TR5LCdgU_q7mrRmaEnmegM9QC7UFBkT11xAyzZ8DWdg5f5Msdg9oxv8wpp5-onBvyuDCsnUony3CBUs9vfMlpJFO8cy8ot3715Fmb4KKRQZp3sSR1OHw7YIE">
+</div>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<div class="px-container-margin md:px-section-padding py-6 md:py-8 flex-grow flex flex-col gap-6 md:gap-8 max-w-7xl mx-auto w-full">
+<!-- Bento Grid Layout for Desktop, Stack for Mobile -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Left Column (Main Info) -->
+<div class="md:col-span-8 flex flex-col gap-6">
+<!-- Order Status Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow border border-surface-variant relative overflow-hidden">
+<!-- Decorative background blob -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-surface-container rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+<h2 class="font-title-md text-title-md text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">local_shipping</span>
+                            Estado del Pedido
+                        </h2>
+<div class="relative pt-2 pb-8">
+<!-- Progress Track -->
+<div class="w-full h-2 bg-surface-variant rounded-full absolute top-1/2 -translate-y-1/2"></div>
+<!-- Progress Fill -->
+<div class="h-2 bg-success-blue rounded-full absolute top-1/2 -translate-y-1/2 progress-animate w-full"></div>
+<!-- Steps -->
+<div class="flex justify-between relative z-10 top-0">
+<!-- Step 1 -->
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-success-blue text-on-primary flex items-center justify-center mb-2 shadow-sm border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-sm icon-filled">check</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center whitespace-nowrap">Recolectado</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-success-blue text-on-primary flex items-center justify-center mb-2 shadow-sm border-2 border-surface-container-lowest">
+<span class="material-symbols-outlined text-sm icon-filled">local_laundry_service</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center whitespace-nowrap">En Planta</span>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex flex-col items-center">
+<div class="w-8 h-8 rounded-full bg-success-blue text-on-primary flex items-center justify-center mb-2 shadow-sm border-2 border-surface-container-lowest ring-4 ring-primary-container/20">
+<span class="material-symbols-outlined text-sm icon-filled">directions_car</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold text-center whitespace-nowrap">En Camino</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Client & Delivery Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Client Info -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow border border-surface-variant">
+<h3 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary">person</span>
+                                Información del Cliente
+                            </h3>
+<div class="flex items-start gap-4">
+<img alt="Carlos Ruiz" class="w-16 h-16 rounded-full object-cover border-2 border-surface-variant" data-alt="A smiling Latin American male in his 30s, casual attire, bright clean background. Photography, high quality, soft lighting, modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm--zPL_ffff6lHXnSJ7B0MSuZmgiQR7G8bvpaMyannmcFa-cr6q0tB6MiAqMUzJ3Q9EM3v8j_Gow7yhzfnVUOUOTYkVFI2YUR_VAEBdKPpUeZAhUbtaxJt0IiWB9_xkJKdYeRVvsoLBxG0EJLiYGJDL5kCOYajbnw_C17x4hQ9lp4Uq0oL4qscmGWGmLp3jVWsrmxK__A6gjYZjJ1iSjpJu94eL6KkWg3mRJQalaHtvXUc92e1YnS">
+<div class="flex flex-col gap-1">
+<span class="font-body-lg text-body-lg font-semibold text-on-surface">Carlos Ruiz</span>
+<a class="font-body-md text-body-md text-primary flex items-center gap-1 hover:underline" href="tel:+525551234567">
+<span class="material-symbols-outlined text-sm">phone</span>
+                                        +52 55 5123 4567
+                                    </a>
+<a class="font-body-md text-body-md text-secondary flex items-center gap-1 hover:underline" href="mailto:carlos.ruiz@email.com">
+<span class="material-symbols-outlined text-sm">mail</span>
+                                        carlos.ruiz@email.com
+                                    </a>
+</div>
+</div>
+</div>
+<!-- Delivery Person -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow border border-surface-variant">
+<h3 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary">badge</span>
+                                Repartidor Asignado
+                            </h3>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="Marcos Repartidor" class="w-12 h-12 rounded-full object-cover border-2 border-primary-fixed" data-alt="A portrait of a male delivery driver wearing a blue uniform polo shirt, smiling, professional and trustworthy appearance. Clean background, bright lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl4EJZ3ENnb5pC5YmiKO5T57aluBds6FRNfQFA8EIQPoWnpNmaR9fVIqagnmz4YPYixZpDb0mL8GgcIqNh1X3YO7rq3nSbUNL6MuhV-jLlQ_3YL1ds3eIcEWjhDDLrMuiQ-1NqtWns8jZlTMtdm_d2by0Rm_gcU8FKXKkpqAodalIbUavEfnqP2yC4Tro5CrCwC3ypkIgqDqT07aaicYoExQhLoY1Fs2cXsV-7_6LHqj1vD9pYBZaC">
+<div class="flex flex-col">
+<span class="font-body-lg text-body-lg font-semibold text-on-surface">Marcos Repartidor</span>
+<span class="font-label-md text-label-md text-secondary">Unidad 04</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined">call</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Logistics Section -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden ambient-shadow border border-surface-variant flex flex-col md:flex-row">
+<div class="w-full md:w-1/2 h-48 md:h-auto relative bg-surface-variant">
+<img alt="Map Location" class="w-full h-full object-cover" data-location="Mexico City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ4V28mflevq3uTqZ3-CG15lfBeXvK-DvJGN3X4unOY7ww661YrWa1dkgxKslk97MF5ETCRoLoHlIlE0Vr31PX5fbrrc2BNkr8-jTIyLXM19R2Sm2UPPRkadCl3wh8WGMipFxiDfLHh4tf9GB69qITJiVJDNNM7oMUTTgrzIxQW0k8XMKdUUNWZh_G-xrQFECW2azJ_USutJAZOhvuufumIVxxY12_jaWnuZdJ6m41UtLBkILW7lj">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 to-transparent md:hidden"></div>
+</div>
+<div class="w-full md:w-1/2 p-6 flex flex-col justify-center gap-4 bg-surface-container-lowest z-10">
+<div>
+<h4 class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-1">Dirección de Entrega</h4>
+<p class="font-body-md text-body-md text-on-surface flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-base mt-0.5">location_on</span>
+                                    Av. Insurgentes Sur 1234, Col. Del Valle, 03100, CDMX. Depto 402.
+                                </p>
+</div>
+<div class="h-px w-full bg-outline-variant"></div>
+<div>
+<h4 class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-1">Horario de Entrega</h4>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">schedule</span>
+                                    Hoy, 4:00 PM - 6:00 PM
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (Details & Payment) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Service Details Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow border border-surface-variant">
+<h3 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary">receipt_long</span>
+                            Detalles del Servicio
+                        </h3>
+<div class="flex items-center gap-4 mb-4 p-3 bg-surface-container rounded-lg">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined icon-filled">scale</span>
+</div>
+<div>
+<h4 class="font-body-lg text-body-lg font-semibold text-on-surface">Lavado y Doblado</h4>
+<p class="font-body-md text-body-md text-secondary">12kg - Lavado x Kilo</p>
+</div>
+</div>
+<ul class="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">check_circle</span>
+                                Doblado Estándar
+                            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">check_circle</span>
+                                Sin Aroma
+                            </li>
+</ul>
+</div>
+<!-- Payment Summary -->
+<div class="bg-surface-container-lowest rounded-xl p-6 ambient-shadow border border-surface-variant flex flex-col h-full">
+<h3 class="font-title-md text-title-md text-on-surface mb-4 flex items-center gap-2 border-b border-outline-variant pb-2">
+<span class="material-symbols-outlined text-secondary">payments</span>
+                            Resumen de Pago
+                        </h3>
+<div class="flex flex-col gap-2 mb-6 flex-grow">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span class="">Subtotal</span>
+<span class="">$280.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span class="">Envío</span>
+<span class="">$40.00</span>
+</div>
+<div class="h-px w-full bg-outline-variant my-2"></div>
+<div class="flex justify-between items-center">
+<span class="font-title-md text-title-md text-on-surface">Total</span>
+<span class="font-headline-lg text-headline-lg text-primary font-bold">$320.00 <span class="text-sm font-normal text-secondary">MXN</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2 p-3 bg-surface-container-low rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-success-blue">credit_card</span>
+<span class="font-body-md text-body-md text-on-surface flex-grow">Pagado con Visa terminada en 4242</span>
+<span class="font-label-md text-label-md bg-success-blue/10 text-success-blue px-2 py-1 rounded">Pagado</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="flex flex-col sm:flex-row justify-end gap-4 mt-4 border-t border-outline-variant pt-6">
+<button class="w-full sm:w-auto px-6 py-3 rounded-full border-2 border-outline text-on-surface font-button text-button flex items-center justify-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">print</span>
+                    Imprimir Ticket
+                </button>
+<button class="w-full sm:w-auto px-8 py-3 rounded-full bg-primary text-on-primary font-button text-button flex items-center justify-center gap-2 hover:opacity-90 transition-opacity ambient-shadow">
+<span class="material-symbols-outlined">update</span>
+                    Actualizar Estado
+                </button>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Hidden on Desktop) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest flex items-center justify-around h-20 px-4 z-50 ambient-shadow border-t border-outline-variant">
+<!-- Tab 1: Panel (Inactive) -->
+<a class="flex flex-col items-center gap-1 text-on-surface-variant p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Panel</span>
+</a>
+<!-- Tab 2: Pedidos (Active) -->
+<a class="flex flex-col items-center gap-1 p-2" href="#">
+<div class="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full flex items-center justify-center mb-1">
+<span class="material-symbols-outlined icon-filled">receipt_long</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Pedidos</span>
+</a>
+<!-- Tab 3: Clientes (Inactive) -->
+<a class="flex flex-col items-center gap-1 text-on-surface-variant p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+<!-- Tab 4: Servicios (Inactive) -->
+<a class="flex flex-col items-center gap-1 text-on-surface-variant p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">settings_applications</span>
+<span class="font-label-md text-label-md">Servicios</span>
+</a>
+</nav>
+
+
+</body></html>

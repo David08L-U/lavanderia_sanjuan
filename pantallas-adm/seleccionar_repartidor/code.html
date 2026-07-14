@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreshClean - Asignar Repartidor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#d7e4f1",
+                        "tertiary": "#414546",
+                        "surface-container-highest": "#d8e3fb",
+                        "primary": "#00418f",
+                        "success-blue": "#0070eb",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "on-background": "#111c2d",
+                        "surface-variant": "#d8e3fb",
+                        "outline": "#727784",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-dim": "#cfdaf2",
+                        "secondary-container": "#d7e4f1",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-tertiary-container": "#d2d4d7",
+                        "surface-tint": "#095bbf",
+                        "secondary-fixed-dim": "#bbc8d5",
+                        "outline-variant": "#c2c6d5",
+                        "on-secondary-fixed-variant": "#3c4853",
+                        "background": "#f9f9ff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-surface-variant": "#424753",
+                        "tertiary-container": "#595c5e",
+                        "inverse-primary": "#adc6ff",
+                        "on-primary-container": "#c3d4ff",
+                        "on-error": "#ffffff",
+                        "primary-container": "#0058bc",
+                        "on-secondary-fixed": "#111d26",
+                        "on-tertiary-fixed": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#001a41",
+                        "inverse-surface": "#263143",
+                        "surface-container-high": "#dee8ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-blue-tint": "#e7eeff",
+                        "on-error-container": "#93000a",
+                        "surface": "#f9f9ff",
+                        "secondary": "#54606b",
+                        "on-secondary-container": "#5a6671",
+                        "tertiary-fixed": "#e1e3e5",
+                        "on-primary-fixed-variant": "#004494",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-surface": "#111c2d",
+                        "surface-container": "#e7eeff",
+                        "error-red": "#ba1a1a",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "inline-gap": "0.75rem",
+                        "stack-gap": "1rem",
+                        "hero-padding": "2.5rem",
+                        "section-padding": "2rem",
+                        "container-margin": "1.25rem"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "button": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "button": ["16px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .driver-card.selected {
+            border-color: #00418f; /* primary */
+            background-color: #f0f3ff; /* surface-container-low */
+        }
+        .driver-card.selected .radio-circle {
+            border-color: #00418f;
+        }
+        .driver-card.selected .radio-dot {
+            opacity: 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-lg min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface shadow-sm shadow-[0px_24px_24px_rgba(89,92,94,0.05)] flex justify-between items-center px-5 h-16 md:hidden">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">local_laundry_service</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">FreshClean</span>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="px-5 pt-6 pb-24 md:max-w-3xl md:mx-auto md:pt-12">
+<div class="flex items-center gap-3 mb-6">
+<button class="md:hidden w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-background">
+                Asignar Repartidor
+            </h1>
+</div>
+<!-- Driver List -->
+<div class="flex flex-col gap-4">
+<!-- Driver Card 1 -->
+<div class="driver-card selected bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between shadow-[0px_24px_24px_rgba(89,92,94,0.05)] cursor-pointer transition-all hover:border-primary-fixed" onclick="selectDriver(this)">
+<div class="flex items-center gap-4">
+<div class="relative w-12 h-12 rounded-full overflow-hidden border border-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a delivery driver wearing a clean, modern blue uniform with a FreshClean logo. The background is a slightly blurred, bright urban setting on a sunny day. The lighting is soft and flattering, creating a trustworthy and approachable mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5BGdX8a0oT8wjirTUJppy9yr7M7tWc_azB5L8Ps4zcQjL4QoVx5xKcJ88sZSC69u2EdzMALUaTD3aXZgBkU1YGGSfd5B2mGnTGX44RpteMKe0RuaIPh-e8yBpD7mXc1Sb72R0kIiQPrS2PkRVw29Azq_ch3eyYFAlV1n-5yILJvTS9Cc_GtyDbO59OC1gQZ8WOpdAlPPYxICZz6wg4FXlqR3iG_PK_ZLWaL5G8r1Fs_a0sJQWVR5v"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Carlos Mendoza</h3>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                                FreshVan #042
+                            </span>
+</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[#F59E0B] text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface-variant">4.9 (124 viajes)</span>
+</div>
+</div>
+</div>
+<div class="radio-circle w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="radio-dot w-3 h-3 rounded-full bg-primary opacity-0 transition-opacity"></div>
+</div>
+</div>
+<!-- Driver Card 2 -->
+<div class="driver-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between shadow-[0px_24px_24px_rgba(89,92,94,0.05)] cursor-pointer transition-all hover:border-primary-fixed" onclick="selectDriver(this)">
+<div class="flex items-center gap-4">
+<div class="relative w-12 h-12 rounded-full overflow-hidden border border-surface-container-high bg-surface-container flex items-center justify-center">
+<span class="font-title-md text-title-md text-primary">LG</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Laura Gómez</h3>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">pedal_bike</span>
+                                FreshBike #12
+                            </span>
+</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[#F59E0B] text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface-variant">4.7 (89 viajes)</span>
+</div>
+</div>
+</div>
+<div class="radio-circle w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="radio-dot w-3 h-3 rounded-full bg-primary opacity-0 transition-opacity"></div>
+</div>
+</div>
+<!-- Driver Card 3 -->
+<div class="driver-card bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between shadow-[0px_24px_24px_rgba(89,92,94,0.05)] cursor-pointer transition-all hover:border-primary-fixed" onclick="selectDriver(this)">
+<div class="flex items-center gap-4">
+<div class="relative w-12 h-12 rounded-full overflow-hidden border border-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a delivery driver wearing a clean, modern blue uniform. He is smiling warmly. The background is a slightly blurred suburban neighborhood. The lighting is bright and clear, conveying a sense of reliability and professional service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgBp9sgzfqTj7nJ4pWTdCICMyZGbnQQauG-pvxM2OkGz_gvEXI2KVQMLk1d8006qzwxAtO9-jKy36o1iGBL7HQpYMGXAqxoxHx1LCaSV-zWwF_BbJtg6S7kNVIKKMZquaEMPxMUN-MWe7MzFpN8SPXd31e28gbgdspRF6ezXzwJObeiScEJ4pq0kgfBiFKVsTK5NnVnzFpLIQdL7dJlgiBaGFmVOjOLFbvYu_JsdMJ-TP_vF3UXlm9"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Roberto Díaz</h3>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                                FreshVan #018
+                            </span>
+</div>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[#F59E0B] text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md text-on-surface-variant">5.0 (312 viajes)</span>
+</div>
+</div>
+</div>
+<div class="radio-circle w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="radio-dot w-3 h-3 rounded-full bg-primary opacity-0 transition-opacity"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky CTA -->
+<div class="fixed bottom-[72px] md:bottom-0 left-0 w-full bg-surface-container-lowest bg-opacity-90 backdrop-blur-md border-t border-surface-variant p-4 z-40 md:border-none md:bg-transparent md:p-0 md:static md:max-w-3xl md:mx-auto md:pb-12">
+<button class="w-full h-14 bg-primary text-on-primary rounded-full font-button text-button flex items-center justify-center gap-2 hover:bg-primary-container hover:text-on-primary-container active:scale-95 transition-all shadow-md">
+<span>Confirmar Selección</span>
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe z-50 rounded-t-xl border-t border-surface-variant bg-surface-container-lowest shadow-[0px_-4px_24px_rgba(89,92,94,0.05)] md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200 px-3 rounded-lg w-16">
+<span class="material-symbols-outlined mb-1">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</button>
+<!-- Active State: Orders (Contextual intent for assigning drivers) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1 active:scale-95 transition-all duration-200 shadow-sm w-20">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-md text-label-md font-bold">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200 px-3 rounded-lg w-16">
+<span class="material-symbols-outlined mb-1">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-surface-container-high transition-all active:scale-95 duration-200 px-3 rounded-lg w-16">
+<span class="material-symbols-outlined mb-1">settings_suggest</span>
+<span class="font-label-md text-label-md">Services</span>
+</button>
+</nav>
+<script>
+        function selectDriver(element) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.driver-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            // Add selected class to clicked card
+            element.classList.add('selected');
+        }
+    </script>
+</body></html>
