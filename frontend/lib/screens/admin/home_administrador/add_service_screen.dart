@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../models/servicio.dart';
-import '../../providers/admin_provider.dart';
-import '../../utils/app_colors.dart';
+import '../../../models/servicio.dart';
+import '../../../providers/admin_provider.dart';
+import '../../../utils/app_colors.dart';
 
 class AddServiceScreen extends StatefulWidget {
   const AddServiceScreen({super.key, this.servicio});
@@ -241,7 +241,7 @@ class _AddServiceScreenState extends State<AddServiceScreen> {
                     Expanded(
                       flex: 1,
                       child: DropdownButtonFormField<String>(
-                        value: _selectedUnit,
+                        initialValue: _selectedUnit,
                         decoration: InputDecoration(
                           labelText: 'Unidad',
                           labelStyle: GoogleFonts.inter(color: AppColors.onSurfaceVariant),

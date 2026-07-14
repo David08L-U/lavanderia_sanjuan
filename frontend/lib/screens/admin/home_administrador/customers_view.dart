@@ -324,7 +324,7 @@ class _CustomersViewState extends State<CustomersView> {
         border: Border.all(color: AppColors.surfaceVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 24,
             offset: const Offset(0, 4),
           ),

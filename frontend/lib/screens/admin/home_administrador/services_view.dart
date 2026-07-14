@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../models/servicio.dart';
 import '../../../providers/admin_provider.dart';
 import '../../../utils/app_colors.dart';
-import '../add_service_screen.dart';
+import 'add_service_screen.dart';
 
 class ServicesView extends StatelessWidget {
   const ServicesView({super.key});
@@ -112,10 +112,10 @@ class ServicesView extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: isActivo ? AppColors.surfaceVariant : AppColors.surfaceVariant.withOpacity(0.5),
+          color: isActivo ? AppColors.surfaceVariant : AppColors.surfaceVariant.withValues(alpha: 0.5),
         ),
       ),
-      color: isActivo ? AppColors.surfaceContainerLowest : AppColors.surfaceContainerLow.withOpacity(0.7),
+      color: isActivo ? AppColors.surfaceContainerLowest : AppColors.surfaceContainerLow.withValues(alpha: 0.7),
       child: Opacity(
         opacity: isActivo ? 1.0 : 0.7,
         child: Padding(
@@ -153,7 +153,7 @@ class ServicesView extends StatelessWidget {
                       const SizedBox(width: 8),
                       Switch.adaptive(
                         value: isActivo,
-                        activeColor: AppColors.primary,
+                        activeThumbColor: AppColors.primary,
                         onChanged: (value) {
                           provider.toggleServicioActivo(servicio.id);
                         },

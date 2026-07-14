@@ -40,43 +40,10 @@ class AuthService {
     required String correo,
     required String password,
   }) async {
-<<<<<<< HEAD
     final response = await http.post(
       Uri.parse('$_baseUrl/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'correo': correo, 'password': password}),
-=======
-    // TODO: sustituir este stub por la llamada real, por ejemplo:
-    //
-    // final response = await http.post(
-    //   Uri.parse('$_baseUrl/auth/login'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({'correo': correo, 'password': password}),
-    // );
-    //
-    // if (response.statusCode == 401) {
-    //   throw AuthException('Correo o contraseña incorrectos');
-    // }
-    // if (response.statusCode != 200) {
-    //   throw AuthException('No se pudo iniciar sesión, intenta de nuevo');
-    // }
-    // return Usuario.fromJson(jsonDecode(response.body));
-
-    await Future.delayed(const Duration(milliseconds: 600));
-    if (correo.contains('admin')) {
-      return Usuario(
-        id: '1',
-        nombre: 'Admin San Juan',
-        correo: correo,
-        rol: UserRole.administrador,
-      );
-    }
-    return Usuario(
-      id: '0',
-      nombre: 'Usuario',
-      correo: correo,
-      rol: UserRole.cliente,
->>>>>>> 5c9e703d44001684717913344e4e3fdd2b2ce222
     );
 
     if (response.statusCode == 401 || response.statusCode == 404) {
