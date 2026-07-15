@@ -246,13 +246,20 @@ class _PedidoCard extends StatelessWidget {
               const Icon(Icons.payments_rounded, size: 15, color: AppColors.primary),
               const SizedBox(width: 4),
               Text(
-                '\$${pedido.total.toStringAsFixed(2)} MXN',
+                '\$${pedido.precioFinal.toStringAsFixed(2)} MXN',
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.onSurface,
                 ),
               ),
+              if (!pedido.precioConfirmado) ...[
+                const SizedBox(width: 6),
+                Text(
+                  '(estimado)',
+                  style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
+                ),
+              ],
             ],
           ),
           const SizedBox(height: 16),

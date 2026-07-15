@@ -102,7 +102,21 @@ class DetalleFacturaScreen extends StatelessWidget {
                 monto: pedido.total,
               ),
               const SizedBox(height: 24),
-              _TotalCard(total: pedido.total),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Text(
+                  'Preferencias',
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _PreferenciasCard(pedido: pedido),
+              const SizedBox(height: 24),
+              _TotalCard(pedido: pedido),
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -117,6 +131,7 @@ class DetalleFacturaScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _MetodoPagoCard(
+                metodoPago: pedido.metodoPago,
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MetodosPagoScreen()),
                 ),
@@ -341,13 +356,74 @@ class _ServiciosCard extends StatelessWidget {
   }
 }
 
-class _TotalCard extends StatelessWidget {
-  const _TotalCard({required this.total});
+class _PreferenciasCard extends StatelessWidget {
+  const _PreferenciasCard({required this.pedido});
 
-  final double total;
+  final Pedido pedido;
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.surfaceVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.eco_outlined, color: AppColors.primary, size: 20),
+              const SizedBox(width: 12),
+              Text(
+                pedido.ecoFriendly ? 'Eco-friendly activado' : 'Eco-friendly desactivado',
+                style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurface),
+              ),
+            ],
+          ),
+          if (pedido.fragancia != null) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Icon(Icons.spa_outlined, color: AppColors.primary, size: 20),
+                const SizedBox(width: 12),
+                Text(
+                  'Fragancia: ${pedido.fragancia}',
+                  style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurface),
+                ),
+              ],
+            ),
+          ],
+          if (pedido.cantidadAproximada != null) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Icon(Icons.scale_outlined, color: AppColors.primary, size: 20),
+                const SizedBox(width: 12),
+                Text(
+                  'Cantidad aproximada: ${pedido.cantidadAproximada}',
+                  style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurface),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _TotalCard extends StatelessWidget {
+  const _TotalCard({required this.pedido});
+
+  final Pedido pedido;
+
+  @override
+  Widget build(BuildContext context) {
+    final confirmado = pedido.precioConfirmado;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -362,7 +438,7 @@ class _TotalCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'Total',
+                confirmado ? 'Total Confirmado' : 'Total Estimado',
                 style: GoogleFonts.inter(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
@@ -371,7 +447,7 @@ class _TotalCard extends StatelessWidget {
               ),
               Text.rich(
                 TextSpan(
-                  text: '\$${total.toStringAsFixed(2)} ',
+                  text: '\$${pedido.precioFinal.toStringAsFixed(2)} ',
                   style: GoogleFonts.inter(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
@@ -387,6 +463,22 @@ class _TotalCard extends StatelessWidget {
               ),
             ],
           ),
+          if (!confirmado) ...[
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.onSurfaceVariant),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'Este total es una referencia. Se confirmará cuando se pese o verifique tu pedido.',
+                    style: GoogleFonts.inter(fontSize: 12, color: AppColors.onSurfaceVariant),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );
@@ -395,9 +487,10 @@ class _TotalCard extends StatelessWidget {
 
 
 class _MetodoPagoCard extends StatelessWidget {
-  const _MetodoPagoCard({required this.onTap});
+  const _MetodoPagoCard({required this.onTap, this.metodoPago});
 
   final VoidCallback onTap;
+  final String? metodoPago;
 
   @override
   Widget build(BuildContext context) {
@@ -415,25 +508,17 @@ class _MetodoPagoCard extends StatelessWidget {
           children: [
             Container(
               width: 40,
-              height: 24,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
+              height: 40,
+              decoration: const BoxDecoration(
                 color: AppColors.secondaryContainer,
-                borderRadius: BorderRadius.circular(4),
+                shape: BoxShape.circle,
               ),
-              child: Text(
-                'VISA',
-                style: GoogleFonts.inter(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.onSecondaryContainer,
-                ),
-              ),
+              child: const Icon(Icons.payments_outlined, color: AppColors.onSecondaryContainer, size: 20),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Visa •••• 4242',
+                metodoPago ?? 'No especificado',
                 style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurface),
               ),
             ),

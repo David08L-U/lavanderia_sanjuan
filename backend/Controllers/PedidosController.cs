@@ -13,13 +13,19 @@ public class PedidosController : ControllerBase
             Id = "1",
             ClienteId = "2",
             ClienteNombre = "Cliente Demo",
+            ClienteEmail = "cliente@sanjuan.com",
+            ClienteTelefono = "3007654321",
             Servicio = "Lavado y Doblado",
             Fecha = "2026-07-08",
             FranjaHoraria = "Tarde",
             Direccion = "Calle 45 # 10-20",
             Instrucciones = "Lavar con agua fría",
+            EcoFriendly = false,
+            Fragancia = "Lavanda",
+            CantidadAproximada = 5,
+            MetodoPago = "Efectivo contra entrega",
             Total = 25m,
-            Estado = "En proceso"
+            Estado = "Recibido"
         }
     };
 
@@ -53,13 +59,19 @@ public class PedidosController : ControllerBase
             Id = (Pedidos.Count + 1).ToString(),
             ClienteId = request.ClienteId ?? "2",
             ClienteNombre = request.ClienteNombre ?? "Cliente Demo",
+            ClienteEmail = request.ClienteEmail,
+            ClienteTelefono = request.ClienteTelefono,
             Servicio = request.Servicio,
             Fecha = string.IsNullOrWhiteSpace(request.Fecha) ? DateTime.Now.ToString("yyyy-MM-dd") : request.Fecha,
             FranjaHoraria = string.IsNullOrWhiteSpace(request.FranjaHoraria) ? "Tarde" : request.FranjaHoraria,
             Direccion = string.IsNullOrWhiteSpace(request.Direccion) ? "Sin dirección" : request.Direccion,
             Instrucciones = request.Instrucciones ?? string.Empty,
+            EcoFriendly = request.EcoFriendly ?? false,
+            Fragancia = request.Fragancia,
+            CantidadAproximada = request.CantidadAproximada,
+            MetodoPago = request.MetodoPago,
             Total = request.Total ?? 0m,
-            Estado = "En proceso"
+            Estado = "Recibido"
         };
 
         Pedidos.Add(pedido);
@@ -76,6 +88,37 @@ public class PedidosController : ControllerBase
         }
 
         pedido.Estado = string.IsNullOrWhiteSpace(request.Estado) ? pedido.Estado : request.Estado;
+        return Ok(pedido);
+    }
+
+    [HttpPut("{id}/repartidor")]
+    public IActionResult AsignarRepartidor(string id, [FromBody] AsignarRepartidorRequest request)
+    {
+        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        if (pedido == null)
+        {
+            return NotFound(new { message = "Pedido no encontrado" });
+        }
+
+        pedido.Repartidor = request.Repartidor;
+        if (pedido.Estado == "Recibido")
+        {
+            pedido.Estado = "Asignado";
+        }
+        return Ok(pedido);
+    }
+
+    [HttpPut("{id}/confirmar-precio")]
+    public IActionResult ConfirmarPrecio(string id, [FromBody] ConfirmarPrecioRequest request)
+    {
+        var pedido = Pedidos.FirstOrDefault(p => p.Id == id);
+        if (pedido == null)
+        {
+            return NotFound(new { message = "Pedido no encontrado" });
+        }
+
+        pedido.PesoConfirmado = request.PesoConfirmado;
+        pedido.TotalConfirmado = request.TotalConfirmado;
         return Ok(pedido);
     }
 
@@ -139,17 +182,34 @@ public class CrearPedidoRequest
 {
     public string? ClienteId { get; set; }
     public string? ClienteNombre { get; set; }
+    public string? ClienteEmail { get; set; }
+    public string? ClienteTelefono { get; set; }
     public string? Servicio { get; set; }
     public string? Fecha { get; set; }
     public string? FranjaHoraria { get; set; }
     public string? Direccion { get; set; }
     public string? Instrucciones { get; set; }
+    public bool? EcoFriendly { get; set; }
+    public string? Fragancia { get; set; }
+    public int? CantidadAproximada { get; set; }
+    public string? MetodoPago { get; set; }
     public decimal? Total { get; set; }
 }
 
 public class ActualizarEstadoRequest
 {
     public string? Estado { get; set; }
+}
+
+public class AsignarRepartidorRequest
+{
+    public string? Repartidor { get; set; }
+}
+
+public class ConfirmarPrecioRequest
+{
+    public double? PesoConfirmado { get; set; }
+    public decimal TotalConfirmado { get; set; }
 }
 
 public class CancelarPedidoRequest
@@ -175,11 +235,20 @@ public class PedidoDto
     public string? Id { get; set; }
     public string? ClienteId { get; set; }
     public string? ClienteNombre { get; set; }
+    public string? ClienteEmail { get; set; }
+    public string? ClienteTelefono { get; set; }
     public string? Servicio { get; set; }
     public string? Fecha { get; set; }
     public string? FranjaHoraria { get; set; }
     public string? Direccion { get; set; }
     public string? Instrucciones { get; set; }
+    public bool EcoFriendly { get; set; }
+    public string? Fragancia { get; set; }
+    public int? CantidadAproximada { get; set; }
+    public string? MetodoPago { get; set; }
+    public string? Repartidor { get; set; }
+    public double? PesoConfirmado { get; set; }
+    public decimal? TotalConfirmado { get; set; }
     public decimal Total { get; set; }
     public string? Estado { get; set; }
 }
