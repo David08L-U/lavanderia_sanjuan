@@ -1,19 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/api_config.dart';
+
 class PedidoOpsService {
-  String get _baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:5162/api';
-    }
-    if (Platform.isAndroid) {
-      return 'http://localhost:5162/api';
-    }
-    return 'http://localhost:5162/api';
-  }
+  String get _baseUrl => ApiConfig.baseUrl;
 
   Future<Map<String, dynamic>> cancelarPedido(String pedidoId, {required String razon, String? comentarios}) async {
     final response = await http.post(

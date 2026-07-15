@@ -1,19 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/api_config.dart';
+
 class PedidoService {
-  String get _baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:5162/api';
-    }
-    if (Platform.isAndroid) {
-      return 'http://localhost:5162/api';
-    }
-    return 'http://localhost:5162/api';
-  }
+  String get _baseUrl => ApiConfig.baseUrl;
 
   Future<List<Map<String, dynamic>>> listarPedidos({String? clienteId}) async {
     final uri = Uri.parse('$_baseUrl/pedidos').replace(queryParameters: clienteId == null ? null : {'clienteId': clienteId});

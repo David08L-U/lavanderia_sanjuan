@@ -69,7 +69,30 @@ adb reverse tcp:5162 tcp:5162
 
 Esto reenvía el puerto 5162 del teléfono hacia el 5162 de tu computadora mientras el cable siga conectado. Si desconectas el celular o reinicias, hay que volver a correrlo.
 
-Si vas a probar por WiFi en vez de USB, en cambio necesitas reemplazar `localhost` por la IP local de tu computadora (ej. `192.168.1.50`) en los `_baseUrl` de `frontend/lib/services/` — pero para el USB de arriba no hace falta tocar código.
+Si vas a probar por WiFi en vez de USB, en cambio necesitas reemplazar `localhost` por la IP local de tu computadora (ej. `192.168.1.50`) en `frontend/lib/utils/api_config.dart` — pero para el USB de arriba no hace falta tocar código.
+
+## Compartir un APK con el equipo (sin depender de tu computadora)
+
+Si generas el APK y se lo pasas a tu equipo tal cual, **no va a funcionar** aunque tú tengas `dotnet run` corriendo, y tampoco si alguien de tu equipo corre el backend en su propia máquina. La razón: la app trae `http://localhost:5162` fijo en el código, y `localhost` siempre significa "este mismo celular" — nunca la computadora de otra persona. El truco de `adb reverse` de la sección anterior solo sirve para un celular conectado por USB a la computadora específica que tiene el backend corriendo; no sirve para repartir un APK suelto.
+
+Para que el APK funcione en cualquier celular, sin que dependa de que alguien tenga su compu prendida, hay que desplegar el backend en un servicio con URL pública. Pasos con [Render](https://render.com) (tiene capa gratis y soporta Docker, que es justo lo que ya preparamos en `Backend/Dockerfile`):
+
+1. Crea una cuenta en [render.com](https://render.com) (puedes entrar con tu cuenta de GitHub).
+2. **New +** → **Web Service** → conecta el repo `lavanderia_sanjuan`.
+3. En "Root Directory" pon `Backend` (para que use el `Dockerfile` que está ahí).
+4. Runtime: **Docker** (Render lo detecta solo al ver el Dockerfile).
+5. En **Environment Variables**, agrega estas 4 (con tus valores reales de Supabase, los mismos que usaste en `dotnet user-secrets`):
+   - `Supabase__Enabled` = `true`
+   - `Supabase__Url` = `https://tu-proyecto.supabase.co`
+   - `Supabase__AnonKey` = tu anon key
+   - `Supabase__ServiceRoleKey` = tu service role key
+   
+   (Nota el doble guion bajo `__` en vez de `:` — así es como ASP.NET Core lee configuración anidada desde variables de entorno.)
+6. Deploy. Cuando termine, Render te da una URL fija como `https://freshclean-backend.onrender.com`.
+7. Edita `frontend/lib/utils/api_config.dart` y cambia `baseUrl` a `https://freshclean-backend.onrender.com/api` (con esa URL real, y el `/api` al final).
+8. Genera el APK de nuevo (`flutter build apk`) y compártelo — ahora sí va a funcionar para cualquiera, sin depender de tu computadora ni la de nadie.
+
+**Ojo con la capa gratis de Render**: el servicio se "duerme" tras ~15 minutos sin tráfico, y la primera petición después de eso tarda unos 30-60 segundos en responder mientras despierta. Para probar el equipo esto es aceptable; si más adelante quieren algo siempre activo, hay que pasarse a un plan pago.
 
 ## Seguridad
 

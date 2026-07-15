@@ -982,19 +982,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\manue\\.nuget\\packages\\": {}
+    "C:\\Users\\david\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
+      "projectUniqueName": "C:\\Hom\\Lavanderia_san_juan\\Backend\\test\\backend.tests.csproj",
       "projectName": "backend.tests",
-      "projectPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\backend.tests.csproj",
-      "packagesPath": "C:\\Users\\manue\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\test\\obj\\",
+      "projectPath": "C:\\Hom\\Lavanderia_san_juan\\Backend\\test\\backend.tests.csproj",
+      "packagesPath": "C:\\Users\\david\\.nuget\\packages\\",
+      "outputPath": "C:\\Hom\\Lavanderia_san_juan\\Backend\\test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\manue\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\david\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -1006,8 +1006,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {
-              "projectPath": "C:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj"
+            "C:\\Hom\\Lavanderia_san_juan\\Backend\\backend.csproj": {
+              "projectPath": "C:\\Hom\\Lavanderia_san_juan\\Backend\\backend.csproj"
             }
           }
         }
@@ -1065,7 +1065,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.110/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

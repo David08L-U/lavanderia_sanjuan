@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/usuario.dart';
+import '../utils/api_config.dart';
 
 class AuthException implements Exception {
   AuthException(this.message);
@@ -16,15 +15,7 @@ class AuthException implements Exception {
 }
 
 class AuthService {
-  String get _baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:5162/api';
-    }
-    if (Platform.isAndroid) {
-      return 'http://localhost:5162/api';
-    }
-    return 'http://localhost:5162/api';
-  }
+  String get _baseUrl => ApiConfig.baseUrl;
 
   /// Llama al endpoint de login del backend.
   ///
