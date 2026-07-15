@@ -51,4 +51,32 @@ class PedidoService {
     }
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
+
+  Future<Map<String, dynamic>> asignarRepartidor(String id, String repartidor) async {
+    final response = await http.put(
+      Uri.parse('$_baseUrl/pedidos/$id/repartidor'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'repartidor': repartidor}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('No se pudo asignar el repartidor');
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> confirmarPrecio(
+    String id, {
+    double? pesoConfirmado,
+    required double totalConfirmado,
+  }) async {
+    final response = await http.put(
+      Uri.parse('$_baseUrl/pedidos/$id/confirmar-precio'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'pesoConfirmado': pesoConfirmado, 'totalConfirmado': totalConfirmado}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('No se pudo confirmar el precio');
+    }
+    return jsonDecode(response.body) as Map<String, dynamic>;
+  }
 }

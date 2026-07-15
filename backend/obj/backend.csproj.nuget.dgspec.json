@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {}
+    "C:\\Hom\\Lavanderia_san_juan\\Backend\\backend.csproj": {}
   },
   "projects": {
-    "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj": {
+    "C:\\Hom\\Lavanderia_san_juan\\Backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Hom\\Lavanderia_san_juan\\Backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\manue\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\manue\\Downloads\\lavanderia_sanjuan\\backend\\obj\\",
+        "projectPath": "C:\\Hom\\Lavanderia_san_juan\\Backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\david\\.nuget\\packages\\",
+        "outputPath": "C:\\Hom\\Lavanderia_san_juan\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\manue\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\david\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -44,6 +44,10 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.75.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.3, )"
@@ -68,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.109/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

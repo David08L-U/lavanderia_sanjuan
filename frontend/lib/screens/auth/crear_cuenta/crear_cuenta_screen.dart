@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -154,10 +155,14 @@ class CrearCuentaScreen extends StatelessWidget {
                               const SizedBox(height: 12),
                               _RoundedTextField(
                                 controller: form.telefonoController,
-                                hintText: 'Teléfono',
+                                hintText: 'Teléfono (opcional)',
                                 icon: Icons.call_outlined,
                                 keyboardType: TextInputType.phone,
                                 validator: form.validateTelefono,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
                               ),
                               const SizedBox(height: 12),
                               _RoundedTextField(
@@ -338,6 +343,7 @@ class _RoundedTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType,
     this.validator,
+    this.inputFormatters,
   });
 
   final TextEditingController controller;
@@ -347,6 +353,7 @@ class _RoundedTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -355,6 +362,7 @@ class _RoundedTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
+      inputFormatters: inputFormatters,
       style: GoogleFonts.inter(fontSize: 14, color: AppColors.onSurface),
       decoration: InputDecoration(
         hintText: hintText,

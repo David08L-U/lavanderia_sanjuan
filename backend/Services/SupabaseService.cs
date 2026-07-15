@@ -86,7 +86,11 @@ public class SupabaseService
         }
 
         var root = await ReadJsonAsync(response);
-        var user = root?["user"];
+        // Si el proyecto de Supabase pide confirmar el correo (comportamiento por
+        // defecto en proyectos nuevos), /signup devuelve el objeto de usuario
+        // directamente en la raíz (sin sesión ni el envoltorio "user"), en vez del
+        // { user, access_token } que se obtiene cuando la confirmación está desactivada.
+        var user = root?["user"] ?? (root?["id"] is not null ? root : null);
         if (user is null)
         {
             return new AuthOperationResult(false, StatusCodes.Status502BadGateway, "Respuesta inválida de Supabase", null, null);
