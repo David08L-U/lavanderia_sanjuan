@@ -6,60 +6,54 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
 {
-    private static readonly List<UsuarioDto> Usuarios = new()
+    private readonly SupabaseService _supabaseService;
+
+    public UsuariosController(SupabaseService supabaseService)
     {
-        new() { Id = "1", Nombre = "Admin San Juan", Correo = "admin@sanjuan.com", Telefono = "3001234567", Password = "admin123", Rol = "administrador" },
-        new() { Id = "2", Nombre = "Cliente Demo", Correo = "cliente@sanjuan.com", Telefono = "3007654321", Password = "cliente123", Rol = "cliente" }
-    };
+        _supabaseService = supabaseService;
+    }
 
     [HttpPut("{id}")]
-    public IActionResult ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
+    public async Task<IActionResult> ActualizarPerfil(string id, [FromBody] ActualizarPerfilRequest request)
     {
-        var usuario = Usuarios.FirstOrDefault(u => u.Id == id);
-        if (usuario == null)
+        if (!_supabaseService.IsConfigured)
         {
-            return NotFound(new { message = "Usuario no encontrado" });
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = "Supabase no está configurado en el backend" });
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Correo))
+        var update = await _supabaseService.UpdateProfileAsync(id, request.Nombre, request.Correo, request.Telefono);
+        if (!update.Success)
         {
-            var existe = Usuarios.Any(u => u.Id != id && u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
-            if (existe)
-            {
-                return Conflict(new { message = "Ese correo ya está registrado" });
-            }
+            return StatusCode(update.StatusCode, new { message = update.ErrorMessage ?? "No se pudo actualizar el perfil" });
         }
 
-        usuario.Nombre = string.IsNullOrWhiteSpace(request.Nombre) ? usuario.Nombre : request.Nombre;
-        usuario.Correo = string.IsNullOrWhiteSpace(request.Correo) ? usuario.Correo : request.Correo;
-        usuario.Telefono = string.IsNullOrWhiteSpace(request.Telefono) ? usuario.Telefono : request.Telefono;
-
-        return Ok(usuario);
+        return Ok(update.Usuario);
     }
 
     [HttpPost("cambiar-password")]
-    public IActionResult CambiarPassword([FromBody] CambiarPasswordRequest request)
+    public async Task<IActionResult> CambiarPassword([FromBody] CambiarPasswordRequest request)
     {
+        if (!_supabaseService.IsConfigured)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = "Supabase no está configurado en el backend" });
+        }
+
         if (string.IsNullOrWhiteSpace(request.PasswordActual) || string.IsNullOrWhiteSpace(request.PasswordNueva))
         {
             return BadRequest(new { message = "Se requieren ambas contraseñas" });
         }
 
-        var usuario = string.IsNullOrWhiteSpace(request.Correo)
-            ? Usuarios.FirstOrDefault(u => u.Password == request.PasswordActual)
-            : Usuarios.FirstOrDefault(u => u.Correo.Equals(request.Correo, StringComparison.OrdinalIgnoreCase));
-
-        if (usuario == null)
+        if (string.IsNullOrWhiteSpace(request.Correo))
         {
-            return NotFound(new { message = "Usuario no encontrado" });
+            return BadRequest(new { message = "Correo requerido para cambiar contraseña" });
         }
 
-        if (!string.Equals(usuario.Password, request.PasswordActual, StringComparison.Ordinal))
+        var result = await _supabaseService.ChangePasswordAsync(request.Correo, request.PasswordActual, request.PasswordNueva);
+        if (!result.Success)
         {
-            return Unauthorized(new { message = "La contraseña actual es incorrecta" });
+            return StatusCode(result.StatusCode, new { message = result.ErrorMessage ?? "No se pudo actualizar la contraseña" });
         }
 
-        usuario.Password = request.PasswordNueva;
         return Ok(new { message = "Contraseña actualizada" });
     }
 }

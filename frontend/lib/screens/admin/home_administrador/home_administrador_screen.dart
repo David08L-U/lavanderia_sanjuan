@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/admin_provider.dart';
 import '../../../utils/app_colors.dart';
 import 'dashboard_view.dart';
-import 'orders_view.dart';
-import 'customers_view.dart';
-import 'services_view.dart';
+import '../pedidos/orders_view.dart';
+import '../clientes/customers_view.dart';
+import '../servicios/services_view.dart';
+import 'perfil_administrador_screen.dart';
 
 class HomeAdministradorScreen extends StatefulWidget {
   const HomeAdministradorScreen({super.key});
@@ -28,6 +31,7 @@ class _HomeAdministradorScreenState extends State<HomeAdministradorScreen> {
       const CustomersView(),
       const ServicesView(),
     ];
+    context.read<AdminProvider>().cargarPedidos();
   }
 
   void _onItemTapped(int index) {
@@ -71,7 +75,9 @@ class _HomeAdministradorScreenState extends State<HomeAdministradorScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PerfilAdministradorScreen()),
+            ),
             icon: const CircleAvatar(
               radius: 18,
               backgroundColor: AppColors.surfaceContainerHigh,

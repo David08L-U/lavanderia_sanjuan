@@ -1,79 +1,150 @@
 import 'package:flutter/material.dart';
 import '../models/pedido_admin.dart';
 import '../models/servicio.dart';
+import '../services/pedido_service.dart';
 
 class AdminProvider extends ChangeNotifier {
-  final List<PedidoAdmin> _pedidos = [
-    PedidoAdmin(
-      id: 'ORD-4923',
-      clienteNombre: 'David Miller',
-      clienteEmail: 'david.miller@example.com',
-      servicioNombre: 'Solo Planchado',
-      servicioIcono: 'iron',
+  final _pedidoService = PedidoService();
+
+  final List<PedidoAdmin> _pedidos = [];
+  bool _isLoading = false;
+  String? _error;
+
+  List<PedidoAdmin> get pedidos => List.unmodifiable(_pedidos);
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  /// Trae los pedidos reales desde el backend (todos, sin filtrar por
+  /// cliente, ya que este es el panel de administrador).
+  Future<void> cargarPedidos() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final data = await _pedidoService.listarPedidos();
+      _pedidos
+        ..clear()
+        ..addAll(data.map(_mapPedido));
+    } catch (_) {
+      _error = 'No se pudieron cargar los pedidos';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  PedidoAdmin _mapPedido(Map<String, dynamic> json) {
+    final servicioNombre = json['servicio']?.toString() ?? 'Servicio';
+    final total = double.tryParse(json['total']?.toString() ?? '0') ?? 0;
+    final totalConfirmado = double.tryParse(json['totalConfirmado']?.toString() ?? '');
+    final repartidor = json['repartidor']?.toString();
+    final fecha = json['fecha']?.toString() ?? 'Sin fecha';
+
+    return PedidoAdmin(
+      id: json['id']?.toString() ?? '',
+      clienteNombre: json['clienteNombre']?.toString() ?? 'Cliente',
+      clienteEmail: json['clienteEmail']?.toString() ?? 'No especificado',
+      clienteTelefono: json['clienteTelefono']?.toString() ?? 'No especificado',
+      clienteDireccion: json['direccion']?.toString() ?? 'Sin dirección',
+      servicioNombre: servicioNombre,
+      servicioIcono: _iconoParaServicio(servicioNombre),
       tipoEntrega: 'Domicilio',
-      estado: PedidoEstado.atencion,
-      progreso: 0.0,
-      fecha: 'Hoy, 08:30 AM',
-      warningMessage: 'Falta artículo en el inventario. Se requiere verificación manual.',
-    ),
-    PedidoAdmin(
-      id: 'ORD-1042',
-      clienteNombre: 'Marcus Sterling',
-      clienteEmail: 'marcus.s@example.com',
-      servicioNombre: 'Lavado y Doblado',
-      servicioIcono: 'local_laundry_service',
-      tipoEntrega: 'Domicilio',
-      estado: PedidoEstado.lavando,
-      progreso: 0.4,
-      fecha: 'Hoy, 09:15 AM',
-    ),
-    PedidoAdmin(
-      id: 'ORD-3819',
-      clienteNombre: 'Sophia Chen',
-      clienteEmail: 'sophia.chen@example.com',
-      servicioNombre: 'Tintorería',
-      servicioIcono: 'dry_cleaning',
-      tipoEntrega: 'Domicilio',
-      estado: PedidoEstado.recibido,
-      progreso: 0.1,
-      fecha: 'Hoy, 10:00 AM',
-      detallesAdicionales: 'Programado para hoy, 14:00 - 16:00',
-    ),
-    PedidoAdmin(
-      id: 'ORD-8492',
-      clienteNombre: 'María González',
-      clienteEmail: 'maria.g@example.com',
-      servicioNombre: 'Planchado',
-      servicioIcono: 'iron',
-      tipoEntrega: 'Domicilio',
-      estado: PedidoEstado.recibido,
-      progreso: 0.1,
-      fecha: 'Hoy, 09:30 AM',
-    ),
-    PedidoAdmin(
-      id: 'ORD-8924',
-      clienteNombre: 'Laura G.',
-      clienteEmail: 'laura.g@example.com',
-      servicioNombre: 'Limpieza de Edredones',
-      servicioIcono: 'bed',
-      tipoEntrega: 'Domicilio',
-      estado: PedidoEstado.asignado,
-      progreso: 0.3,
-      fecha: 'Ayer, 06:00 PM',
-      repartidorNombre: 'Carlos Mendoza',
-    ),
-    PedidoAdmin(
-      id: 'ORD-2718',
-      clienteNombre: 'Juan Pérez',
-      clienteEmail: 'juan.perez@example.com',
-      servicioNombre: 'Lavado x Kilo',
-      servicioIcono: 'scale',
-      tipoEntrega: 'Local',
-      estado: PedidoEstado.enPlanta,
-      progreso: 0.6,
-      fecha: 'Hoy, 11:00 AM',
-    ),
-  ];
+      estado: pedidoEstadoFromString(json['estado']?.toString()),
+      progreso: _progresoParaEstado(pedidoEstadoFromString(json['estado']?.toString())),
+      fecha: fecha,
+      items: [PedidoItem(nombre: servicioNombre, precio: totalConfirmado ?? total)],
+      notas: [NotaPedido(fecha: fecha, texto: 'Pedido recibido')],
+      ecoFriendly: json['ecoFriendly'] == true,
+      fragancia: json['fragancia']?.toString(),
+      cantidadAproximada: int.tryParse(json['cantidadAproximada']?.toString() ?? ''),
+      pesoConfirmado: double.tryParse(json['pesoConfirmado']?.toString() ?? ''),
+      totalConfirmado: totalConfirmado,
+      metodoPago: json['metodoPago']?.toString(),
+      repartidorNombre: (repartidor == null || repartidor.isEmpty) ? null : repartidor,
+    );
+  }
+
+  String _iconoParaServicio(String nombre) {
+    final n = nombre.toLowerCase();
+    if (n.contains('planch')) return 'iron';
+    if (n.contains('tintorer')) return 'dry_cleaning';
+    if (n.contains('edred')) return 'bed';
+    if (n.contains('kilo') || n.contains('kg')) return 'scale';
+    return 'local_laundry_service';
+  }
+
+  double _progresoParaEstado(PedidoEstado estado) {
+    switch (estado) {
+      case PedidoEstado.recibido:
+        return 0.1;
+      case PedidoEstado.asignado:
+        return 0.3;
+      case PedidoEstado.enPlanta:
+        return 0.4;
+      case PedidoEstado.lavando:
+        return 0.6;
+      case PedidoEstado.secandoDoblado:
+        return 0.8;
+      case PedidoEstado.enCamino:
+        return 0.9;
+      case PedidoEstado.listo:
+      case PedidoEstado.entregado:
+        return 1.0;
+      case PedidoEstado.atencion:
+      case PedidoEstado.cancelado:
+        return 0.0;
+    }
+  }
+
+  Future<void> updatePedidoEstado(String id, PedidoEstado nuevoEstado) async {
+    final index = _pedidos.indexWhere((p) => p.id == id);
+    if (index == -1) return;
+
+    await _pedidoService.actualizarEstado(id, estadoToString(nuevoEstado));
+
+    _pedidos[index].estado = nuevoEstado;
+    _pedidos[index].progreso = _progresoParaEstado(nuevoEstado);
+    _pedidos[index].notas.add(
+      NotaPedido(fecha: 'Justo ahora', texto: "Estado cambiado a '${estadoToString(nuevoEstado)}'", autor: 'Admin'),
+    );
+    notifyListeners();
+  }
+
+  Future<void> assignRepartidor(String id, String repartidorNombre) async {
+    final index = _pedidos.indexWhere((p) => p.id == id);
+    if (index == -1) return;
+
+    await _pedidoService.asignarRepartidor(id, repartidorNombre);
+
+    _pedidos[index].repartidorNombre = repartidorNombre;
+    if (_pedidos[index].estado == PedidoEstado.recibido) {
+      _pedidos[index].estado = PedidoEstado.asignado;
+      _pedidos[index].progreso = _progresoParaEstado(PedidoEstado.asignado);
+    }
+    _pedidos[index].notas.add(
+      NotaPedido(fecha: 'Justo ahora', texto: 'Repartidor $repartidorNombre asignado', autor: 'Admin'),
+    );
+    notifyListeners();
+  }
+
+  /// Confirma el peso/cantidad real y el precio final tras pesar el pedido
+  /// en planta, reemplazando el total estimado que se calculó al agendar.
+  Future<void> confirmarPrecio(String id, {double? pesoConfirmado, required double totalConfirmado}) async {
+    final index = _pedidos.indexWhere((p) => p.id == id);
+    if (index == -1) return;
+
+    await _pedidoService.confirmarPrecio(id, pesoConfirmado: pesoConfirmado, totalConfirmado: totalConfirmado);
+
+    _pedidos[index].pesoConfirmado = pesoConfirmado;
+    _pedidos[index].totalConfirmado = totalConfirmado;
+    _pedidos[index].notas.add(
+      NotaPedido(fecha: 'Justo ahora', texto: 'Precio final confirmado: \$${totalConfirmado.toStringAsFixed(2)}', autor: 'Admin'),
+    );
+    notifyListeners();
+  }
+
+  // --- Servicios: catálogo local (el backend aún no tiene un endpoint para esto) ---
 
   final List<Servicio> _servicios = [
     Servicio(
@@ -114,56 +185,7 @@ class AdminProvider extends ChangeNotifier {
     ),
   ];
 
-  List<PedidoAdmin> get pedidos => List.unmodifiable(_pedidos);
   List<Servicio> get servicios => List.unmodifiable(_servicios);
-
-  void updatePedidoEstado(String id, PedidoEstado nuevoEstado) {
-    final index = _pedidos.indexWhere((p) => p.id == id);
-    if (index != -1) {
-      _pedidos[index].estado = nuevoEstado;
-      
-      // Ajustar progreso según el estado de forma automática
-      switch (nuevoEstado) {
-        case PedidoEstado.recibido:
-          _pedidos[index].progreso = 0.1;
-          break;
-        case PedidoEstado.asignado:
-          _pedidos[index].progreso = 0.3;
-          break;
-        case PedidoEstado.enPlanta:
-          _pedidos[index].progreso = 0.4;
-          break;
-        case PedidoEstado.lavando:
-          _pedidos[index].progreso = 0.6;
-          break;
-        case PedidoEstado.secandoDoblado:
-          _pedidos[index].progreso = 0.8;
-          break;
-        case PedidoEstado.enCamino:
-          _pedidos[index].progreso = 0.9;
-          break;
-        case PedidoEstado.listo:
-        case PedidoEstado.entregado:
-          _pedidos[index].progreso = 1.0;
-          break;
-        case PedidoEstado.atencion:
-          _pedidos[index].progreso = 0.0;
-          break;
-      }
-      
-      notifyListeners();
-    }
-  }
-
-  void assignRepartidor(String id, String repartidorNombre) {
-    final index = _pedidos.indexWhere((p) => p.id == id);
-    if (index != -1) {
-      _pedidos[index].repartidorNombre = repartidorNombre;
-      _pedidos[index].estado = PedidoEstado.asignado;
-      _pedidos[index].progreso = 0.3;
-      notifyListeners();
-    }
-  }
 
   void addServicio(Servicio servicio) {
     _servicios.add(servicio);

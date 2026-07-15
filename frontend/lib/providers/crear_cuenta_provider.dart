@@ -48,7 +48,7 @@ class CrearCuentaProvider extends ChangeNotifier {
 
   String? validateTelefono(String? value) {
     final telefono = value?.trim() ?? '';
-    if (telefono.isEmpty) return 'Ingresa tu teléfono';
+    if (telefono.isEmpty) return null;
     if (telefono.length < 10) return 'Teléfono inválido';
     return null;
   }

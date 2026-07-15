@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../models/pedido_admin.dart';
 import '../../../providers/admin_provider.dart';
 import '../../../utils/app_colors.dart';
-import 'order_detail_screen.dart';
+import '../pedido/order_detail_screen.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key, this.onViewOrdersTap});
@@ -13,9 +13,36 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pedidos = context.watch<AdminProvider>().pedidos;
+    final admin = context.watch<AdminProvider>();
+    final pedidos = admin.pedidos;
+
+    if (admin.isLoading && pedidos.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (admin.error != null && pedidos.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(admin.error!, style: GoogleFonts.inter(color: AppColors.error)),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () => admin.cargarPedidos(),
+              child: const Text('Reintentar'),
+            ),
+          ],
+        ),
+      );
+    }
+
     // Tomamos los primeros 3 pedidos para el resumen reciente
     final pedidosRecientes = pedidos.take(3).toList();
+
+    final pedidosHoy = pedidos.where((p) => p.fecha.startsWith('Hoy')).length;
+    final entregasActivas = pedidos
+        .where((p) => p.estado == PedidoEstado.asignado || p.estado == PedidoEstado.enCamino)
+        .length;
+    final ingresos = pedidos.fold<double>(0, (suma, p) => suma + p.precioFinal);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -52,33 +79,29 @@ class DashboardView extends StatelessWidget {
                         _buildMetricCard(
                           context,
                           title: 'Pedidos de Hoy',
-                          value: '142',
+                          value: '$pedidosHoy',
                           icon: Icons.shopping_bag_outlined,
                           iconBg: AppColors.primaryFixed,
                           iconColor: AppColors.primary,
-                          badgeText: '+12%',
-                          badgeIcon: Icons.trending_up_rounded,
                         ),
                         const SizedBox(width: 16),
                         _buildMetricCard(
                           context,
                           title: 'Entregas Activas',
-                          value: '28',
+                          value: '$entregasActivas',
                           icon: Icons.local_shipping_outlined,
                           iconBg: AppColors.secondaryContainer,
                           iconColor: AppColors.onSecondaryContainer,
-                          progress: 0.65,
+                          progress: pedidos.isEmpty ? 0 : entregasActivas / pedidos.length,
                         ),
                         const SizedBox(width: 16),
                         _buildMetricCard(
                           context,
                           title: 'Ingresos',
-                          value: '\$4,289',
+                          value: '\$${ingresos.toStringAsFixed(2)}',
                           icon: Icons.payments_outlined,
                           iconBg: AppColors.surfaceContainerHigh,
                           iconColor: AppColors.primary,
-                          badgeText: '+5%',
-                          badgeIcon: Icons.trending_up_rounded,
                         ),
                       ],
                     )
@@ -89,23 +112,19 @@ class DashboardView extends StatelessWidget {
                             _buildMetricCard(
                               context,
                               title: 'Pedidos de Hoy',
-                              value: '142',
+                              value: '$pedidosHoy',
                               icon: Icons.shopping_bag_outlined,
                               iconBg: AppColors.primaryFixed,
                               iconColor: AppColors.primary,
-                              badgeText: '+12%',
-                              badgeIcon: Icons.trending_up_rounded,
                             ),
                             const SizedBox(width: 12),
                             _buildMetricCard(
                               context,
                               title: 'Ingresos',
-                              value: '\$4,289',
+                              value: '\$${ingresos.toStringAsFixed(2)}',
                               icon: Icons.payments_outlined,
                               iconBg: AppColors.surfaceContainerHigh,
                               iconColor: AppColors.primary,
-                              badgeText: '+5%',
-                              badgeIcon: Icons.trending_up_rounded,
                             ),
                           ],
                         ),
@@ -113,11 +132,11 @@ class DashboardView extends StatelessWidget {
                         _buildMetricCard(
                           context,
                           title: 'Entregas Activas',
-                          value: '28',
+                          value: '$entregasActivas',
                           icon: Icons.local_shipping_outlined,
                           iconBg: AppColors.secondaryContainer,
                           iconColor: AppColors.onSecondaryContainer,
-                          progress: 0.65,
+                          progress: pedidos.isEmpty ? 0 : entregasActivas / pedidos.length,
                         ),
                       ],
                     );

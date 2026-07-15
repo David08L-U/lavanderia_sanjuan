@@ -7,12 +7,14 @@ import '../../../providers/preferencias_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../../widgets/app_bottom_nav_bar.dart';
 import '../../auth/login/login_screen.dart';
+import '../../auth/terminos_condiciones/politica_privacidad_screen.dart';
 import '../../auth/terminos_condiciones/terminos_condiciones_screen.dart';
 import '../home_cliente/home_cliente_screen.dart';
 import '../mis_pedidos/mis_pedidos_screen.dart';
 import '../notificaciones/notificaciones_screen.dart';
 import '../servicios/servicios_screen.dart';
 import 'cambiar_contrasena_screen.dart';
+import 'centro_ayuda_screen.dart';
 import 'editar_perfil_screen.dart';
 import 'metodos_pago_screen.dart';
 import 'mis_direcciones_screen.dart';
@@ -27,12 +29,6 @@ class MiPerfilScreen extends StatefulWidget {
 
 class _MiPerfilScreenState extends State<MiPerfilScreen> {
   bool _notificaciones = true;
-
-  void _showComingSoon() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Próximamente disponible')),
-    );
-  }
 
   void _verTerminos() {
     Navigator.of(context).push(
@@ -252,7 +248,9 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
                   _MenuItem(
                     icon: Icons.help_center_outlined,
                     label: 'Centro de Ayuda',
-                    onTap: _showComingSoon,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const CentroAyudaScreen()),
+                    ),
                   ),
                   _MenuItem(
                     icon: Icons.gavel_rounded,
@@ -262,7 +260,9 @@ class _MiPerfilScreenState extends State<MiPerfilScreen> {
                   _MenuItem(
                     icon: Icons.privacy_tip_outlined,
                     label: 'Política de Privacidad',
-                    onTap: _verTerminos,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const PoliticaPrivacidadScreen()),
+                    ),
                   ),
                 ],
               ),
