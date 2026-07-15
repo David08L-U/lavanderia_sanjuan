@@ -88,6 +88,8 @@ class AgendarRecoleccionScreen extends StatelessWidget {
     final pedido = await provider.agendarRecoleccion(
       clienteId: auth.currentUser?.id ?? '2',
       clienteNombre: auth.currentUser?.nombre ?? 'Cliente Demo',
+      clienteEmail: auth.currentUser?.correo,
+      clienteTelefono: auth.currentUser?.telefono,
     );
     if (!context.mounted) return;
 

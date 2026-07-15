@@ -131,7 +131,12 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
   /// Crea el pedido en el backend y devuelve el pedido real ya creado
   /// (con su ID real), para que la pantalla de confirmación y el
   /// seguimiento no dependan de datos inventados.
-  Future<Pedido?> agendarRecoleccion({String? clienteId, String? clienteNombre}) async {
+  Future<Pedido?> agendarRecoleccion({
+    String? clienteId,
+    String? clienteNombre,
+    String? clienteEmail,
+    String? clienteTelefono,
+  }) async {
     _isLoading = true;
     notifyListeners();
 
@@ -140,10 +145,16 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
       final franjaEtiqueta = franjasDisponibles
           .firstWhere((f) => f.valor == _franja)
           .etiqueta;
+      final tarjeta = _tarjetaSeleccionada;
+      final metodoPago = tarjeta == null
+          ? 'Efectivo contra entrega'
+          : '${tarjeta.marca == MarcaTarjeta.mastercard ? 'Mastercard' : 'Visa'} •••• ${tarjeta.ultimosDigitos}';
 
       final creado = await pedidoService.crearPedido({
         'clienteId': clienteId ?? '2',
         'clienteNombre': clienteNombre ?? 'Cliente Demo',
+        'clienteEmail': clienteEmail,
+        'clienteTelefono': clienteTelefono,
         'servicio': servicioInfo.nombre,
         'fecha': _fechaSeleccionada.toIso8601String(),
         'franjaHoraria': franjaEtiqueta,
@@ -152,6 +163,7 @@ class AgendarRecoleccionProvider extends ChangeNotifier {
         'ecoFriendly': _ecoFriendly,
         'fragancia': _fragancia,
         'cantidadAproximada': _cantidad,
+        'metodoPago': metodoPago,
         'total': totalConDescuento,
       });
       return Pedido.fromJson(creado);
